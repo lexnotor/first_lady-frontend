@@ -22,7 +22,7 @@ const LinkWrapper = ({
                 href={to}
                 className={`pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-[#0b0b18] ${
                     isActive
-                        ? "bg-[#0b0b18] font-bold border border-neutral-500"
+                        ? "bg-[#0b0b18] font-bold border border-neutral-500 text-[#f0ff25]"
                         : ""
                 } rounded-xl flex gap-4 items-center`}
             >
