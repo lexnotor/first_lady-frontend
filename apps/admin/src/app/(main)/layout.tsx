@@ -1,10 +1,8 @@
-import StoreProvider from "@/redux/StoreProvider";
-import "../globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Header from "@/components/sidebar/Header";
 import AuthManager from "@/components/auth/AuthManager";
-
-const inter = Inter({ subsets: ["latin"] });
+import StoreProvider from "@/redux/StoreProvider";
+import type { Metadata } from "next";
+import "../globals.css";
 
 export const metadata: Metadata = {
     title: "Dashboard - Admin",
@@ -18,8 +16,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="fr">
-            <body className={inter.className}>
-                <>{children}</>
+            <body className="text-neutral-100 bg-[#0b0b18]">
+                <div className="flex justify-center h-screen max-w-[1500px] mx-auto">
+                    <div className="w-64 overflow-y-auto shrink-0 h-full">
+                        <Header />
+                    </div>
+                    <main className="grow">{children}</main>
+                </div>
+
                 <StoreProvider>
                     <AuthManager />
                 </StoreProvider>
