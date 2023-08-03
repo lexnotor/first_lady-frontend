@@ -37,14 +37,15 @@ const loginUser: AsyncThunkPayloadCreator<string, any> = async (
     payload: {
         secret: string;
         username: string;
+        shopId: string;
     },
     thunkAPI
 ) => {
-    const { secret, username } = payload;
+    const { secret, username, shopId } = payload;
     try {
         const res = await axios.post(
             authUrl.login,
-            {},
+            { shop: shopId },
             { auth: { username, password: secret } }
         );
         return res.data.data;

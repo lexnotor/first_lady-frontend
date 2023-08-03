@@ -23,4 +23,8 @@ const userUrl = {
     getUser: `${baseUrl}/user`,
 };
 
-export { apiFetch, authUrl, baseUrl, userUrl };
+const shopUrl = {
+    findShop: (text = "") => `${baseUrl}/shop?text=${text}`,
+};
+
+export { apiFetch, authUrl, baseUrl, userUrl, shopUrl };
