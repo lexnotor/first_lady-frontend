@@ -16,22 +16,20 @@ const SignupForm = () => {
 
     const firstRef = useRef<HTMLInputElement>(null);
     const lastRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
+    const usernameRef = useRef<HTMLInputElement>(null);
     const secretRef = useRef<HTMLInputElement>(null);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         const [first, last] = [firstRef.current.value, lastRef.current.value];
-        const [email, secret] = [
-            emailRef.current.value,
+        const [username, secret] = [
+            usernameRef.current.value,
             secretRef.current.value,
         ];
 
         const payload = {
-            firstname: first,
-            lastname: last,
-            username: email,
-            email,
+            names: `${first} ${last}`,
+            username: username,
             secret,
         };
 
@@ -63,9 +61,9 @@ const SignupForm = () => {
             <div className="flex gap-4">
                 <input
                     type="email"
-                    placeholder="Votre email"
+                    placeholder="Username"
                     className="py-2 px-4 w-full border border-neutral-400 rounded-lg focus:outline-none"
-                    ref={emailRef}
+                    ref={usernameRef}
                 />
             </div>
             <div className="flex gap-4">
