@@ -20,7 +20,7 @@ const LinkWrapper = ({
         <li>
             <Link
                 href={to}
-                className={`pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-neutral-700/30 ${
+                className={`pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-[#0b0b18] ${
                     isActive
                         ? "bg-[#0b0b18] font-bold border border-neutral-500"
                         : ""

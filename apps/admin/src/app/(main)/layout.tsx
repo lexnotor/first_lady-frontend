@@ -21,7 +21,9 @@ export default function RootLayout({
                     <div className="w-64 overflow-y-auto shrink-0 h-full">
                         <Header />
                     </div>
-                    <main className="grow">{children}</main>
+                    <main className="grow max-h-full overflow-y-auto">
+                        {children}
+                    </main>
                 </div>
 
                 <StoreProvider>
