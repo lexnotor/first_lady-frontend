@@ -11,7 +11,7 @@ const Header = () => {
     return (
         <header className="p-4 flex flex-col gap-5 w-full min-h-full bg-[#262830] text-white">
             <div className="flex justify-between">
-                <span>FIRST LADY</span>
+                <span>Logo</span>
                 <span></span>
             </div>
             <ul className="flex gap-3 flex-col my-auto">

@@ -2,7 +2,7 @@
 import { Line, LineConfig } from "@ant-design/plots";
 import React, { useEffect, useState } from "react";
 
-const GraphiqueCard = () => {
+const GraphiqueCard = ({ text }: { text?: string }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const GraphiqueCard = () => {
     return (
         <div className="h-80 bg-[#262830] p-4 rounded-xl flex flex-col">
             <h3 className="mb-2 pb-2 font-bold shrink-0 flex justify-between">
-                <span>Graphique</span>
+                <span>{text}</span>
                 <span>Selecte</span>
             </h3>
             <div className="w-full h-full basis-full">

@@ -1,4 +1,5 @@
 import GraphiqueCard from "@/components/dash/GraphiqueCard";
+import PendingOrderList from "@/components/dash/PendingOrderList";
 import QuantityCard from "@/components/dash/QuantityCard";
 import React from "react";
 
@@ -12,13 +13,19 @@ const Page = () => {
                 <QuantityCard />
             </div>
             <div className="grid grid-cols-2 p-4 gap-4">
-                <GraphiqueCard />
-                <GraphiqueCard />
-                <GraphiqueCard />
-                <GraphiqueCard />
+                <GraphiqueCard text="Vente Annuelle" />
+                <PendingOrderList />
+                <PendingOrderList />
+                <GraphiqueCard text="Commandes" />
             </div>
         </div>
     );
 };
 
 export default Page;
+
+// Out-of-stock
+// Livraison/mois
+// Vente/mois
+// Commande/mois - Insitu/mois
+// Nbre shop - Nbre product -Nbre User
