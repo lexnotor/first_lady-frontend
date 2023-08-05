@@ -1,44 +1,37 @@
 "use client";
+import useProduct from "@/hooks/useProduct";
 import { Table } from "antd";
 import React from "react";
 
 const ListeCategory = () => {
+    const { category } = useProduct();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
                 <Table
+                    rowKey={(record) => record.id}
                     className="bg-transparent"
                     columns={[
-                        { title: "Designation", dataIndex: "title" },
+                        {
+                            title: "Designation",
+                            render: (_, record) => <>{record.title}</>,
+                        },
                         { title: "Nbr de Produit", dataIndex: "versions" },
-                        { title: "Ajouté", dataIndex: "category" },
+                        {
+                            title: "Ajouté",
+                            render: (_, record) => (
+                                <>
+                                    {new Date(
+                                        record.created_at
+                                    ).toLocaleDateString()}
+                                </>
+                            ),
+                        },
                         { title: "Action", width: "5rem" },
                     ]}
                     pagination={false}
                     size="small"
-                    dataSource={[
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                    ]}
+                    dataSource={category}
                     locale={{
                         emptyText: (
                             <div className="text-center font-bold py-20">

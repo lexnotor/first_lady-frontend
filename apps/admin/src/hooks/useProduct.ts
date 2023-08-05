@@ -19,12 +19,16 @@ const useProduct = () => {
         );
     }, [thread]);
 
-    useEffect(() => {
-        if (category.length == 0 && !isLookingCategory)
-            dispatch(getCategories());
-    }, [dispatch, category.length, isLookingCategory]);
+    const alreadySearchCategory = useMemo(() => {
+        return thread.some((task) => task.action == "GET_CATEGORIES");
+    }, [thread]);
 
-    return { category, products, search, thread };
+    useEffect(() => {
+        if (category.length == 0 && !alreadySearchCategory)
+            dispatch(getCategories({}));
+    }, [dispatch, category.length, alreadySearchCategory]);
+
+    return { category, products, search, thread, isLookingCategory };
 };
 
 export default useProduct;

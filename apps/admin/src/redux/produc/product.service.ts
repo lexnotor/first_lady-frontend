@@ -4,8 +4,8 @@ import { ApiResponse, CategoryInfo, ProductInfo } from "..";
 import { productUrl } from "../helper.api";
 import { RootState } from "../store";
 
-const createProduct: AsyncThunkPayloadCreator<ProductInfo> = async (
-    payload,
+const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
+    payload = {},
     thunkAPI
 ) => {
     const {
@@ -22,8 +22,8 @@ const createProduct: AsyncThunkPayloadCreator<ProductInfo> = async (
     } catch (error) {}
 };
 
-const createCategory: AsyncThunkPayloadCreator<CategoryInfo> = async (
-    payload,
+const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
+    payload = {},
     thunkAPI
 ) => {
     const {
@@ -46,8 +46,8 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo> = async (
     }
 };
 
-const getCategories: AsyncThunkPayloadCreator<CategoryInfo[]> = async (
-    payload,
+const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
+    payload = {},
     thunkAPI
 ) => {
     const {} = payload;
