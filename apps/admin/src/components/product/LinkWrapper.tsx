@@ -18,7 +18,7 @@ const LinkWrapper = ({
             <Link
                 href={to}
                 className={`py-3 px-4 font-bold transition-colors duration-500 cursor-pointer hover:bg-primary-700 ${
-                    isActive ? "bg-primary-700" : ""
+                    isActive ? "bg-primary-700 text-secondary-800" : ""
                 } rounded-3xl flex gap-4 items-center`}
             >
                 <span>{text}</span>
