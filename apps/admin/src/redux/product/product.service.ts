@@ -63,4 +63,24 @@ const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
     }
 };
 
-export const productService = { createProduct, createCategory, getCategories };
+const loadCategorieStat: AsyncThunkPayloadCreator<
+    {
+        id: string;
+        products: string;
+        title: string;
+    }[]
+> = async (_, thunkAPI) => {
+    try {
+        const res = await axios.get(productUrl.loadCategorieStat);
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || "FAIL_TO_GET_STAT");
+    }
+};
+
+export const productService = {
+    createProduct,
+    createCategory,
+    getCategories,
+    loadCategorieStat,
+};

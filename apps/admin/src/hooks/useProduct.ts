@@ -3,12 +3,15 @@
 import { useEffect, useMemo } from "react";
 import { useAppSelector } from "./useAppSelector";
 import { useAppDispatch } from "./useAppDispatch";
-import { getCategories } from "@/redux/product/product.slice";
+import {
+    getCategories,
+    loadCategorieStat,
+} from "@/redux/product/product.slice";
 
 const useProduct = () => {
     const dispatch = useAppDispatch();
 
-    const { category, products, search, thread } = useAppSelector(
+    const { category, products, search, thread, categoryStat } = useAppSelector(
         (state) => state.product
     );
 
@@ -28,7 +31,21 @@ const useProduct = () => {
             dispatch(getCategories({}));
     }, [dispatch, category.length, alreadySearchCategory]);
 
-    return { category, products, search, thread, isLookingCategory };
+    useEffect(() => {
+        dispatch(loadCategorieStat());
+        const timer = setInterval(() => dispatch(loadCategorieStat()), 60_000);
+
+        return () => clearInterval(timer);
+    }, [dispatch]);
+
+    return {
+        category,
+        products,
+        search,
+        thread,
+        isLookingCategory,
+        categoryStat,
+    };
 };
 
 export default useProduct;

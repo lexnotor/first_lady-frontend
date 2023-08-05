@@ -31,6 +31,7 @@ const productUrl = {
     createProduct: `${baseUrl}/product/new`,
     createCategory: `${baseUrl}/product/category/new`,
     findCategory: `${baseUrl}/product/category`,
+    loadCategorieStat: `${baseUrl}/product/category/count`,
 };
 
 export { apiFetch, authUrl, baseUrl, userUrl, shopUrl, productUrl };

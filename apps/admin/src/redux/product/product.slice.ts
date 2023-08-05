@@ -6,6 +6,11 @@ type Status = "LOADING" | "ERROR" | "FULLFILED";
 interface ProductState {
     products: ProductInfo[];
     category: CategoryInfo[];
+    categoryStat: {
+        id: string;
+        products: string;
+        title: string;
+    }[];
     search: ProductInfo[];
     thread: {
         id: string;
@@ -13,6 +18,7 @@ interface ProductState {
             | "CREATE_PRODUCT"
             | "CREATE_CATEGORY"
             | "GET_CATEGORIES"
+            | "LOAD_CATEGORY_STAT"
             | "SEARCH_PRODUCT"
             | "DELETE_PRODUCT";
         status: Status;
@@ -33,10 +39,15 @@ const getCategories = createAsyncThunk(
     "product/getCategories",
     productService.getCategories
 );
+const loadCategorieStat = createAsyncThunk(
+    "product/loadCategorieStat",
+    productService.loadCategorieStat
+);
 
 const initialState: ProductState = {
     products: [],
     category: [],
+    categoryStat: [],
     search: [],
     thread: [],
 };
@@ -112,6 +123,31 @@ const productSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // loadCategoriesStat
+            .addCase(loadCategorieStat.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "LOAD_CATEGORY_STAT",
+                    status: "LOADING",
+                });
+            })
+            .addCase(
+                loadCategorieStat.fulfilled,
+                (state, { meta, payload }) => {
+                    state.categoryStat = payload;
+
+                    const task = state.thread.find(
+                        (item) => item.id == meta.requestId
+                    );
+                    if (task) task.status = "FULLFILED";
+                }
+            )
+            .addCase(loadCategorieStat.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -119,7 +155,7 @@ const productSlice = createSlice({
 export default productSlice.reducer;
 
 // async
-export { createProduct, createCategory, getCategories };
+export { createProduct, createCategory, getCategories, loadCategorieStat };
 
 // sync
 export {};

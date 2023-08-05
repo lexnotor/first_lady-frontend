@@ -4,7 +4,7 @@ import { Table } from "antd";
 import React from "react";
 
 const ListeCategory = () => {
-    const { category } = useProduct();
+    const { category, categoryStat } = useProduct();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
@@ -16,7 +16,18 @@ const ListeCategory = () => {
                             title: "Designation",
                             render: (_, record) => <>{record.title}</>,
                         },
-                        { title: "Nbr de Produit", dataIndex: "versions" },
+                        {
+                            title: "Nbr de Produit",
+                            render: (_, record) => {
+                                return (
+                                    <>
+                                        {categoryStat.find(
+                                            (item) => item.id == record.id
+                                        )?.products ?? 0}
+                                    </>
+                                );
+                            },
+                        },
                         {
                             title: "Ajouté",
                             render: (_, record) => (
