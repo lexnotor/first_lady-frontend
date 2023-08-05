@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useAppSelector } from "./useAppSelector";
 import { useAppDispatch } from "./useAppDispatch";
-import { getCategories } from "@/redux/produc/product.slice";
+import { getCategories } from "@/redux/product/product.slice";
 
 const useProduct = () => {
     const dispatch = useAppDispatch();
