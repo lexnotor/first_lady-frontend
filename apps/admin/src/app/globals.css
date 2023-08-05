@@ -5,7 +5,10 @@
 
 * {
     font-family: "Inter", "Poppins";
+
 }
+
+
 
 body {
     font-size: 14px;
@@ -13,4 +16,37 @@ body {
 
 .ant-btn-primary {
     @apply bg-purple-600
+}
+
+@layer base {
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        @apply outline-none
+    }
+}
+
+@layer utilities {
+    .table-form {
+        @apply table
+    }
+
+    .input-group {
+        @apply table-row py-3
+    }
+
+    .input-group>.input-content {
+        @apply table-cell py-2
+    }
+
+    .input-group>.input-label {
+        @apply table-cell py-2 pr-4 w-52 text-right align-middle
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+        @apply bg-primary-700 py-3 px-4 rounded-3xl w-full
+    }
 }
