@@ -26,7 +26,11 @@ const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
             { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
-    } catch (error) {}
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error.message ?? "FAIL_TO_CREATE_PRODUCT"
+        );
+    }
 };
 
 const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (

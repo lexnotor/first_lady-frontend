@@ -1,7 +1,6 @@
 "use client";
 import useProduct from "@/hooks/useProduct";
-import { Table } from "antd";
-import React from "react";
+import { Popover, Table } from "antd";
 
 const ListeProduct = () => {
     const { products } = useProduct();
@@ -12,11 +11,66 @@ const ListeProduct = () => {
                     className="bg-transparent"
                     columns={[
                         { title: "Désiggnation", dataIndex: "title" },
-                        { title: "Variants", dataIndex: "versions" },
-                        { title: "Categorie", dataIndex: "category" },
-                        { title: "Prix", dataIndex: "price" },
-                        { title: "Quantité", dataIndex: "quantity" },
-                        { title: "Action", width: "5rem" },
+                        {
+                            title: "Variants",
+                            render: (_, record) => (
+                                <div>
+                                    {record.product_v.map((item) => (
+                                        <span key={item.id}>{item.title},</span>
+                                    ))}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: "Categorie",
+                            render: (_, record) => (
+                                <span>
+                                    {record.category?.title ?? "No spécifié"}
+                                </span>
+                            ),
+                        },
+                        {
+                            title: "Prix",
+                            render: (_, record) => (
+                                <div>
+                                    {record.product_v.map((item) => (
+                                        <span key={item.id}>
+                                            {item.price} USD,
+                                        </span>
+                                    ))}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: "Quantité",
+                            render: (_, record) => (
+                                <div>
+                                    {record.product_v.reduce(
+                                        (prev, cur) => prev + cur.quantity,
+                                        0
+                                    )}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: "",
+                            width: "5rem",
+                            render: () => (
+                                <Popover
+                                    placement="left"
+                                    trigger={["contextMenu", "click"]}
+                                    content={
+                                        <ul>
+                                            <li>More</li>
+                                        </ul>
+                                    }
+                                >
+                                    <div className="cursor-pointer px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800  hover:text-black transition-colors duration-500 rounded-lg">
+                                        Plus
+                                    </div>
+                                </Popover>
+                            ),
+                        },
                     ]}
                     pagination={false}
                     size="small"
@@ -56,6 +110,7 @@ const ListeProduct = () => {
                             ),
                         },
                     }}
+                    rowKey={(record) => record.id}
                 />
             </div>
         </div>
