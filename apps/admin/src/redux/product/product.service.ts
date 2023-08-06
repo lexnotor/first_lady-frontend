@@ -29,11 +29,11 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
     const {
         user: { token },
     } = thunkAPI.getState() as RootState;
-    const {} = payload;
+    const { title, description } = payload;
     try {
         const res: AxiosResponse<ApiResponse<CategoryInfo>> = await axios.post(
             productUrl.createCategory,
-            {},
+            { title, description },
             {
                 headers: { Authorization: `Bearer ${token}` },
             }
