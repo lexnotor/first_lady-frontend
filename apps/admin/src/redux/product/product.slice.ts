@@ -17,6 +17,7 @@ interface ProductState {
         action:
             | "CREATE_PRODUCT"
             | "CREATE_CATEGORY"
+            | "GET_PRODUCTS"
             | "GET_CATEGORIES"
             | "LOAD_CATEGORY_STAT"
             | "SEARCH_PRODUCT"
@@ -31,17 +32,25 @@ const createProduct = createAsyncThunk(
     "product/createProduct",
     productService.createProduct
 );
+
 const createCategory = createAsyncThunk(
     "product/createCategory",
     productService.createCategory
 );
+
 const getCategories = createAsyncThunk(
     "product/getCategories",
     productService.getCategories
 );
+
 const loadCategorieStat = createAsyncThunk(
     "product/loadCategorieStat",
     productService.loadCategorieStat
+);
+
+const getProducts = createAsyncThunk(
+    "product/getProducts",
+    productService.getProducts
 );
 
 const initialState: ProductState = {
@@ -148,6 +157,28 @@ const productSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // getProducts
+            .addCase(getProducts.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "GET_PRODUCTS",
+                    status: "LOADING",
+                });
+            })
+            .addCase(getProducts.fulfilled, (state, { meta, payload }) => {
+                state.products.push(...payload);
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(getProducts.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -155,7 +186,13 @@ const productSlice = createSlice({
 export default productSlice.reducer;
 
 // async
-export { createProduct, createCategory, getCategories, loadCategorieStat };
+export {
+    createProduct,
+    createCategory,
+    getCategories,
+    loadCategorieStat,
+    getProducts,
+};
 
 // sync
 export {};

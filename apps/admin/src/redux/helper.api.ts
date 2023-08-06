@@ -30,6 +30,7 @@ const shopUrl = {
 const productUrl = {
     createProduct: `${baseUrl}/product/new`,
     createCategory: `${baseUrl}/product/category/new`,
+    findProduct: `${baseUrl}/product`,
     findCategory: `${baseUrl}/product/category`,
     loadCategorieStat: `${baseUrl}/product/category/count`,
 };

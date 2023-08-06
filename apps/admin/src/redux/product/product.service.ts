@@ -15,7 +15,14 @@ const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
     try {
         const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.post(
             productUrl.createProduct,
-            { title, description, price, quantity, category, brand },
+            {
+                title,
+                description,
+                price: +price,
+                quantity: +quantity,
+                category,
+                brand,
+            },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
@@ -42,6 +49,22 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
     } catch (error) {
         return thunkAPI.rejectWithValue(
             error.message || "FAIL_TO_CREATE_CATEGORY"
+        );
+    }
+};
+
+const getProducts: AsyncThunkPayloadCreator<ProductInfo[], any> = async (
+    _,
+    thunkAPI
+) => {
+    try {
+        const res: AxiosResponse<ApiResponse<ProductInfo[]>> = await axios.get(
+            productUrl.findProduct
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error.message ?? "FAIL_TO_FETCH_PRODUCT"
         );
     }
 };
@@ -83,4 +106,5 @@ export const productService = {
     createCategory,
     getCategories,
     loadCategorieStat,
+    getProducts,
 };

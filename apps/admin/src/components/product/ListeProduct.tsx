@@ -1,8 +1,10 @@
 "use client";
+import useProduct from "@/hooks/useProduct";
 import { Table } from "antd";
 import React from "react";
 
 const ListeProduct = () => {
+    const { products } = useProduct();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
@@ -18,29 +20,7 @@ const ListeProduct = () => {
                     ]}
                     pagination={false}
                     size="small"
-                    dataSource={[
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                        {
-                            title: "lexnotor",
-                            versions: "insitu",
-                            category: new Date().toISOString(),
-                            price: "none",
-                            quantity: "done",
-                        },
-                    ]}
+                    dataSource={products}
                     locale={{
                         emptyText: (
                             <div className="text-center font-bold py-20">

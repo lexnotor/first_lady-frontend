@@ -5,6 +5,7 @@ import { useAppSelector } from "./useAppSelector";
 import { useAppDispatch } from "./useAppDispatch";
 import {
     getCategories,
+    getProducts,
     loadCategorieStat,
 } from "@/redux/product/product.slice";
 
@@ -26,6 +27,15 @@ const useProduct = () => {
         return thread.some((task) => task.action == "GET_CATEGORIES");
     }, [thread]);
 
+    const alreadySearchProduct = useMemo(() => {
+        return thread.some((task) => task.action == "GET_PRODUCTS");
+    }, [thread]);
+
+    useEffect(() => {
+        if (category.length == 0 && !alreadySearchProduct)
+            dispatch(getProducts({}));
+    }, [dispatch, category.length, alreadySearchProduct]);
+
     useEffect(() => {
         if (category.length == 0 && !alreadySearchCategory)
             dispatch(getCategories({}));
@@ -45,6 +55,8 @@ const useProduct = () => {
         thread,
         isLookingCategory,
         categoryStat,
+        alreadySearchProduct,
+        alreadySearchCategory,
     };
 };
 
