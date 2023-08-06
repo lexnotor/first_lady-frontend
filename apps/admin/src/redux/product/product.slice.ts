@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CategoryInfo, ProductInfo } from "..";
+import { CategoryInfo, ProductInfo, ProductStats } from "..";
 import { productService } from "./product.service";
 
 type Status = "LOADING" | "ERROR" | "FULLFILED";
@@ -11,6 +11,7 @@ interface ProductState {
         products: string;
         title: string;
     }[];
+    productStat: ProductStats;
     search: ProductInfo[];
     thread: {
         id: string;
@@ -20,6 +21,7 @@ interface ProductState {
             | "GET_PRODUCTS"
             | "GET_CATEGORIES"
             | "LOAD_CATEGORY_STAT"
+            | "LOAD_PRODUCT_STAT"
             | "SEARCH_PRODUCT"
             | "DELETE_PRODUCT";
         status: Status;
@@ -53,9 +55,15 @@ const getProducts = createAsyncThunk(
     productService.getProducts
 );
 
+const getProductStats = createAsyncThunk(
+    "product/getProductStats",
+    productService.getProductStats
+);
+
 const initialState: ProductState = {
     products: [],
     category: [],
+    productStat: null,
     categoryStat: [],
     search: [],
     thread: [],
@@ -179,6 +187,28 @@ const productSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // getProductStats
+            .addCase(getProductStats.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "LOAD_PRODUCT_STAT",
+                    status: "LOADING",
+                });
+            })
+            .addCase(getProductStats.fulfilled, (state, { meta, payload }) => {
+                state.productStat = payload;
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(getProductStats.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -192,6 +222,7 @@ export {
     getCategories,
     loadCategorieStat,
     getProducts,
+    getProductStats,
 };
 
 // sync

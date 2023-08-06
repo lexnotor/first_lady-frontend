@@ -5,6 +5,7 @@ import { useAppSelector } from "./useAppSelector";
 import { useAppDispatch } from "./useAppDispatch";
 import {
     getCategories,
+    getProductStats,
     getProducts,
     loadCategorieStat,
 } from "@/redux/product/product.slice";
@@ -12,9 +13,8 @@ import {
 const useProduct = () => {
     const dispatch = useAppDispatch();
 
-    const { category, products, search, thread, categoryStat } = useAppSelector(
-        (state) => state.product
-    );
+    const { category, products, search, thread, categoryStat, productStat } =
+        useAppSelector((state) => state.product);
 
     const isLookingCategory = useMemo(() => {
         return thread.some(
@@ -31,15 +31,24 @@ const useProduct = () => {
         return thread.some((task) => task.action == "GET_PRODUCTS");
     }, [thread]);
 
+    const alreadyLoadStats = useMemo(() => {
+        return thread.some((task) => task.action == "GET_PRODUCTS");
+    }, [thread]);
+
     useEffect(() => {
-        if (category.length == 0 && !alreadySearchProduct)
+        if (products.length == 0 && !alreadySearchProduct)
             dispatch(getProducts({}));
-    }, [dispatch, category.length, alreadySearchProduct]);
+    }, [dispatch, products.length, alreadySearchProduct]);
 
     useEffect(() => {
         if (category.length == 0 && !alreadySearchCategory)
             dispatch(getCategories({}));
     }, [dispatch, category.length, alreadySearchCategory]);
+
+    useEffect(() => {
+        if (productStat == null && !alreadyLoadStats)
+            dispatch(getProductStats());
+    }, [dispatch, productStat, alreadyLoadStats]);
 
     useEffect(() => {
         dispatch(loadCategorieStat());
@@ -56,6 +65,7 @@ const useProduct = () => {
         isLookingCategory,
         categoryStat,
         alreadySearchProduct,
+        productStat,
         alreadySearchCategory,
     };
 };

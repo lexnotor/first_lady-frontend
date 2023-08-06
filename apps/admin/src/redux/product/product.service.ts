@@ -1,6 +1,12 @@
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { ApiResponse, CategoryInfo, ProductInfo } from "..";
+import {
+    ApiResponse,
+    CategoryInfo,
+    CategoryStats,
+    ProductInfo,
+    ProductStats,
+} from "..";
 import { productUrl } from "../helper.api";
 import { RootState } from "../store";
 
@@ -90,18 +96,30 @@ const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
     }
 };
 
-const loadCategorieStat: AsyncThunkPayloadCreator<
-    {
-        id: string;
-        products: string;
-        title: string;
-    }[]
-> = async (_, thunkAPI) => {
+const loadCategorieStat: AsyncThunkPayloadCreator<CategoryStats[]> = async (
+    _,
+    thunkAPI
+) => {
     try {
         const res = await axios.get(productUrl.loadCategorieStat);
         return res.data.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || "FAIL_TO_GET_STAT");
+    }
+};
+
+const getProductStats: AsyncThunkPayloadCreator<ProductStats> = async (
+    _,
+    thunkAPI
+) => {
+    try {
+        const res: AxiosResponse<ApiResponse<ProductStats>> = await axios.get(
+            productUrl.getStats
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_LOAD_STATS");
     }
 };
 
@@ -111,4 +129,5 @@ export const productService = {
     getCategories,
     loadCategorieStat,
     getProducts,
+    getProductStats,
 };
