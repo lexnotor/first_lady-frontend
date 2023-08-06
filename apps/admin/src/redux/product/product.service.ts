@@ -11,11 +11,11 @@ const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
     const {
         user: { token },
     } = thunkAPI.getState() as RootState;
-    const {} = payload;
+    const { title, description, price, quantity, category, brand } = payload;
     try {
         const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.post(
             productUrl.createProduct,
-            {},
+            { title, description, price, quantity, category, brand },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
