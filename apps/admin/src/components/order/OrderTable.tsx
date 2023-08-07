@@ -1,14 +1,12 @@
 "use client";
 
-import { Table } from "antd";
-import React from "react";
+import { CustomTable } from "ui";
 
 const OrderTable = () => {
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
-                <Table
-                    className="bg-transparent"
+                <CustomTable
                     columns={[
                         { title: "Utilisateur", dataIndex: "user" },
                         { title: "Type", dataIndex: "type" },
@@ -18,7 +16,6 @@ const OrderTable = () => {
                         { title: "Action", width: "5rem" },
                     ]}
                     pagination={false}
-                    size="small"
                     dataSource={[
                         {
                             user: "lexnotor",
@@ -48,34 +45,6 @@ const OrderTable = () => {
                                 Pas de commande
                             </div>
                         ),
-                    }}
-                    components={{
-                        header: {
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-2 hover:!bg-transparent !font-medium !text-white text-sm !bg-[#262830]/30"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                            row: ({ children }) => <tr>{children}</tr>,
-                        },
-                        body: {
-                            row: ({ children }) => (
-                                <tr className="!rounded-xl odd:!bg-transparent even:!bg-[#262830]/30 hover:!bg-[#262830]/50 transition-colors duration-500">
-                                    {children}
-                                </tr>
-                            ),
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-0 !font-normal !text-white text-sm !border-none"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                        },
                     }}
                 />
             </div>

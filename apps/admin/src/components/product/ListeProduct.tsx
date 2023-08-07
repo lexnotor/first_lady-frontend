@@ -1,14 +1,14 @@
 "use client";
 import useProduct from "@/hooks/useProduct";
-import { Popover, Table } from "antd";
+import { Popover } from "antd";
+import { CustomTable } from "ui";
 
 const ListeProduct = () => {
     const { products } = useProduct();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
-                <Table
-                    className="bg-transparent"
+                <CustomTable
                     columns={[
                         { title: "Désiggnation", dataIndex: "title" },
                         {
@@ -73,7 +73,6 @@ const ListeProduct = () => {
                         },
                     ]}
                     pagination={false}
-                    size="small"
                     dataSource={products}
                     locale={{
                         emptyText: (
@@ -81,34 +80,6 @@ const ListeProduct = () => {
                                 Pas de commande
                             </div>
                         ),
-                    }}
-                    components={{
-                        header: {
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-2 hover:!bg-transparent !font-medium !text-white text-sm !bg-[#262830]/30"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                            row: ({ children }) => <tr>{children}</tr>,
-                        },
-                        body: {
-                            row: ({ children }) => (
-                                <tr className="!rounded-xl odd:!bg-transparent even:!bg-[#262830]/30 hover:!bg-[#262830]/50 transition-colors duration-500">
-                                    {children}
-                                </tr>
-                            ),
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-0 !font-normal !text-white text-sm !border-none"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                        },
                     }}
                     rowKey={(record) => record.id}
                 />

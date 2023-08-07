@@ -1,6 +1,5 @@
 "use client";
-import { Table } from "antd";
-import React from "react";
+import { CustomTable } from "ui";
 
 const PendingOrderList = () => {
     return (
@@ -10,15 +9,13 @@ const PendingOrderList = () => {
                 <span>Selecte</span>
             </h3>
             <div className="[&_.ant-table]:!bg-transparent ">
-                <Table
-                    className="bg-transparent"
+                <CustomTable
                     columns={[
                         { title: "Utilisateur" },
                         { title: "Type" },
                         { title: "Action", width: "5rem" },
                     ]}
                     pagination={false}
-                    size="small"
                     dataSource={[]}
                     locale={{
                         emptyText: (
@@ -26,30 +23,6 @@ const PendingOrderList = () => {
                                 Pas de commande
                             </div>
                         ),
-                    }}
-                    components={{
-                        header: {
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-2 !bg-transparent !font-medium !text-white"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                            row: ({ children }) => <tr>{children}</tr>,
-                        },
-                        body: {
-                            row: ({ children }) => <tr>{children}</tr>,
-                            cell: ({ children, ...rest }) => (
-                                <td
-                                    {...rest}
-                                    className="p-0 !bg-transparent !font-normal !text-white"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                        },
                     }}
                 />
             </div>
