@@ -36,4 +36,8 @@ const productUrl = {
     getStats: `${baseUrl}/product/stats`,
 };
 
-export { apiFetch, authUrl, baseUrl, userUrl, shopUrl, productUrl };
+const orderUrl = {
+    findOrders: `${baseUrl}/order`,
+};
+
+export { apiFetch, authUrl, baseUrl, userUrl, shopUrl, productUrl, orderUrl };
