@@ -1,18 +1,12 @@
-import OrderTable from "@/components/order/OrderTable";
-import TopNavbar from "@/components/order/TopNavbar";
-import React from "react";
+"use client";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Page = () => {
-    return (
-        <div>
-            <div className="">
-                <TopNavbar />
-            </div>
-            <section className="px-5">
-                <OrderTable />
-            </section>
-        </div>
-    );
+    const router = useRouter();
+    const pathname = usePathname();
+    useEffect(() => router.replace(`${pathname}/pend`));
+    return <section className="px-5"></section>;
 };
 
 export default Page;

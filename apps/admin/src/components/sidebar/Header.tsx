@@ -20,14 +20,18 @@ const Header = () => {
                     text="Dashboard"
                     to="/dash"
                 />
-                <LinkWrapper icon={<BsCart4 />} text="Orders" to="/order" />
+                <LinkWrapper icon={<BsCart4 />} text="Commandes" to="/order" />
                 <LinkWrapper
                     icon={<BiShoppingBag />}
-                    text="Products"
+                    text="Produits"
                     to="/product"
                 />
-                <LinkWrapper icon={<FiUsers />} text="Users" to="/user" />
-                <LinkWrapper icon={<BsShop />} text="Shops" to="/shop" />
+                <LinkWrapper
+                    icon={<FiUsers />}
+                    text="Ustilisateurs"
+                    to="/user"
+                />
+                <LinkWrapper icon={<BsShop />} text="Boutiques" to="/shop" />
             </ul>
             <div className="mt-auto">
                 <StoreProvider>

@@ -1,15 +1,11 @@
-import React from "react";
+import LinkWrapper from "./LinkWrapper";
 
 const TopNavbar = () => {
     return (
         <nav className="w-full py-4 px-4 overflow-y-auto flex gap-4">
-            <span className="py-3 px-4 rounded-3xl cursor-pointer">
-                En cours
-            </span>
-            <span className="bg-[#262830] font-bold py-3 px-4 rounded-3xl cursor-pointer">
-                Commandes
-            </span>
-            <span className="py-3 px-4 rounded-3xl cursor-pointer">Annulé</span>
+            <LinkWrapper to="/order/pend" text="En cours" />
+            <LinkWrapper to="/order/done" text="Terminé" />
+            <LinkWrapper to="/order/cancel" text="Annulé" />
         </nav>
     );
 };
