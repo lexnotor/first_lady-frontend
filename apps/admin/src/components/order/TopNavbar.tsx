@@ -6,6 +6,7 @@ const TopNavbar = () => {
             <LinkWrapper to="/order/pend" text="En cours" />
             <LinkWrapper to="/order/done" text="Terminé" />
             <LinkWrapper to="/order/cancel" text="Annulé" />
+            <LinkWrapper to="/order/pos" text="Vente" />
         </nav>
     );
 };
