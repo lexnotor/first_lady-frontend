@@ -1,13 +1,28 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useLocatCart } from "@/hooks/useLocalCart";
-import { setItemQty } from "@/redux/order/order.slice";
+import {
+    emptyCart,
+    saveLocalOrder,
+    setItemQty,
+} from "@/redux/order/order.slice";
 import Image from "next/image";
 import React from "react";
 
 const SaleCart = () => {
     const { local_cart } = useLocatCart();
     const dispatch = useAppDispatch();
+
+    const submit = () => {
+        if (local_cart.length == 0) return alert("Please add Items in Cart");
+
+        const payload = local_cart.map((item) => ({
+            id: item.product_v_id,
+            qty: item.quantity,
+        }));
+
+        dispatch(saveLocalOrder(payload));
+    };
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -68,10 +83,16 @@ const SaleCart = () => {
                 )}
             </div>
             <footer className="shrink-0 flex gap-4">
-                <button className="cursor-pointer w-[50%] px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl">
+                <button
+                    onClick={() => dispatch(emptyCart())}
+                    className="cursor-pointer w-[50%] px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl"
+                >
                     Vider
                 </button>
-                <button className="cursor-pointer w-[50%] px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl">
+                <button
+                    onClick={submit}
+                    className="cursor-pointer w-[50%] px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl"
+                >
                     Save
                 </button>
             </footer>

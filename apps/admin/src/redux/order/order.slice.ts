@@ -14,7 +14,7 @@ interface OrderState {
     }[];
     thread: {
         id: string;
-        action: "GET_ALL_ORDERS";
+        action: "GET_ALL_ORDERS" | "SAVE_LOCAL_ORDER";
         status: Status;
         payload?: object;
         message?: { content: string; display: boolean };
@@ -30,6 +30,10 @@ const initialState: OrderState = {
 const getAllOrders = createAsyncThunk(
     "order/getAllOrders",
     ordersService.getAllOrders
+);
+const saveLocalOrder = createAsyncThunk(
+    "order/saveLocalOrder",
+    ordersService.saveLocalOrder
 );
 
 const orderSlice = createSlice({
@@ -64,9 +68,13 @@ const orderSlice = createSlice({
             );
             item.quantity = payload.quantity < 1 ? 1 : payload.quantity;
         },
+        emptyCart: (state) => {
+            state.local_cart = [];
+        },
     },
     extraReducers: (builder) =>
         builder
+            // getAllOrders
             .addCase(getAllOrders.pending, (state, { meta }) => {
                 state.thread.push({
                     id: meta.requestId,
@@ -87,6 +95,28 @@ const orderSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // saveLocalOrder
+            .addCase(saveLocalOrder.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "SAVE_LOCAL_ORDER",
+                    status: "LOADING",
+                });
+            })
+            .addCase(saveLocalOrder.fulfilled, (state, { meta, payload }) => {
+                state.orders.unshift(payload);
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(saveLocalOrder.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -94,7 +124,7 @@ const orderSlice = createSlice({
 export default orderSlice.reducer;
 
 // async
-export { getAllOrders };
+export { getAllOrders, saveLocalOrder };
 
 // sync
-export const { addLocalItem, setItemQty } = orderSlice.actions;
+export const { addLocalItem, setItemQty, emptyCart } = orderSlice.actions;

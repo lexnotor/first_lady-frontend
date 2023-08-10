@@ -38,6 +38,20 @@ const productUrl = {
 
 const orderUrl = {
     findOrders: `${baseUrl}/order`,
+    saveLocalOrder: `${baseUrl}/order/local`,
 };
 
-export { apiFetch, authUrl, baseUrl, userUrl, shopUrl, productUrl, orderUrl };
+const cartUrl = {
+    addItem: `${baseUrl}/cart/item/add`,
+};
+
+export {
+    apiFetch,
+    authUrl,
+    baseUrl,
+    cartUrl,
+    orderUrl,
+    productUrl,
+    shopUrl,
+    userUrl,
+};
