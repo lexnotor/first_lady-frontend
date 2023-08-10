@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { OrderInfo } from "..";
+import { OrderInfo, ProductInfo, ProductVersionInfo } from "..";
 import { ordersService } from "./order.service";
 
 type Status = "LOADING" | "ERROR" | "FULLFILED";
 
 interface OrderState {
     orders: OrderInfo[];
+    local_cart: {
+        product_v_id: string;
+        product_v: ProductVersionInfo;
+        product: ProductInfo;
+        quantity: number;
+    }[];
     thread: {
         id: string;
         action: "GET_ALL_ORDERS";
@@ -18,6 +24,7 @@ interface OrderState {
 const initialState: OrderState = {
     orders: [],
     thread: [],
+    local_cart: [],
 };
 
 const getAllOrders = createAsyncThunk(
@@ -28,7 +35,36 @@ const getAllOrders = createAsyncThunk(
 const orderSlice = createSlice({
     initialState,
     name: "order",
-    reducers: {},
+    reducers: {
+        addLocalItem: (
+            state,
+            {
+                payload,
+            }: { payload: { p_v: ProductVersionInfo; p: ProductInfo } }
+        ) => {
+            const item = state.local_cart.find(
+                (item) => item.product_v_id == payload.p_v.id
+            );
+
+            if (!!item) item.quantity++;
+            else
+                state.local_cart.push({
+                    product_v: payload.p_v,
+                    quantity: 1,
+                    product_v_id: payload.p_v.id,
+                    product: payload.p,
+                });
+        },
+        setItemQty: (
+            state,
+            { payload }: { payload: { id: string; quantity: number } }
+        ) => {
+            const item = state.local_cart.find(
+                (item) => item.product_v_id == payload.id
+            );
+            item.quantity = payload.quantity < 1 ? 1 : payload.quantity;
+        },
+    },
     extraReducers: (builder) =>
         builder
             .addCase(getAllOrders.pending, (state, { meta }) => {
@@ -61,3 +97,4 @@ export default orderSlice.reducer;
 export { getAllOrders };
 
 // sync
+export const { addLocalItem, setItemQty } = orderSlice.actions;
