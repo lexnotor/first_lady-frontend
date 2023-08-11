@@ -60,7 +60,8 @@ const SignupForm = () => {
             </div>
             <div className="flex gap-4">
                 <input
-                    type="email"
+                    type="text"
+                    minLength={3}
                     placeholder="Username"
                     className="py-2 px-4 w-full border border-neutral-400 rounded-lg focus:outline-none"
                     ref={usernameRef}

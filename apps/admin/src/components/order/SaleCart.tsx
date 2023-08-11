@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useLocatCart } from "@/hooks/useLocalCart";
 import {
     emptyCart,
+    removeItem,
     saveLocalOrder,
     setItemQty,
 } from "@/redux/order/order.slice";
@@ -21,7 +22,9 @@ const SaleCart = () => {
             qty: item.quantity,
         }));
 
-        await dispatch(saveLocalOrder(payload));
+        await dispatch(saveLocalOrder(payload)).then(() =>
+            dispatch(emptyCart())
+        );
         alert("SALE_SAVED");
     };
 
@@ -52,13 +55,18 @@ const SaleCart = () => {
                                 }
                                 width={200}
                                 height={200}
-                                className="aspect-square w-6 rounded"
+                                className="aspect-square w-6 rounded self-start"
                             />
-                            <p>
-                                {item.product.title} ({item.product_v.title} -{" "}
-                                {item.product_v.price} $)
+                            <p className="flex flex-col">
+                                <span className="font-bold">
+                                    {item.product.title}
+                                </span>
+                                <span className="text-primary-300">
+                                    {item.product_v.title} -{" "}
+                                    {item.product_v.price} $
+                                </span>
                             </p>
-                            <p className="ml-auto flex gap-2">
+                            <p className="ml-auto flex items-center gap-2">
                                 <button
                                     onClick={() =>
                                         dispatch(
@@ -85,6 +93,14 @@ const SaleCart = () => {
                                     className="cursor-pointer text-sm px-2 py-[0px] text-secondary-800 border border-secondary-800 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl"
                                 >
                                     +
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        dispatch(removeItem(item.product_v_id))
+                                    }
+                                    className="cursor-pointer text-sm px-2 py-[0px] text-red-300 border border-red-300 hover:bg-red-300 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl"
+                                >
+                                    x
                                 </button>
                             </p>
                         </div>

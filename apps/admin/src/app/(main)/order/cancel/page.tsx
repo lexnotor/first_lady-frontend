@@ -1,7 +1,21 @@
+import OrderTable from "@/components/order/OrderTable";
+import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
 
+enum OrderState {
+    DONE = "DONE",
+    PENDING = "PENDING",
+    ERROR = "ERROR",
+}
+
 const Page = () => {
-    return <div>Cancel</div>;
+    return (
+        <div className="px-5">
+            <StoreProvider>
+                <OrderTable status={OrderState.ERROR} />
+            </StoreProvider>
+        </div>
+    );
 };
 
 export default Page;
