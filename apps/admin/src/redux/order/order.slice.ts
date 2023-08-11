@@ -14,7 +14,7 @@ interface OrderState {
     }[];
     thread: {
         id: string;
-        action: "GET_ALL_ORDERS" | "SAVE_LOCAL_ORDER";
+        action: "GET_ALL_ORDERS" | "SAVE_LOCAL_ORDER" | "CHANGE_ORDER_STATE";
         status: Status;
         payload?: object;
         message?: { content: string; display: boolean };
@@ -34,6 +34,10 @@ const getAllOrders = createAsyncThunk(
 const saveLocalOrder = createAsyncThunk(
     "order/saveLocalOrder",
     ordersService.saveLocalOrder
+);
+const changeOrderState = createAsyncThunk(
+    "order/changeOrderState",
+    ordersService.changeOrderState
 );
 
 const orderSlice = createSlice({
@@ -125,6 +129,31 @@ const orderSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // changeOrderState
+            .addCase(changeOrderState.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "CHANGE_ORDER_STATE",
+                    status: "LOADING",
+                });
+            })
+            .addCase(changeOrderState.fulfilled, (state, { meta, payload }) => {
+                const i = state.orders.findIndex(
+                    (item) => item.id == payload.id
+                );
+                state.orders.splice(i, 1, payload);
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(changeOrderState.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -132,7 +161,7 @@ const orderSlice = createSlice({
 export default orderSlice.reducer;
 
 // async
-export { getAllOrders, saveLocalOrder };
+export { getAllOrders, saveLocalOrder, changeOrderState };
 
 // sync
 export const { addLocalItem, setItemQty, emptyCart, removeItem } =

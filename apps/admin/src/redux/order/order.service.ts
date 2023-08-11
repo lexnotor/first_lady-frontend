@@ -1,6 +1,7 @@
+import { OrderState } from "@/components/order";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { ApiResponse, CartProductInfo, OrderInfo, OrderState } from "..";
+import type { ApiResponse, CartProductInfo, OrderInfo } from "..";
 import { cartUrl, orderUrl } from "../helper.api";
 import { RootState } from "../store";
 
@@ -27,7 +28,23 @@ const changeOrderState: AsyncThunkPayloadCreator<
     const {
         user: { token },
     } = thunkAPI.getState() as RootState;
-    return null;
+    try {
+        const url =
+            payload.state == OrderState.DONE
+                ? orderUrl.finishOrder
+                : orderUrl.cancelOrder;
+        const res: AxiosResponse<ApiResponse<OrderInfo>> = await axios.put(
+            `${url}/${payload.id}`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error.message ?? "FAIL_TO_CHANGE_STATE"
+        );
+    }
 };
 
 const saveLocalOrder: AsyncThunkPayloadCreator<

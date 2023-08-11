@@ -97,11 +97,11 @@ export interface CategoryStats {
     title: string;
 }
 
-enum OrderType {
+export enum OrderType {
     INSITU = "INSITU",
     DELIVERY = "DELIVERY",
 }
-enum OrderState {
+export enum OrderState {
     DONE = "DONE",
     PENDING = "PENDING",
     ERROR = "ERROR",
