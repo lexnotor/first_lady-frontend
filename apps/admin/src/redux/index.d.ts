@@ -123,3 +123,11 @@ export interface OrderProductInfo extends DefaultInfo {
     product: ProductInfo;
     quantity: number;
 }
+export interface OrderStats {
+    total_order: number;
+    order_insitu: number;
+    order_delivery: number;
+    order_cancel: number;
+    order_done: number;
+    order_pending: number;
+}

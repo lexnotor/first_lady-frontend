@@ -1,4 +1,5 @@
 "use client";
+import useOrder from "@/hooks/useOrder";
 import useProduct from "@/hooks/useProduct";
 
 const QuantityCard = () => {
@@ -22,4 +23,16 @@ const QuantityProductCard = () => {
     );
 };
 
-export { QuantityCard, QuantityProductCard };
+const TotalOrderCard = () => {
+    const { orderStats } = useOrder();
+    return (
+        <div className="h-28 bg-[#262830] p-4 rounded-xl">
+            <h3 className="text-3xl font-bold">
+                {orderStats?.total_order ?? "loading..."}
+            </h3>
+            <h4 className="text-neutral-500 text-[85%]">Commandes</h4>
+        </div>
+    );
+};
+
+export { QuantityCard, QuantityProductCard, TotalOrderCard };
