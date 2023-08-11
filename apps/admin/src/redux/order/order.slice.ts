@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { OrderInfo, ProductInfo, ProductVersionInfo } from "..";
+import { OrderInfo, OrderStats, ProductInfo, ProductVersionInfo } from "..";
 import { ordersService } from "./order.service";
 
 type Status = "LOADING" | "ERROR" | "FULLFILED";
@@ -12,9 +12,14 @@ interface OrderState {
         product: ProductInfo;
         quantity: number;
     }[];
+    orderStats: OrderStats;
     thread: {
         id: string;
-        action: "GET_ALL_ORDERS" | "SAVE_LOCAL_ORDER" | "CHANGE_ORDER_STATE";
+        action:
+            | "GET_ALL_ORDERS"
+            | "SAVE_LOCAL_ORDER"
+            | "CHANGE_ORDER_STATE"
+            | "LOAD_ORDER_STATS";
         status: Status;
         payload?: object;
         message?: { content: string; display: boolean };
@@ -24,6 +29,7 @@ interface OrderState {
 const initialState: OrderState = {
     orders: [],
     thread: [],
+    orderStats: null,
     local_cart: [],
 };
 
@@ -38,6 +44,10 @@ const saveLocalOrder = createAsyncThunk(
 const changeOrderState = createAsyncThunk(
     "order/changeOrderState",
     ordersService.changeOrderState
+);
+const loadOrderStat = createAsyncThunk(
+    "order/loadOrderStat",
+    ordersService.loadOrderStat
 );
 
 const orderSlice = createSlice({
@@ -154,6 +164,28 @@ const orderSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // loadOrderStat
+            .addCase(loadOrderStat.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "LOAD_ORDER_STATS",
+                    status: "LOADING",
+                });
+            })
+            .addCase(loadOrderStat.fulfilled, (state, { meta, payload }) => {
+                state.orderStats = payload;
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(loadOrderStat.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -161,7 +193,7 @@ const orderSlice = createSlice({
 export default orderSlice.reducer;
 
 // async
-export { getAllOrders, saveLocalOrder, changeOrderState };
+export { changeOrderState, getAllOrders, loadOrderStat, saveLocalOrder };
 
 // sync
 export const { addLocalItem, setItemQty, emptyCart, removeItem } =

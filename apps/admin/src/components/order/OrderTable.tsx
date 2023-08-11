@@ -1,11 +1,12 @@
 "use client";
 
-import useOrder from "@/hooks/useOrder";
-import { Popover, Table, Tag } from "antd";
-import { useEffect, useMemo } from "react";
-import { OrderState } from ".";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import useOrder from "@/hooks/useOrder";
 import { changeOrderState } from "@/redux/order/order.slice";
+import { Popover, Tag } from "antd";
+import { useEffect, useMemo } from "react";
+import { CustomTable } from "ui";
+import { OrderState } from ".";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
@@ -21,7 +22,7 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
-                <Table
+                <CustomTable
                     columns={[
                         {
                             title: "Utilisateur",
@@ -118,54 +119,12 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                     pagination={false}
                     dataSource={source}
                     rowKey={(record) => record.id}
-                    className="bg-transparent"
-                    size="small"
                     locale={{
                         emptyText: (
                             <div className="text-center font-bold py-20">
                                 Pas de commande
                             </div>
                         ),
-                    }}
-                    components={{
-                        header: {
-                            cell: ({
-                                children,
-                                ...rest
-                            }: {
-                                children: any;
-                            }) => (
-                                <td
-                                    {...rest}
-                                    className="p-2 hover:!bg-transparent !font-medium !text-white text-sm !bg-[#262830]/30"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                            row: ({ children }: { children: any }) => (
-                                <tr>{children}</tr>
-                            ),
-                        },
-                        body: {
-                            row: ({ children }: { children: any }) => (
-                                <tr className="!rounded-xl odd:!bg-transparent even:!bg-[#262830]/30 hover:!bg-[#262830]/50 transition-colors duration-500">
-                                    {children}
-                                </tr>
-                            ),
-                            cell: ({
-                                children,
-                                ...rest
-                            }: {
-                                children: any;
-                            }) => (
-                                <td
-                                    {...rest}
-                                    className="p-0 !font-normal !text-white text-sm !border-none"
-                                >
-                                    {children}
-                                </td>
-                            ),
-                        },
                     }}
                 />
             </div>

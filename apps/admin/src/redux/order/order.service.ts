@@ -1,7 +1,7 @@
 import { OrderState } from "@/components/order";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import type { ApiResponse, CartProductInfo, OrderInfo } from "..";
+import type { ApiResponse, CartProductInfo, OrderInfo, OrderStats } from "..";
 import { cartUrl, orderUrl } from "../helper.api";
 import { RootState } from "../store";
 
@@ -91,4 +91,24 @@ const saveLocalOrder: AsyncThunkPayloadCreator<
     }
 };
 
-export const ordersService = { getAllOrders, saveLocalOrder, changeOrderState };
+const loadOrderStat: AsyncThunkPayloadCreator<OrderStats> = async (
+    _,
+    thunkAPI
+) => {
+    try {
+        const res: AxiosResponse<ApiResponse<OrderStats>> = await axios.get(
+            orderUrl.getStats
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_LOAD_STATS");
+    }
+};
+
+export const ordersService = {
+    getAllOrders,
+    saveLocalOrder,
+    changeOrderState,
+    loadOrderStat,
+};

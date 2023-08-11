@@ -3,6 +3,7 @@ import PendingOrderList from "@/components/dash/PendingOrderList";
 import {
     QuantityCard,
     QuantityProductCard,
+    TotalOrderCard,
 } from "@/components/dash/QuantityCard";
 import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
@@ -13,16 +14,18 @@ const Page = () => {
             <div className="grid grid-cols-4 p-4 gap-4">
                 <StoreProvider>
                     <QuantityProductCard />
-                    <QuantityCard />
+                    <TotalOrderCard />
                     <QuantityCard />
                     <QuantityCard />
                 </StoreProvider>
             </div>
             <div className="grid grid-cols-2 p-4 gap-4">
-                <GraphiqueCard text="Vente Annuelle" />
-                <PendingOrderList />
-                <PendingOrderList />
-                <GraphiqueCard text="Commandes" />
+                <StoreProvider>
+                    <GraphiqueCard text="Vente Annuelle" />
+                    <PendingOrderList />
+                    <PendingOrderList />
+                    <GraphiqueCard text="Commandes" />
+                </StoreProvider>
             </div>
         </div>
     );

@@ -2,11 +2,13 @@
 import { useEffect, useMemo } from "react";
 import { useAppSelector } from "./useAppSelector";
 import { useAppDispatch } from "./useAppDispatch";
-import { getAllOrders } from "@/redux/order/order.slice";
+import { getAllOrders, loadOrderStat } from "@/redux/order/order.slice";
 
 const useOrder = () => {
     const dispatch = useAppDispatch();
-    const { orders, thread } = useAppSelector((state) => state.order);
+    const { orders, thread, orderStats } = useAppSelector(
+        (state) => state.order
+    );
 
     const isLoadingOrders = useMemo(
         () =>
@@ -17,11 +19,19 @@ const useOrder = () => {
         [thread]
     );
 
+    const alreadyLoadStats = useMemo(() => {
+        return thread.some((task) => task.action == "LOAD_ORDER_STATS");
+    }, [thread]);
+
+    useEffect(() => {
+        if (orderStats == null && !alreadyLoadStats) dispatch(loadOrderStat());
+    }, [dispatch, orderStats, alreadyLoadStats]);
+
     useEffect(() => {
         if (orders.length == 0 && !isLoadingOrders) dispatch(getAllOrders());
     }, [dispatch, orders.length, isLoadingOrders]);
 
-    return { orders, thread };
+    return { orders, thread, orderStats };
 };
 
 export default useOrder;
