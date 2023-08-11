@@ -13,7 +13,7 @@ const SaleCart = () => {
     const { local_cart } = useLocatCart();
     const dispatch = useAppDispatch();
 
-    const submit = () => {
+    const submit = async () => {
         if (local_cart.length == 0) return alert("Please add Items in Cart");
 
         const payload = local_cart.map((item) => ({
@@ -21,14 +21,23 @@ const SaleCart = () => {
             qty: item.quantity,
         }));
 
-        dispatch(saveLocalOrder(payload));
+        await dispatch(saveLocalOrder(payload));
+        alert("SALE_SAVED");
     };
 
     return (
         <div className="w-full h-full flex flex-col">
             <h2 className="flex justify-between">
                 <span>Panier</span>
-                <span>Total: 00.0 USD</span>
+                <span className="font-bold text-secondary-800">
+                    Total:{" "}
+                    {local_cart?.reduce(
+                        (prev, cur) =>
+                            prev + cur.quantity * cur.product_v.price,
+                        0
+                    )}{" "}
+                    USD
+                </span>
             </h2>
             <div className="h-[calc(100%-1.5rem-1.5rem)] overflow-y-auto flex flex-col gap-4 mt-4">
                 {local_cart.length == 0 ? (
