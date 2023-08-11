@@ -39,6 +39,8 @@ const productUrl = {
 const orderUrl = {
     findOrders: `${baseUrl}/order`,
     saveLocalOrder: `${baseUrl}/order/local`,
+    cancelOrder: `${baseUrl}/done`,
+    finishOrder: `${baseUrl}/cancel`,
 };
 
 const cartUrl = {

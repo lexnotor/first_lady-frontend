@@ -5,6 +5,7 @@ import { Popover, Table, Tag } from "antd";
 import { useEffect, useMemo } from "react";
 import { OrderState } from ".";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { changeOrderState } from "@/redux/order/order.slice";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
@@ -56,7 +57,7 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                         {
                             title: "Action",
                             width: "5rem",
-                            render: (_, { state }) => (
+                            render: (_, { state, id }) => (
                                 <Popover
                                     overlayInnerStyle={{
                                         padding: "0",
@@ -72,7 +73,14 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                                 <>
                                                     <li
                                                         onClick={() =>
-                                                            dispatch()
+                                                            dispatch(
+                                                                changeOrderState(
+                                                                    {
+                                                                        id,
+                                                                        state: OrderState.DONE,
+                                                                    }
+                                                                )
+                                                            )
                                                         }
                                                         className="cursor-pointer hover:text-white hover:bg-neutral-600"
                                                     >
@@ -80,7 +88,14 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                                     </li>
                                                     <li
                                                         onClick={() =>
-                                                            dispatch()
+                                                            dispatch(
+                                                                changeOrderState(
+                                                                    {
+                                                                        id,
+                                                                        state: OrderState.ERROR,
+                                                                    }
+                                                                )
+                                                            )
                                                         }
                                                         className="cursor-pointer hover:text-white hover:bg-neutral-600"
                                                     >
