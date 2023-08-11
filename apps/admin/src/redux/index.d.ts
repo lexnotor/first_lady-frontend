@@ -70,12 +70,56 @@ export interface CategoryInfo extends DefaultInfo {
     shop?: ShopInfo;
 }
 
-export interface BasketInfo extends DefaultInfo {
+export interface CartInfo extends DefaultInfo {
     user?: UserInfo;
 }
-export interface BasketProductInfo extends DefaultInfo {
+export interface CartProductInfo extends DefaultInfo {
     quantity?: number;
     shop?: ShopInfo;
     product?: ProductInfo;
     product_v?: ProductVersionInfo;
+}
+
+export interface ProductStats {
+    total_product: number;
+    total_variant: number;
+    total_category: number;
+    product_without_category: number;
+    product_out_of_stock: number;
+    total_order: number;
+    total_insitu: number;
+    total_delivery: number;
+}
+
+export interface CategoryStats {
+    id: string;
+    products: string;
+    title: string;
+}
+
+enum OrderType {
+    INSITU = "INSITU",
+    DELIVERY = "DELIVERY",
+}
+enum OrderState {
+    DONE = "DONE",
+    PENDING = "PENDING",
+    ERROR = "ERROR",
+}
+export interface OrderInfo extends DefaultInfo {
+    type: OrderType;
+    address: string;
+    date: Date;
+    paid: boolean;
+    state: OrderState;
+    user: UserInfo;
+    shop: ShopInfo;
+    products: OrderProductInfo[];
+}
+
+export interface OrderProductInfo extends DefaultInfo {
+    order: OrderInfo;
+    product_v: ProductVersionInfo;
+    product: ProductInfo;
+    quantity: number;
 }

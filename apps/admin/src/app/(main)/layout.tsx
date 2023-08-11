@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="fr">
-            <body className="text-neutral-100 bg-[#0b0b18]">
+            <body className="text-neutral-100 bg-[#0b0b18] min-w-[1240px]">
                 <div className="flex justify-center h-screen max-w-[1500px] mx-auto">
                     <div className="w-64 overflow-y-auto shrink-0 h-full">
                         <Header />

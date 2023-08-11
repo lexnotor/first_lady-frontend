@@ -5,3 +5,4 @@ export { Header } from "./Header";
 export { default as AntConfig } from "./AntConfig";
 export { default as Checkbox } from "./Checkbox";
 export { SpinLoader } from "./SpinLoader";
+export { CustomTable } from "./CustomTable";

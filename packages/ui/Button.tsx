@@ -23,8 +23,8 @@ export const Button = ({
             className={` ${
                 size == "small" ? "py-1" : size == "large" ? "py-3" : "py-2"
             } px-4 ${
-                active ? "bg-neutral-600" : "bg-neutral-400"
-            } hover:bg-neutral-600 transition-colors !duration-500 rounded-r-full rounded-l-full text-white`}
+                active ? "bg-primary-700" : "bg-primary-600"
+            } hover:bg-primary-700 transition-colors !duration-500 rounded-r-full rounded-l-full text-white`}
         >
             {children}
         </button>

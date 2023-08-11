@@ -11,7 +11,7 @@ const Header = () => {
     return (
         <header className="p-4 flex flex-col gap-5 w-full min-h-full bg-[#262830] text-white">
             <div className="flex justify-between">
-                <span>FIRST LADY</span>
+                <span>Logo</span>
                 <span></span>
             </div>
             <ul className="flex gap-3 flex-col my-auto">
@@ -20,14 +20,18 @@ const Header = () => {
                     text="Dashboard"
                     to="/dash"
                 />
-                <LinkWrapper icon={<BsCart4 />} text="Orders" to="/order" />
+                <LinkWrapper icon={<BsCart4 />} text="Commandes" to="/order" />
                 <LinkWrapper
                     icon={<BiShoppingBag />}
-                    text="Products"
+                    text="Produits"
                     to="/product"
                 />
-                <LinkWrapper icon={<FiUsers />} text="Users" to="/user" />
-                <LinkWrapper icon={<BsShop />} text="Shops" to="/shop" />
+                <LinkWrapper
+                    icon={<FiUsers />}
+                    text="Ustilisateurs"
+                    to="/user"
+                />
+                <LinkWrapper icon={<BsShop />} text="Boutiques" to="/shop" />
             </ul>
             <div className="mt-auto">
                 <StoreProvider>

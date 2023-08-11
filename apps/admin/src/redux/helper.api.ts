@@ -27,4 +27,31 @@ const shopUrl = {
     findShop: (text = "") => `${baseUrl}/shop?text=${text}`,
 };
 
-export { apiFetch, authUrl, baseUrl, userUrl, shopUrl };
+const productUrl = {
+    createProduct: `${baseUrl}/product/new`,
+    createCategory: `${baseUrl}/product/category/new`,
+    findProduct: `${baseUrl}/product`,
+    findCategory: `${baseUrl}/product/category`,
+    loadCategorieStat: `${baseUrl}/product/category/count`,
+    getStats: `${baseUrl}/product/stats`,
+};
+
+const orderUrl = {
+    findOrders: `${baseUrl}/order`,
+    saveLocalOrder: `${baseUrl}/order/local`,
+};
+
+const cartUrl = {
+    addItem: `${baseUrl}/cart/item/add`,
+};
+
+export {
+    apiFetch,
+    authUrl,
+    baseUrl,
+    cartUrl,
+    orderUrl,
+    productUrl,
+    shopUrl,
+    userUrl,
+};
