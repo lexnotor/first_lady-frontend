@@ -18,7 +18,7 @@ const useOrder = () => {
     );
 
     useEffect(() => {
-        if (orders.length == 0 && isLoadingOrders) dispatch(getAllOrders());
+        if (orders.length == 0 && !isLoadingOrders) dispatch(getAllOrders());
     }, [dispatch, orders.length, isLoadingOrders]);
 
     return { orders, thread };

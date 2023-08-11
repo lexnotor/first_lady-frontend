@@ -71,6 +71,14 @@ const orderSlice = createSlice({
         emptyCart: (state) => {
             state.local_cart = [];
         },
+        removeItem: (state, { payload }: { payload: string }) => {
+            const i = state.local_cart.findIndex(
+                (item) => item.product_v_id == payload
+            );
+            if (i == -1) return state;
+
+            state.local_cart.splice(i, 1);
+        },
     },
     extraReducers: (builder) =>
         builder
@@ -127,4 +135,5 @@ export default orderSlice.reducer;
 export { getAllOrders, saveLocalOrder };
 
 // sync
-export const { addLocalItem, setItemQty, emptyCart } = orderSlice.actions;
+export const { addLocalItem, setItemQty, emptyCart, removeItem } =
+    orderSlice.actions;

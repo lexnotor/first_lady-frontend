@@ -1,6 +1,6 @@
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { ApiResponse, CartProductInfo, OrderInfo } from "..";
+import { ApiResponse, CartProductInfo, OrderInfo, OrderState } from "..";
 import { cartUrl, orderUrl } from "../helper.api";
 import { RootState } from "../store";
 
@@ -18,6 +18,16 @@ const getAllOrders: AsyncThunkPayloadCreator<OrderInfo[]> = async (
             error.message ?? "FAIL_TO_FETCH_ORDERS"
         );
     }
+};
+
+const changeOrderState: AsyncThunkPayloadCreator<
+    OrderInfo,
+    { id: string; state: OrderState }
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    return null;
 };
 
 const saveLocalOrder: AsyncThunkPayloadCreator<
@@ -64,4 +74,4 @@ const saveLocalOrder: AsyncThunkPayloadCreator<
     }
 };
 
-export const ordersService = { getAllOrders, saveLocalOrder };
+export const ordersService = { getAllOrders, saveLocalOrder, changeOrderState };
