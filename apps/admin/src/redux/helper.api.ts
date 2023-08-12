@@ -21,6 +21,7 @@ const authUrl = {
 const userUrl = {
     getMe: `${baseUrl}/user/me`,
     getUser: `${baseUrl}/user`,
+    getStats: `${baseUrl}/user/stats`,
 };
 
 const shopUrl = {

@@ -4,6 +4,7 @@ import {
     QuantityCard,
     QuantityProductCard,
     TotalOrderCard,
+    TotalUserCard,
 } from "@/components/dash/QuantityCard";
 import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
@@ -15,7 +16,7 @@ const Page = () => {
                 <StoreProvider>
                     <QuantityProductCard />
                     <TotalOrderCard />
-                    <QuantityCard />
+                    <TotalUserCard />
                     <QuantityCard />
                 </StoreProvider>
             </div>
