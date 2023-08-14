@@ -11,11 +11,7 @@ const useOrder = () => {
     );
 
     const isLoadingOrders = useMemo(
-        () =>
-            thread.some(
-                (task) =>
-                    task.status == "LOADING" && task.action == "GET_ALL_ORDERS"
-            ),
+        () => thread.some((task) => task.action == "GET_ALL_ORDERS"),
         [thread]
     );
 
