@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { userServices } from "./user.service";
+import { UserStats } from "..";
 
 type Status = "LOADING" | "ERROR" | "FULLFILED";
 interface UserState {
@@ -12,9 +13,10 @@ interface UserState {
         email: string;
         roles: string[];
     };
+    userStats: UserStats;
     thread: {
         id: string;
-        action: "LOGIN" | "GET_ME" | "SIGNUP";
+        action: "LOGIN" | "GET_ME" | "SIGNUP" | "LOAD_USER_STATS";
         status: Status;
         payload?: object;
         message?: { content: string; display: boolean };
@@ -25,6 +27,7 @@ interface UserState {
 const initialState: UserState = {
     token: null,
     data: null,
+    userStats: null,
     thread: [],
 };
 
@@ -33,6 +36,11 @@ const signupUser = createAsyncThunk("user/signupUser", userServices.signupUser);
 const loginUser = createAsyncThunk("user/loginUser", userServices.loginUser);
 
 const getMe = createAsyncThunk("user/getMyInfo", userServices.getMyInfo);
+
+const getUserStats = createAsyncThunk(
+    "user/getUserStats",
+    userServices.getUserStats
+);
 
 const userSlice = createSlice({
     name: "user",
@@ -62,6 +70,7 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) =>
         builder
+            // loginUser
             .addCase(loginUser.pending, (state, { meta }) => {
                 state.thread.push({
                     action: "LOGIN",
@@ -85,7 +94,7 @@ const userSlice = createSlice({
                 });
                 if (tasks) tasks.status = "ERROR";
             })
-
+            // signupUser
             .addCase(signupUser.pending, (state, { meta }) => {
                 state.thread.push({
                     action: "SIGNUP",
@@ -105,7 +114,7 @@ const userSlice = createSlice({
                 });
                 if (tasks) tasks.status = "ERROR";
             })
-
+            // getMe
             .addCase(getMe.pending, (state, { meta }) => {
                 state.thread.push({
                     action: "GET_ME",
@@ -126,6 +135,28 @@ const userSlice = createSlice({
                     (task) => task.id == meta.requestId
                 );
                 if (tasks) tasks.status = "ERROR";
+            })
+            // getUserStats
+            .addCase(getUserStats.pending, (state, { meta }) => {
+                state.thread.push({
+                    action: "LOAD_USER_STATS",
+                    id: meta.requestId,
+                    status: "LOADING",
+                });
+            })
+            .addCase(getUserStats.fulfilled, (state, { payload, meta }) => {
+                state.userStats = payload;
+
+                const tasks = state.thread.find(
+                    (task) => task.id == meta.requestId
+                );
+                if (tasks) tasks.status = "FULLFILED";
+            })
+            .addCase(getUserStats.rejected, (state, { meta }) => {
+                const tasks = state.thread.find(
+                    (task) => task.id == meta.requestId
+                );
+                if (tasks) tasks.status = "ERROR";
             }),
 });
 
@@ -133,6 +164,6 @@ const userSlice = createSlice({
 export const { removeUserData, loadUserData, loadUserToken, logoutUser } =
     userSlice.actions;
 // async actions
-export { getMe, loginUser, signupUser };
+export { getMe, loginUser, signupUser, getUserStats };
 // reducer
 export default userSlice.reducer;

@@ -1,9 +1,10 @@
 "use client";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { authUrl, userUrl } from "../helper.api";
 import { loginUser as loginUserAction } from "./user.slice";
 import { RootState } from "../store";
+import { ApiResponse, UserStats } from "..";
 
 const signupUser: AsyncThunkPayloadCreator<any, any> = async (
     payload: {
@@ -66,4 +67,20 @@ const getMyInfo: AsyncThunkPayloadCreator<any, void> = async (_, thunkAPI) => {
     }
 };
 
-export const userServices = { signupUser, loginUser, getMyInfo };
+const getUserStats: AsyncThunkPayloadCreator<UserStats> = async (
+    _,
+    thunkAPI
+) => {
+    try {
+        const res: AxiosResponse<ApiResponse<UserStats>> = await axios.get(
+            userUrl.getStats
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error.message ?? "FAIL_TO_LOAD_USER_STAT"
+        );
+    }
+};
+
+export const userServices = { signupUser, loginUser, getMyInfo, getUserStats };

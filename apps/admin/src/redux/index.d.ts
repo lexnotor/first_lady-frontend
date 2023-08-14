@@ -131,3 +131,6 @@ export interface OrderStats {
     order_done: number;
     order_pending: number;
 }
+export interface UserStats {
+    total_user: number;
+}
