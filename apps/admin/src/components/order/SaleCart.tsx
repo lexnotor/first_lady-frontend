@@ -1,6 +1,8 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useLocatCart } from "@/hooks/useLocalCart";
+import { OrderInfo } from "@/redux";
+import { invoiceUrl } from "@/redux/helper.api";
 import {
     emptyCart,
     removeItem,
@@ -8,7 +10,6 @@ import {
     setItemQty,
 } from "@/redux/order/order.slice";
 import Image from "next/image";
-import React from "react";
 
 const SaleCart = () => {
     const { local_cart } = useLocatCart();
@@ -22,9 +23,13 @@ const SaleCart = () => {
             qty: item.quantity,
         }));
 
-        await dispatch(saveLocalOrder(payload)).then(() =>
-            dispatch(emptyCart())
-        );
+        const order = (await dispatch(saveLocalOrder(payload)).then(
+            ({ payload }) => {
+                dispatch(emptyCart());
+                return payload;
+            }
+        )) as OrderInfo;
+        `${invoiceUrl.getOrderInvoice}/${order.id}`;
         alert("SALE_SAVED");
     };
 

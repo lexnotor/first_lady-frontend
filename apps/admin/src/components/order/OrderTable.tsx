@@ -7,6 +7,8 @@ import { Popover, Tag } from "antd";
 import { useEffect, useMemo } from "react";
 import { CustomTable } from "ui";
 import { OrderState } from ".";
+import Link from "next/link";
+import { invoiceUrl } from "@/redux/helper.api";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
@@ -69,7 +71,7 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                     destroyTooltipOnHide
                                     trigger={["contextMenu", "click"]}
                                     content={
-                                        <ul className="[&>li]:py-2 [&>li]:px-8 [&>li]:duration-300 flex flex-col gap-0">
+                                        <ul className="[&_li]:py-2 [&_li]:px-8 [&_li]:duration-300 flex flex-col gap-0">
                                             {state == OrderState.PENDING ? (
                                                 <>
                                                     <li
@@ -106,6 +108,14 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                             ) : (
                                                 <></>
                                             )}
+                                            <Link
+                                                href={`${invoiceUrl.getOrderInvoice}/${id}`}
+                                                target="_blank"
+                                                rel="no-opener"
+                                                className="block cursor-pointer hover:text-white hover:bg-neutral-600"
+                                            >
+                                                <li>Facture</li>
+                                            </Link>
                                         </ul>
                                     }
                                 >

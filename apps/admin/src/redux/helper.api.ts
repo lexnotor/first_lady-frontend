@@ -45,6 +45,10 @@ const orderUrl = {
     getStats: `${baseUrl}/order/stats`,
 };
 
+const invoiceUrl = {
+    getOrderInvoice: `${baseUrl}/facture`,
+};
+
 const cartUrl = {
     addItem: `${baseUrl}/cart/item/add`,
 };
@@ -58,4 +62,5 @@ export {
     productUrl,
     shopUrl,
     userUrl,
+    invoiceUrl,
 };
