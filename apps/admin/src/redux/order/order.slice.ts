@@ -24,6 +24,7 @@ interface OrderState {
         payload?: object;
         message?: { content: string; display: boolean };
     }[];
+    invoiceId?: string;
 }
 
 const initialState: OrderState = {
@@ -31,6 +32,7 @@ const initialState: OrderState = {
     thread: [],
     orderStats: null,
     local_cart: [],
+    invoiceId: null,
 };
 
 const getAllOrders = createAsyncThunk(
@@ -92,6 +94,9 @@ const orderSlice = createSlice({
             if (i == -1) return state;
 
             state.local_cart.splice(i, 1);
+        },
+        setInvoiceId: (state, { payload }: { payload?: string }) => {
+            state.invoiceId = payload ?? null;
         },
     },
     extraReducers: (builder) =>
@@ -196,5 +201,5 @@ export default orderSlice.reducer;
 export { changeOrderState, getAllOrders, loadOrderStat, saveLocalOrder };
 
 // sync
-export const { addLocalItem, setItemQty, emptyCart, removeItem } =
+export const { addLocalItem, setItemQty, emptyCart, removeItem, setInvoiceId } =
     orderSlice.actions;

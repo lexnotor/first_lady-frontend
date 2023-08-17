@@ -2,13 +2,12 @@
 
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useOrder from "@/hooks/useOrder";
-import { changeOrderState } from "@/redux/order/order.slice";
+import { changeOrderState, setInvoiceId } from "@/redux/order/order.slice";
 import { Popover, Tag } from "antd";
 import { useEffect, useMemo } from "react";
 import { CustomTable } from "ui";
 import { OrderState } from ".";
-import Link from "next/link";
-import { invoiceUrl } from "@/redux/helper.api";
+import LoadFacture from "../modals/LoadFacture";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
@@ -108,14 +107,14 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                             ) : (
                                                 <></>
                                             )}
-                                            <Link
-                                                href={`${invoiceUrl.getOrderInvoice}/${id}`}
-                                                target="_blank"
-                                                rel="no-opener"
+                                            <div
+                                                onClick={() =>
+                                                    dispatch(setInvoiceId(id))
+                                                }
                                                 className="block cursor-pointer hover:text-white hover:bg-neutral-600"
                                             >
                                                 <li>Facture</li>
-                                            </Link>
+                                            </div>
                                         </ul>
                                     }
                                 >
@@ -137,6 +136,9 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                         ),
                     }}
                 />
+            </div>
+            <div className="!text-black">
+                <LoadFacture />
             </div>
         </div>
     );
