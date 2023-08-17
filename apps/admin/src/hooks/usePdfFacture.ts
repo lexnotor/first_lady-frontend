@@ -14,14 +14,14 @@ const usePdfFacture = (id: string) => {
 
         const doc = new jsPDF({
             unit: "px",
-            compress: true,
-            putOnlyUsedFonts: true,
+            format: [500, 500],
         });
 
         await doc.html(html.data, {
-            width: 400,
+            width: 500,
             windowWidth: 500,
-            margin: [20, 20, 20, 20],
+            margin: 0,
+            autoPaging: "text",
         });
 
         // doc.output("pdfobjectnewwindow");
