@@ -7,6 +7,7 @@ const TopNavbar = () => {
             <LinkWrapper to="/product/a" text="Liste produit" />
             <LinkWrapper to="/product/new" text="Nouveau produit" />
             <LinkWrapper to="/product/type" text="Categories" />
+            <LinkWrapper to="/product/appro" text="Approvisionner" />
         </nav>
     );
 };

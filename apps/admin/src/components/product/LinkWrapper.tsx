@@ -11,7 +11,10 @@ const LinkWrapper = ({
     to: string;
 }) => {
     const path = usePathname();
-    const isActive = useMemo(() => path.startsWith(to), [path, to]);
+    const isActive = useMemo(() => {
+        const reg = new RegExp(`^${to}(?![a-zA-Z0-9])`);
+        return reg.test(path);
+    }, [path, to]);
 
     return (
         <span>

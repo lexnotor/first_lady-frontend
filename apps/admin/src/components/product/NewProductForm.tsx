@@ -15,7 +15,6 @@ const NewProductForm = () => {
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const brandRef = useRef<HTMLInputElement>(null);
     const categoryRef = useRef<HTMLSelectElement>(null);
-    const quantityRef = useRef<HTMLInputElement>(null);
     const priceRef = useRef<HTMLInputElement>(null);
 
     const submit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -24,7 +23,7 @@ const NewProductForm = () => {
         const description = descriptionRef.current.value;
         const brand = brandRef.current.value;
         const category = categoryRef.current.value;
-        const quantity = quantityRef.current.value;
+        const quantity = "0";
         const price = priceRef.current.value;
 
         if (title.trim().length < 3)
@@ -50,7 +49,6 @@ const NewProductForm = () => {
                 titleRef.current.value = "";
                 descriptionRef.current.value = "";
                 brandRef.current.value = "";
-                quantityRef.current.value = "0";
                 priceRef.current.value = "0";
             })
             .catch(alert);
@@ -104,20 +102,7 @@ const NewProductForm = () => {
                         </select>
                     </div>
                 </div>
-                <div className="input-group">
-                    <label htmlFor="quantity" className="input-label">
-                        Quantité
-                    </label>
-                    <div className="input-content">
-                        <input
-                            type="number"
-                            id="quantity"
-                            defaultValue={0}
-                            min={0}
-                            ref={quantityRef}
-                        />
-                    </div>
-                </div>
+
                 <div className="input-group">
                     <label htmlFor="price" className="input-label">
                         Prix
