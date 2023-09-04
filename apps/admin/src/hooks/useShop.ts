@@ -18,7 +18,7 @@ const useShop = () => {
     }, [shop.thread]);
 
     useEffect(() => {
-        if (shop.data.length == 0 && !alreadyGetAll) dispatch(getShopList());
+        if (!alreadyGetAll) dispatch(getShopList());
     }, [alreadyGetAll, dispatch, shop.data.length]);
 
     return { onLoading, shops: shop.data };

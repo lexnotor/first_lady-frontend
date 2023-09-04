@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CategoryInfo, ProductInfo, ProductStats } from "..";
+import {
+    CategoryInfo,
+    ProductInfo,
+    ProductStats,
+    ProductVersionInfo,
+} from "..";
 import { productService } from "./product.service";
 
 type Status = "LOADING" | "ERROR" | "FULLFILED";
 interface ProductState {
     products: ProductInfo[];
+    productVersion?: ProductVersionInfo[];
     category: CategoryInfo[];
     categoryStat: {
         id: string;
@@ -17,8 +23,11 @@ interface ProductState {
         id: string;
         action:
             | "CREATE_PRODUCT"
+            | "CREATE_PRODUCT_VERSION"
             | "CREATE_CATEGORY"
             | "GET_PRODUCTS"
+            | "GET_PRODUCTS_VERSION"
+            | "GET_ONE_PRODUCTS"
             | "GET_CATEGORIES"
             | "LOAD_CATEGORY_STAT"
             | "LOAD_PRODUCT_STAT"
@@ -33,6 +42,11 @@ interface ProductState {
 const createProduct = createAsyncThunk(
     "product/createProduct",
     productService.createProduct
+);
+
+const createProductVersion = createAsyncThunk(
+    "product/createProductVersion",
+    productService.createProductVersion
 );
 
 const createCategory = createAsyncThunk(
@@ -55,6 +69,15 @@ const getProducts = createAsyncThunk(
     productService.getProducts
 );
 
+const getProductsVersion = createAsyncThunk(
+    "product/getProductsVersion",
+    productService.getProductsVersion
+);
+const getOneProduct = createAsyncThunk(
+    "product/getOneProduct",
+    productService.getOneProduct
+);
+
 const getProductStats = createAsyncThunk(
     "product/getProductStats",
     productService.getProductStats
@@ -63,6 +86,7 @@ const getProductStats = createAsyncThunk(
 const initialState: ProductState = {
     products: [],
     category: [],
+    productVersion: [],
     productStat: null,
     categoryStat: [],
     search: [],
@@ -92,6 +116,31 @@ const productSlice = createSlice({
                 if (task) task.status = "FULLFILED";
             })
             .addCase(createProduct.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
+            })
+            // createProductVersion
+            .addCase(createProductVersion.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "CREATE_PRODUCT_VERSION",
+                    status: "LOADING",
+                });
+            })
+            .addCase(
+                createProductVersion.fulfilled,
+                (state, { meta, payload }) => {
+                    state.productVersion.unshift(payload);
+
+                    const task = state.thread.find(
+                        (item) => item.id == meta.requestId
+                    );
+                    if (task) task.status = "FULLFILED";
+                }
+            )
+            .addCase(createProductVersion.rejected, (state, { meta }) => {
                 const task = state.thread.find(
                     (item) => item.id == meta.requestId
                 );
@@ -188,6 +237,57 @@ const productSlice = createSlice({
                 );
                 if (task) task.status = "ERROR";
             })
+            // getProductsVersion
+            .addCase(getProductsVersion.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "GET_PRODUCTS_VERSION",
+                    status: "LOADING",
+                });
+            })
+            .addCase(
+                getProductsVersion.fulfilled,
+                (state, { meta, payload }) => {
+                    state.productVersion = payload;
+
+                    const task = state.thread.find(
+                        (item) => item.id == meta.requestId
+                    );
+                    if (task) task.status = "FULLFILED";
+                }
+            )
+            .addCase(getProductsVersion.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
+            })
+            // getOneProduct
+            .addCase(getOneProduct.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "GET_ONE_PRODUCTS",
+                    status: "LOADING",
+                });
+            })
+            .addCase(getOneProduct.fulfilled, (state, { meta, payload }) => {
+                const index = state.products.findIndex(
+                    (item) => item.id == payload.id
+                );
+
+                state.products.splice(index, 1, payload);
+
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "FULLFILED";
+            })
+            .addCase(getOneProduct.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
+            })
             // getProductStats
             .addCase(getProductStats.pending, (state, { meta }) => {
                 state.thread.push({
@@ -222,7 +322,10 @@ export {
     getCategories,
     loadCategorieStat,
     getProducts,
+    getOneProduct,
     getProductStats,
+    getProductsVersion,
+    createProductVersion,
 };
 
 // sync

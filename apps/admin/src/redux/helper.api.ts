@@ -31,7 +31,12 @@ const shopUrl = {
 const productUrl = {
     createProduct: `${baseUrl}/product/new`,
     createCategory: `${baseUrl}/product/category/new`,
+    createProductVersion: `${baseUrl}/product/version/new`,
     findProduct: `${baseUrl}/product`,
+    findProductVersion: `${baseUrl}/product/version`,
+    getOneProduct: (productId: string) => `${baseUrl}/product?id=${productId}`,
+    getOneProductVersion: (productVId: string) =>
+        `${baseUrl}/product/version?id=${productVId}`,
     findCategory: `${baseUrl}/product/category`,
     loadCategorieStat: `${baseUrl}/product/category/count`,
     getStats: `${baseUrl}/product/stats`,
