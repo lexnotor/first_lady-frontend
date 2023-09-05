@@ -132,7 +132,14 @@ const productSlice = createSlice({
             .addCase(
                 createProductVersion.fulfilled,
                 (state, { meta, payload }) => {
-                    state.productVersion.unshift(payload);
+                    payload.product_v.forEach((vers) => {
+                        if (
+                            !state.productVersion.find(
+                                (item) => item.id == vers.id
+                            )
+                        )
+                            state.productVersion.unshift(vers);
+                    });
 
                     const task = state.thread.find(
                         (item) => item.id == meta.requestId

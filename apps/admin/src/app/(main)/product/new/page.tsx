@@ -1,3 +1,4 @@
+"use client";
 import { NewProductForm } from "@/components/product/NewProductForm";
 import StoreProvider from "@/redux/StoreProvider";
 

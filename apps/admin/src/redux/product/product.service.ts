@@ -65,7 +65,7 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
 };
 
 const createProductVersion: AsyncThunkPayloadCreator<
-    ProductVersionInfo,
+    ProductInfo,
     CreateVersionPayload
 > = async (payload, thunkAPI) => {
     const {
@@ -73,12 +73,11 @@ const createProductVersion: AsyncThunkPayloadCreator<
     } = thunkAPI.getState() as RootState;
     const { title, product, description, quantity, price } = payload;
     try {
-        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
-            await axios.post(
-                productUrl.createProductVersion,
-                { title, product, description, quantity, price },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+        const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.post(
+            productUrl.createProductVersion,
+            { title, product, description, quantity, price },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
 
         return res.data.data;
     } catch (error) {
