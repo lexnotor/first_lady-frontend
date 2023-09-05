@@ -1,79 +1,80 @@
 "use client";
-import useProduct from "@/hooks/useProduct";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import useProductVersion from "@/hooks/useProductVersion";
+import { ProductVersionInfo } from "@/redux";
+import { deleteProductVersion } from "@/redux/product/product.slice";
 import { Popover } from "antd";
+import { ColumnsType } from "antd/es/table";
 import { CustomTable } from "ui";
 
+const ColumnConfig: (
+    dispatch: ReturnType<typeof useAppDispatch>
+) => ColumnsType<ProductVersionInfo> = (dispatch) => {
+    const config: ColumnsType<ProductVersionInfo> = [
+        {
+            title: "Désignation",
+            dataIndex: "title",
+            render: (_, record) => <>{record?.product?.title}</>,
+        },
+        {
+            title: "Variants",
+            render: (_, record) => <div>{record.title}</div>,
+        },
+        {
+            title: "Categorie",
+            render: (_, record) => (
+                <>{record?.product?.category?.title ?? "-"}</>
+            ),
+        },
+        {
+            title: "Prix",
+            render: (_, record) => <div>{record.price}</div>,
+        },
+        {
+            title: "Quantité",
+            render: (_, record) => <div>{record.quantity}</div>,
+        },
+        {
+            title: "",
+            width: "5rem",
+            render: (_, record) => (
+                <Popover
+                    placement="left"
+                    trigger={["contextMenu", "click"]}
+                    content={
+                        <ul>
+                            <li
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    dispatch(deleteProductVersion(record.id))
+                                }
+                            >
+                                Supprimer
+                            </li>
+                        </ul>
+                    }
+                >
+                    <div className="cursor-pointer px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800  hover:text-black transition-colors duration-500 rounded-lg">
+                        Plus
+                    </div>
+                </Popover>
+            ),
+        },
+    ];
+    return config;
+};
+
 const ListeProduct = () => {
-    const { products } = useProduct();
+    const { productVersion } = useProductVersion();
+    const dispatch = useAppDispatch();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
                 <CustomTable
-                    columns={[
-                        { title: "Désiggnation", dataIndex: "title" },
-                        {
-                            title: "Variants",
-                            render: (_, record) => (
-                                <div>
-                                    {record.product_v.map((item) => (
-                                        <span key={item.id}>{item.title},</span>
-                                    ))}
-                                </div>
-                            ),
-                        },
-                        {
-                            title: "Categorie",
-                            render: (_, record) => (
-                                <span>
-                                    {record.category?.title ?? "No spécifié"}
-                                </span>
-                            ),
-                        },
-                        {
-                            title: "Prix",
-                            render: (_, record) => (
-                                <div>
-                                    {record.product_v.map((item) => (
-                                        <span key={item.id}>
-                                            {item.price} USD,
-                                        </span>
-                                    ))}
-                                </div>
-                            ),
-                        },
-                        {
-                            title: "Quantité",
-                            render: (_, record) => (
-                                <div>
-                                    {record.product_v.reduce(
-                                        (prev, cur) => prev + cur.quantity,
-                                        0
-                                    )}
-                                </div>
-                            ),
-                        },
-                        {
-                            title: "",
-                            width: "5rem",
-                            render: () => (
-                                <Popover
-                                    placement="left"
-                                    trigger={["contextMenu", "click"]}
-                                    content={
-                                        <ul>
-                                            <li>More</li>
-                                        </ul>
-                                    }
-                                >
-                                    <div className="cursor-pointer px-4 py-1 text-secondary-800 border border-secondary-800 hover:bg-secondary-800  hover:text-black transition-colors duration-500 rounded-lg">
-                                        Plus
-                                    </div>
-                                </Popover>
-                            ),
-                        },
-                    ]}
+                    columns={ColumnConfig(dispatch)}
                     pagination={false}
-                    dataSource={products}
+                    // TODO
+                    dataSource={productVersion}
                     locale={{
                         emptyText: (
                             <div className="text-center font-bold py-20">

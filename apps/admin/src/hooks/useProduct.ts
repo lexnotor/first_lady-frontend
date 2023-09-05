@@ -36,18 +36,15 @@ const useProduct = () => {
     }, [thread]);
 
     useEffect(() => {
-        if (products.length == 0 && !alreadySearchProduct)
-            dispatch(getProducts({}));
+        if (!alreadySearchProduct) dispatch(getProducts({}));
     }, [dispatch, products.length, alreadySearchProduct]);
 
     useEffect(() => {
-        if (category.length == 0 && !alreadySearchCategory)
-            dispatch(getCategories({}));
+        if (!alreadySearchCategory) dispatch(getCategories({}));
     }, [dispatch, category.length, alreadySearchCategory]);
 
     useEffect(() => {
-        if (productStat == null && !alreadyLoadStats)
-            dispatch(getProductStats());
+        if (!alreadyLoadStats) dispatch(getProductStats());
     }, [dispatch, productStat, alreadyLoadStats]);
 
     useEffect(() => {
