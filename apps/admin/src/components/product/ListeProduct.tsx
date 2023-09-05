@@ -1,11 +1,15 @@
 "use client";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useProductVersion from "@/hooks/useProductVersion";
 import { ProductVersionInfo } from "@/redux";
+import { deleteProductVersion } from "@/redux/product/product.slice";
 import { Popover } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { CustomTable } from "ui";
 
-const ColumnConfig: () => ColumnsType<ProductVersionInfo> = () => {
+const ColumnConfig: (
+    dispatch: ReturnType<typeof useAppDispatch>
+) => ColumnsType<ProductVersionInfo> = (dispatch) => {
     const config: ColumnsType<ProductVersionInfo> = [
         {
             title: "Désignation",
@@ -33,13 +37,20 @@ const ColumnConfig: () => ColumnsType<ProductVersionInfo> = () => {
         {
             title: "",
             width: "5rem",
-            render: () => (
+            render: (_, record) => (
                 <Popover
                     placement="left"
                     trigger={["contextMenu", "click"]}
                     content={
                         <ul>
-                            <li>More</li>
+                            <li
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    dispatch(deleteProductVersion(record.id))
+                                }
+                            >
+                                Supprimer
+                            </li>
                         </ul>
                     }
                 >
@@ -55,11 +66,12 @@ const ColumnConfig: () => ColumnsType<ProductVersionInfo> = () => {
 
 const ListeProduct = () => {
     const { productVersion } = useProductVersion();
+    const dispatch = useAppDispatch();
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
                 <CustomTable
-                    columns={ColumnConfig()}
+                    columns={ColumnConfig(dispatch)}
                     pagination={false}
                     // TODO
                     dataSource={productVersion}

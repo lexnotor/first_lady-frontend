@@ -32,7 +32,8 @@ interface ProductState {
             | "LOAD_CATEGORY_STAT"
             | "LOAD_PRODUCT_STAT"
             | "SEARCH_PRODUCT"
-            | "DELETE_PRODUCT";
+            | "DELETE_PRODUCT"
+            | "DELETE_PRODUCT_VERSION";
         status: Status;
         payload?: object;
         message?: { content: string; display: boolean };
@@ -81,6 +82,11 @@ const getOneProduct = createAsyncThunk(
 const getProductStats = createAsyncThunk(
     "product/getProductStats",
     productService.getProductStats
+);
+
+const deleteProductVersion = createAsyncThunk(
+    "product/deleteProductVersion",
+    productService.deleteProductVersion
 );
 
 const initialState: ProductState = {
@@ -316,6 +322,34 @@ const productSlice = createSlice({
                     (item) => item.id == meta.requestId
                 );
                 if (task) task.status = "ERROR";
+            })
+            // deleteProductVersion
+            .addCase(deleteProductVersion.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "DELETE_PRODUCT_VERSION",
+                    status: "LOADING",
+                });
+            })
+            .addCase(
+                deleteProductVersion.fulfilled,
+                (state, { meta, payload }) => {
+                    const index = state.productVersion.findIndex(
+                        (item) => item.id == payload
+                    );
+                    state.productVersion.splice(index, 1);
+
+                    const task = state.thread.find(
+                        (item) => item.id == meta.requestId
+                    );
+                    if (task) task.status = "FULLFILED";
+                }
+            )
+            .addCase(deleteProductVersion.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
             }),
 });
 
@@ -324,15 +358,16 @@ export default productSlice.reducer;
 
 // async
 export {
-    createProduct,
     createCategory,
+    createProduct,
+    createProductVersion,
+    deleteProductVersion,
     getCategories,
-    loadCategorieStat,
-    getProducts,
     getOneProduct,
     getProductStats,
+    getProducts,
     getProductsVersion,
-    createProductVersion,
+    loadCategorieStat,
 };
 
 // sync

@@ -165,6 +165,26 @@ const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
     }
 };
 
+const deleteProductVersion: AsyncThunkPayloadCreator<string, string> = async (
+    versionId,
+    thunkAPI
+) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    try {
+        const res: AxiosResponse<ApiResponse<string>> = await axios.delete(
+            productUrl.deleteProductVersion(versionId),
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error.message || "FAIL_TO_DELETE_PRODUCT_VERSION"
+        );
+    }
+};
+
 const loadCategorieStat: AsyncThunkPayloadCreator<CategoryStats[]> = async (
     _,
     thunkAPI
@@ -202,4 +222,5 @@ export const productService = {
     getOneProduct,
     getProductsVersion,
     createProductVersion,
+    deleteProductVersion,
 };
