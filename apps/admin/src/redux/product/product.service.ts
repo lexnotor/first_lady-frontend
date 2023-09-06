@@ -11,7 +11,7 @@ import {
 import { productUrl } from "../helper.api";
 import { RootState } from "../store";
 import { getOneProduct as getOneProductRe } from "./product.slice";
-import { CreateVersionPayload } from ".";
+import { AddVersionQuantityPayload, CreateVersionPayload } from ".";
 
 const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
     payload = {},
@@ -83,6 +83,43 @@ const createProductVersion: AsyncThunkPayloadCreator<
     } catch (error) {
         return thunkAPI.rejectWithValue(
             error.message ?? "FAIL_TO_CREATE_PRODUCT_VERSION"
+        );
+    }
+};
+
+const addVersionQuantity: AsyncThunkPayloadCreator<
+    ProductVersionInfo,
+    AddVersionQuantityPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
+    const { price, product, quantity } = payload;
+
+    try {
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
+            await axios.put(
+                productUrl.addQuantityProductVersion(product),
+                { price, quantity },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+        // mettre à jour le produit
+        thunkAPI.dispatch(
+            getOneProductRe({
+                productId:
+                    res.data.data.product?.id ??
+                    (res.data.data.product as string),
+                refresh: true,
+            })
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_ADD_QUANTITY"
         );
     }
 };
@@ -223,4 +260,5 @@ export const productService = {
     getProductsVersion,
     createProductVersion,
     deleteProductVersion,
+    addVersionQuantity,
 };

@@ -5,3 +5,9 @@ export interface CreateVersionPayload {
     quantity: number;
     price: number;
 }
+
+export interface AddVersionQuantityPayload {
+    product: string;
+    quantity: number;
+    price: number;
+}

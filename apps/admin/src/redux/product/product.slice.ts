@@ -25,6 +25,7 @@ interface ProductState {
             | "CREATE_PRODUCT"
             | "CREATE_PRODUCT_VERSION"
             | "CREATE_CATEGORY"
+            | "ADD_PRODUCT_VERSION_QUANTITY"
             | "GET_PRODUCTS"
             | "GET_PRODUCTS_VERSION"
             | "GET_ONE_PRODUCTS"
@@ -53,6 +54,11 @@ const createProductVersion = createAsyncThunk(
 const createCategory = createAsyncThunk(
     "product/createCategory",
     productService.createCategory
+);
+
+const addVersionQuantity = createAsyncThunk(
+    "product/addVersionQuantity",
+    productService.addVersionQuantity
 );
 
 const getCategories = createAsyncThunk(
@@ -176,6 +182,36 @@ const productSlice = createSlice({
                 if (task) task.status = "FULLFILED";
             })
             .addCase(createCategory.rejected, (state, { meta }) => {
+                const task = state.thread.find(
+                    (item) => item.id == meta.requestId
+                );
+                if (task) task.status = "ERROR";
+            })
+            // addVersionQuantity
+            .addCase(addVersionQuantity.pending, (state, { meta }) => {
+                state.thread.push({
+                    id: meta.requestId,
+                    action: "ADD_PRODUCT_VERSION_QUANTITY",
+                    status: "LOADING",
+                });
+            })
+            .addCase(
+                addVersionQuantity.fulfilled,
+                (state, { meta, payload }) => {
+                    const index = state.productVersion.findIndex(
+                        (item) => item.key_id == payload.key_id
+                    );
+                    index != -1
+                        ? state.productVersion.splice(index, 1, payload)
+                        : state.productVersion.unshift(payload);
+
+                    const task = state.thread.find(
+                        (item) => item.id == meta.requestId
+                    );
+                    if (task) task.status = "FULLFILED";
+                }
+            )
+            .addCase(addVersionQuantity.rejected, (state, { meta }) => {
                 const task = state.thread.find(
                     (item) => item.id == meta.requestId
                 );
@@ -358,6 +394,7 @@ export default productSlice.reducer;
 
 // async
 export {
+    addVersionQuantity,
     createCategory,
     createProduct,
     createProductVersion,

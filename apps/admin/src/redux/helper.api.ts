@@ -32,6 +32,8 @@ const productUrl = {
     createProduct: `${baseUrl}/product/new`,
     createCategory: `${baseUrl}/product/category/new`,
     createProductVersion: `${baseUrl}/product/version/new`,
+    addQuantityProductVersion: (keyId: string) =>
+        `${baseUrl}/product/version/${keyId}`,
     findProduct: `${baseUrl}/product`,
     findProductVersion: `${baseUrl}/product/version`,
     getOneProduct: (productId: string) => `${baseUrl}/product?id=${productId}`,

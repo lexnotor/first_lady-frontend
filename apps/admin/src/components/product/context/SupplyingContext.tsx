@@ -6,19 +6,19 @@ interface SupplyingType {
         ver: ProductVersionInfo;
         pro: ProductInfo;
     }>;
-    quantity?: React.MutableRefObject<number>;
-    price?: React.MutableRefObject<number>;
+    quantityRef?: React.MutableRefObject<HTMLInputElement>;
+    priceRef?: React.MutableRefObject<HTMLInputElement>;
 }
 
 const supplyingContext = createContext<SupplyingType>({});
 
 const SupplyingProvider = ({ children }: React.PropsWithChildren) => {
     const product = useRef(null);
-    const quantity = useRef(0);
-    const price = useRef(0);
+    const quantityRef = useRef(null);
+    const priceRef = useRef(null);
 
     return (
-        <supplyingContext.Provider value={{ quantity, price, product }}>
+        <supplyingContext.Provider value={{ quantityRef, priceRef, product }}>
             {children}
         </supplyingContext.Provider>
     );
