@@ -15,7 +15,7 @@ export const Button = ({
     active?: boolean;
     size?: "small" | "middle" | "large";
     style?: React.CSSProperties;
-} & React.DOMAttributes<HTMLButtonElement>) => {
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
     return (
         <button
             {...rest}

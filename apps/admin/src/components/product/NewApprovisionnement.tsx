@@ -6,15 +6,24 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { Button } from "ui";
 import { useSupplyingContext } from "./context/SupplyingContext";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { addVersionQuantity } from "@/redux/product/product.slice";
 
 const NewApprovisionnement = () => {
-    const { price, product, quantity } = useSupplyingContext();
+    const dispatch = useAppDispatch();
+    const { priceRef, product, quantityRef } = useSupplyingContext();
 
     const [isearching, setIsearching] = useState(false);
 
     const submit: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
-        return null;
+        dispatch(
+            addVersionQuantity({
+                price: +priceRef.current.value ?? 0,
+                product: product.current?.ver?.id,
+                quantity: +quantityRef.current.value,
+            })
+        );
     };
 
     return (
@@ -37,7 +46,10 @@ const NewApprovisionnement = () => {
                                 />
                             </div>
                         ) : (
-                            <Button onClick={() => setIsearching(true)}>
+                            <Button
+                                type="button"
+                                onClick={() => setIsearching(true)}
+                            >
                                 Choisir
                             </Button>
                         )}
@@ -53,26 +65,22 @@ const NewApprovisionnement = () => {
                                 id="quantity"
                                 defaultValue={0}
                                 placeholder="0"
-                                onChange={(e) =>
-                                    (quantity.current = +e.target.value ?? 0)
-                                }
+                                ref={quantityRef}
                             />
                         </div>
                     </div>
                     <div className="input-group">
-                        <label htmlFor="quantity" className="input-label">
+                        <label htmlFor="price" className="input-label">
                             Prix
                         </label>
                         <div className="input-content">
                             <input
                                 type="number"
                                 min={0}
-                                id="quantity"
+                                id="price"
                                 defaultValue={0}
                                 placeholder="0"
-                                onChange={(e) =>
-                                    (price.current = +e.target.value ?? 0)
-                                }
+                                ref={priceRef}
                             />
                         </div>
                     </div>
@@ -89,7 +97,7 @@ const NewApprovisionnement = () => {
 const SearchForm = ({ isearching, setIsearching }) => {
     const [result, setResult] = useState<ProductInfo[]>([]);
 
-    const { product } = useSupplyingContext();
+    const { product, priceRef } = useSupplyingContext();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const search: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -155,6 +163,8 @@ const SearchForm = ({ isearching, setIsearching }) => {
                                                     ver,
                                                     pro: item,
                                                 };
+                                                priceRef.current.value =
+                                                    ver.price + "";
                                                 setIsearching(false);
                                             }}
                                             className="cursor-pointer text-primary-700 px-2 py-[0px] border border-primary-700 hover:bg-secondary-800 active:!bg-secondary-600 hover:text-black transition-colors duration-500 rounded-3xl"
