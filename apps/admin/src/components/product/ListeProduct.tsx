@@ -1,10 +1,14 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useProductVersion from "@/hooks/useProductVersion";
-import { ProductVersionInfo } from "@/redux";
+import { ApiResponse, ProductVersionInfo } from "@/redux";
+import { productUrl } from "@/redux/helper.api";
 import { deleteProductVersion } from "@/redux/product/product.slice";
 import { Popover } from "antd";
 import { ColumnsType } from "antd/es/table";
+import axios, { AxiosResponse } from "axios";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { CustomTable } from "ui";
 
 const ColumnConfig: (
@@ -12,7 +16,7 @@ const ColumnConfig: (
 ) => ColumnsType<ProductVersionInfo> = (dispatch) => {
     const config: ColumnsType<ProductVersionInfo> = [
         {
-            title: "Désignation",
+            title: "Produit",
             dataIndex: "title",
             render: (_, record) => <>{record?.product?.title}</>,
         },
@@ -67,18 +71,44 @@ const ColumnConfig: (
 const ListeProduct = () => {
     const { productVersion } = useProductVersion();
     const dispatch = useAppDispatch();
+
+    const [data, setData] = useState<any[]>([]);
+
+    const searchParam = useSearchParams();
+    const isSearch = useMemo(() => {
+        return (
+            !!searchParam.get("text") ||
+            !!searchParam.get("minQty") ||
+            !!searchParam.get("maxQty") ||
+            !!searchParam.get("minPrice") ||
+            !!searchParam.get("maxPrice")
+        );
+    }, [searchParam]);
+
+    useEffect(() => {
+        if (!isSearch) return () => null;
+
+        axios
+            .get(productUrl.findProductVersion + "?" + searchParam.toString())
+            .then(
+                (res: AxiosResponse<ApiResponse<ProductVersionInfo[]>>) =>
+                    res.data.data
+            )
+            .then((res) => setData(res))
+            .catch(() => setData([]));
+    }, [isSearch, searchParam]);
+
     return (
         <div>
             <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
                 <CustomTable
                     columns={ColumnConfig(dispatch)}
                     pagination={false}
-                    // TODO
-                    dataSource={productVersion}
+                    dataSource={isSearch ? data : productVersion}
                     locale={{
                         emptyText: (
                             <div className="text-center font-bold py-20">
-                                Pas de commande
+                                Pas de produit
                             </div>
                         ),
                     }}

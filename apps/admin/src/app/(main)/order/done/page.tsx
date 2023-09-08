@@ -3,9 +3,9 @@ import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
 
 enum OrderState {
-    DONE = "DONE",
-    PENDING = "PENDING",
-    ERROR = "ERROR",
+    DONE = "TERMINER",
+    PENDING = "EN_COURS",
+    ERROR = "ERREUR",
 }
 
 const Page = () => {
