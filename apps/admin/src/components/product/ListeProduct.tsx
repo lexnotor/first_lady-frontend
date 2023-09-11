@@ -8,7 +8,7 @@ import { Popover } from "antd";
 import { ColumnsType } from "antd/es/table";
 import axios, { AxiosResponse } from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CustomTable } from "ui";
 
 const ColumnConfig: (
@@ -98,9 +98,14 @@ const ListeProduct = () => {
             .catch(() => setData([]));
     }, [isSearch, searchParam]);
 
+    const ref = useRef<HTMLDivElement>(null);
+
     return (
         <div>
-            <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">
+            <div
+                className="[&_.ant-table]:!bg-transparent rounded-xl p-2"
+                ref={ref}
+            >
                 <CustomTable
                     columns={ColumnConfig(dispatch)}
                     pagination={false}

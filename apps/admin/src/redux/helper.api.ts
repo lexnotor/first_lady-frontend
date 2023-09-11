@@ -39,6 +39,7 @@ const productUrl = {
     getOneProduct: (productId: string) => `${baseUrl}/product?id=${productId}`,
     getOneProductVersion: (productVId: string) =>
         `${baseUrl}/product/version?id=${productVId}`,
+    getProductSummary: `${baseUrl}/product/summary`,
     findCategory: `${baseUrl}/product/category`,
     loadCategorieStat: `${baseUrl}/product/category/count`,
     getStats: `${baseUrl}/product/stats`,

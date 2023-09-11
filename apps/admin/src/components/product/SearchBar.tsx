@@ -1,4 +1,5 @@
 "use client";
+import { generatePdf } from "@/functions/generateProductPdf";
 import useToggle from "@/hooks/toggle";
 import useProduct from "@/hooks/useProduct";
 import { Modal } from "antd";
@@ -73,7 +74,14 @@ const SearchBar = () => {
                     Filtres
                 </span>
                 {/* Print */}
-                <span className="px-4 py-1 font-bold underline cursor-pointer hover:text-secondary-800 duration-500">
+                <span
+                    onClick={() =>
+                        generatePdf(
+                            new URLSearchParams(searchParams.toString())
+                        )
+                    }
+                    className="px-4 py-1 font-bold underline cursor-pointer hover:text-secondary-800 duration-500"
+                >
                     Imprimer
                 </span>
             </div>
