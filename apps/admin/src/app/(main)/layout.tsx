@@ -3,7 +3,6 @@ import AuthManager from "@/components/auth/AuthManager";
 import StoreProvider from "@/redux/StoreProvider";
 import type { Metadata } from "next";
 import "../globals.css";
-import "../../assert/cutivemono-normal";
 
 export const metadata: Metadata = {
     title: "Dashboard - Admin",
