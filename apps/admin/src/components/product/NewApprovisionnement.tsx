@@ -1,13 +1,13 @@
 "use client";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { ApiResponse, ProductInfo } from "@/redux";
 import { productUrl } from "@/redux/helper.api";
+import { addVersionQuantity } from "@/redux/product/product.slice";
 import { Modal } from "antd";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { Button } from "ui";
 import { useSupplyingContext } from "./context/SupplyingContext";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { addVersionQuantity } from "@/redux/product/product.slice";
 
 const NewApprovisionnement = () => {
     const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ const NewApprovisionnement = () => {
                 <div className="table-form w-full">
                     <div className="input-group">
                         <label htmlFor="title" className="input-label">
-                            Produit
+                            Variante
                         </label>
                         {product?.current ? (
                             <div className="input-content">
