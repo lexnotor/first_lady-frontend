@@ -51,9 +51,17 @@ const ColumnConfig: (
                         <ul>
                             <li
                                 className="cursor-pointer py-2 hover:text-secondary-800"
-                                onClick={() => context.setEditing(record)}
+                                onClick={() =>
+                                    context.setEditing(record.product)
+                                }
                             >
                                 Modifier produit
+                            </li>
+                            <li
+                                className="cursor-pointer py-2 hover:text-secondary-800"
+                                onClick={() => context.setEditingVer(record)}
+                            >
+                                Modifier Variant
                             </li>
                             <li
                                 className="cursor-pointer py-2 hover:text-secondary-800"

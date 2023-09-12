@@ -18,6 +18,7 @@ import {
     AddVersionQuantityPayload,
     CreateVersionPayload,
     UpdateProductPayload,
+    UpdateVersionPayload,
 } from ".";
 
 const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
@@ -153,6 +154,7 @@ const getProductsVersion: AsyncThunkPayloadCreator<
         );
     }
 };
+
 const getProducts: AsyncThunkPayloadCreator<ProductInfo[], any> = async (
     _,
     thunkAPI
@@ -308,6 +310,39 @@ const updateProduct: AsyncThunkPayloadCreator<
     }
 };
 
+const updateProductVersion: AsyncThunkPayloadCreator<
+    ProductVersionInfo,
+    UpdateVersionPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    const { productVId, ...rest } = payload;
+
+    try {
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
+            await axios.put(productUrl.updateProductVersion(productVId), rest, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+        const new_vers = res.data.data;
+
+        if (new_vers)
+            thunkAPI.dispatch(
+                getOneProductRe({
+                    productId: new_vers.product.id,
+                    refresh: true,
+                })
+            );
+
+        return new_vers;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAILED_TO_UPDATE_PRODUCT_VERSION"
+        );
+    }
+};
+
 export const productService = {
     createProduct,
     createCategory,
@@ -321,5 +356,6 @@ export const productService = {
     deleteProductVersion,
     addVersionQuantity,
     updateProduct,
+    updateProductVersion,
     getOneProductVersion,
 };

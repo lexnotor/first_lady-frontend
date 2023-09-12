@@ -1,5 +1,5 @@
 "use client";
-import { ProductVersionInfo } from "@/redux";
+import { ProductInfo, ProductVersionInfo } from "@/redux";
 import React, {
     SetStateAction,
     createContext,
@@ -9,11 +9,14 @@ import React, {
 } from "react";
 
 type EditProductContextType = {
-    editing?: ProductVersionInfo;
-    setEditing?: React.Dispatch<SetStateAction<ProductVersionInfo>>;
+    editing?: ProductInfo;
+    setEditing?: React.Dispatch<SetStateAction<ProductInfo>>;
+    editingVer?: ProductVersionInfo;
+    setEditingVer?: React.Dispatch<SetStateAction<ProductVersionInfo>>;
     titleRef?: React.MutableRefObject<HTMLInputElement>;
     categoryRef?: React.MutableRefObject<HTMLSelectElement>;
     descriptionRef?: React.MutableRefObject<HTMLTextAreaElement>;
+    priceRef?: React.MutableRefObject<HTMLInputElement>;
 };
 
 const editProductContext = createContext<EditProductContextType>({});
@@ -23,10 +26,12 @@ const EditProductContextProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [editing, setEditing] = useState<ProductVersionInfo>(null);
+    const [editing, setEditing] = useState<ProductInfo>(null);
+    const [editingVer, setEditingVer] = useState<ProductVersionInfo>(null);
     const titleRef = useRef<HTMLInputElement>(null);
     const categoryRef = useRef<HTMLSelectElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
+    const priceRef = useRef<HTMLInputElement>(null);
 
     return (
         <editProductContext.Provider
@@ -36,6 +41,9 @@ const EditProductContextProvider = ({
                 titleRef,
                 categoryRef,
                 descriptionRef,
+                priceRef,
+                editingVer,
+                setEditingVer,
             }}
         >
             {children}

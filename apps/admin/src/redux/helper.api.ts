@@ -45,6 +45,8 @@ const productUrl = {
     getStats: `${baseUrl}/product/stats`,
     updateProduct: (productId: string) =>
         `${baseUrl}/product/update/${productId}`,
+    updateProductVersion: (productVId: string) =>
+        `${baseUrl}/product/version/${productVId}`,
     deleteProductVersion: (versionId: string) =>
         `${baseUrl}/product/version/${versionId}`,
 };

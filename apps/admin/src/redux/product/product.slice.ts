@@ -35,6 +35,7 @@ interface ProductState {
             | "LOAD_PRODUCT_STAT"
             | "SEARCH_PRODUCT"
             | "UPDATE_PRODUCT"
+            | "UPDATE_PRODUCT_VERSION"
             | "DELETE_PRODUCT"
             | "DELETE_PRODUCT_VERSION";
         status: Status;
@@ -121,6 +122,11 @@ const getProductStats = createAsyncThunk(
 const updateProduct = createAsyncThunk(
     "product/updateProduct",
     productService.updateProduct
+);
+
+const updateProductVersion = createAsyncThunk(
+    "product/updateProductVersion",
+    productService.updateProductVersion
 );
 
 const deleteProductVersion = createAsyncThunk(
@@ -331,6 +337,27 @@ const productSlice = createSlice({
             .addCase(updateProduct.rejected, (state, { meta }) => {
                 changeThreadStatus(state, meta.requestId, "ERROR");
             })
+            // updateProductVersion
+            .addCase(updateProductVersion.pending, (state, { meta }) => {
+                addThread(state, meta.requestId, "UPDATE_PRODUCT_VERSION");
+            })
+            .addCase(
+                updateProductVersion.fulfilled,
+                (state, { meta, payload }) => {
+                    // change version
+                    const index = state.productVersion.findIndex(
+                        (item) => item.key_id == payload.key_id
+                    );
+                    index != -1
+                        ? state.productVersion.splice(index, 1, payload)
+                        : state.productVersion.unshift(payload);
+
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
+                }
+            )
+            .addCase(updateProductVersion.rejected, (state, { meta }) => {
+                changeThreadStatus(state, meta.requestId, "ERROR");
+            })
             // deleteProductVersion
             .addCase(deleteProductVersion.pending, (state, { meta }) => {
                 addThread(state, meta.requestId, "DELETE_PRODUCT_VERSION");
@@ -369,6 +396,7 @@ export {
     loadCategorieStat,
     getOneProductVersion,
     updateProduct,
+    updateProductVersion,
 };
 
 // sync

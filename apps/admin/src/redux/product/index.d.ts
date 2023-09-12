@@ -13,6 +13,13 @@ export interface UpdateProductPayload {
     category?: string;
 }
 
+export interface UpdateVersionPayload {
+    productVId: string;
+    title?: string;
+    description?: string;
+    price?: number;
+}
+
 export interface AddVersionQuantityPayload {
     product: string;
     quantity: number;
