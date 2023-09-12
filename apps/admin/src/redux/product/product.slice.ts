@@ -29,10 +29,12 @@ interface ProductState {
             | "GET_PRODUCTS"
             | "GET_PRODUCTS_VERSION"
             | "GET_ONE_PRODUCTS"
+            | "GET_ONE_PRODUCT_VERSION"
             | "GET_CATEGORIES"
             | "LOAD_CATEGORY_STAT"
             | "LOAD_PRODUCT_STAT"
             | "SEARCH_PRODUCT"
+            | "UPDATE_PRODUCT"
             | "DELETE_PRODUCT"
             | "DELETE_PRODUCT_VERSION";
         status: Status;
@@ -40,6 +42,27 @@ interface ProductState {
         message?: { content: string; display: boolean };
     }[];
 }
+
+const addThread = (
+    state: ProductState,
+    requestId: string,
+    action: ProductState["thread"][0]["action"]
+) => {
+    state.thread.push({
+        id: requestId,
+        action: action,
+        status: "LOADING",
+    });
+};
+
+const changeThreadStatus = (
+    state: ProductState,
+    requestId: string,
+    status: Status
+) => {
+    const task = state.thread.find((item) => item.id == requestId);
+    if (task) task.status = status;
+};
 
 const createProduct = createAsyncThunk(
     "product/createProduct",
@@ -85,9 +108,19 @@ const getOneProduct = createAsyncThunk(
     productService.getOneProduct
 );
 
+const getOneProductVersion = createAsyncThunk(
+    "product/getOneProductVersion",
+    productService.getOneProductVersion
+);
+
 const getProductStats = createAsyncThunk(
     "product/getProductStats",
     productService.getProductStats
+);
+
+const updateProduct = createAsyncThunk(
+    "product/updateProduct",
+    productService.updateProduct
 );
 
 const deleteProductVersion = createAsyncThunk(
@@ -113,33 +146,18 @@ const productSlice = createSlice({
         builder
             // createProduct
             .addCase(createProduct.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "CREATE_PRODUCT",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "CREATE_PRODUCT");
             })
             .addCase(createProduct.fulfilled, (state, { meta, payload }) => {
                 state.products.unshift(payload);
-
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(createProduct.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // createProductVersion
             .addCase(createProductVersion.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "CREATE_PRODUCT_VERSION",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "CREATE_PRODUCT_VERSION");
             })
             .addCase(
                 createProductVersion.fulfilled,
@@ -153,47 +171,31 @@ const productSlice = createSlice({
                             state.productVersion.unshift(vers);
                     });
 
-                    const task = state.thread.find(
-                        (item) => item.id == meta.requestId
-                    );
-                    if (task) task.status = "FULLFILED";
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
             )
             .addCase(createProductVersion.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // createCategory
             .addCase(createCategory.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "CREATE_CATEGORY",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "CREATE_CATEGORY");
             })
             .addCase(createCategory.fulfilled, (state, { meta, payload }) => {
                 state.category.unshift(payload);
 
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(createCategory.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // addVersionQuantity
             .addCase(addVersionQuantity.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "ADD_PRODUCT_VERSION_QUANTITY",
-                    status: "LOADING",
-                });
+                addThread(
+                    state,
+                    meta.requestId,
+                    "ADD_PRODUCT_VERSION_QUANTITY"
+                );
             })
             .addCase(
                 addVersionQuantity.fulfilled,
@@ -205,119 +207,69 @@ const productSlice = createSlice({
                         ? state.productVersion.splice(index, 1, payload)
                         : state.productVersion.unshift(payload);
 
-                    const task = state.thread.find(
-                        (item) => item.id == meta.requestId
-                    );
-                    if (task) task.status = "FULLFILED";
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
             )
             .addCase(addVersionQuantity.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // getCategories
             .addCase(getCategories.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "GET_CATEGORIES",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "GET_CATEGORIES");
             })
             .addCase(getCategories.fulfilled, (state, { meta, payload }) => {
-                state.category.unshift(...payload);
+                state.category = payload;
 
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(getCategories.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // loadCategoriesStat
             .addCase(loadCategorieStat.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "LOAD_CATEGORY_STAT",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "LOAD_CATEGORY_STAT");
             })
             .addCase(
                 loadCategorieStat.fulfilled,
                 (state, { meta, payload }) => {
                     state.categoryStat = payload;
 
-                    const task = state.thread.find(
-                        (item) => item.id == meta.requestId
-                    );
-                    if (task) task.status = "FULLFILED";
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
             )
             .addCase(loadCategorieStat.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // getProducts
             .addCase(getProducts.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "GET_PRODUCTS",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "GET_PRODUCTS");
             })
             .addCase(getProducts.fulfilled, (state, { meta, payload }) => {
                 state.products.push(...payload);
 
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(getProducts.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // getProductsVersion
             .addCase(getProductsVersion.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "GET_PRODUCTS_VERSION",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "GET_PRODUCTS_VERSION");
             })
             .addCase(
                 getProductsVersion.fulfilled,
                 (state, { meta, payload }) => {
                     state.productVersion = payload;
 
-                    const task = state.thread.find(
-                        (item) => item.id == meta.requestId
-                    );
-                    if (task) task.status = "FULLFILED";
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
             )
             .addCase(getProductsVersion.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // getOneProduct
             .addCase(getOneProduct.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "GET_ONE_PRODUCTS",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "GET_ONE_PRODUCTS");
             })
             .addCase(getOneProduct.fulfilled, (state, { meta, payload }) => {
                 const index = state.products.findIndex(
@@ -326,46 +278,62 @@ const productSlice = createSlice({
 
                 state.products.splice(index, 1, payload);
 
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(getOneProduct.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
+            })
+            // getOneProductVersion
+            .addCase(getOneProductVersion.pending, (state, { meta }) => {
+                addThread(state, meta.requestId, "GET_ONE_PRODUCT_VERSION");
+            })
+            .addCase(
+                getOneProductVersion.fulfilled,
+                (state, { meta, payload }) => {
+                    const index = state.productVersion.findIndex(
+                        (item) => item.key_id == payload.key_id
+                    );
+
+                    index == -1
+                        ? state.productVersion.unshift(payload)
+                        : state.productVersion.splice(index, 1, payload);
+
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
+                }
+            )
+            .addCase(getOneProductVersion.rejected, (state, { meta }) => {
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // getProductStats
             .addCase(getProductStats.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "LOAD_PRODUCT_STAT",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "LOAD_PRODUCT_STAT");
             })
             .addCase(getProductStats.fulfilled, (state, { meta, payload }) => {
                 state.productStat = payload;
 
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "FULLFILED";
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
             .addCase(getProductStats.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
+                changeThreadStatus(state, meta.requestId, "ERROR");
+            })
+            // updateProduct
+            .addCase(updateProduct.pending, (state, { meta }) => {
+                addThread(state, meta.requestId, "UPDATE_PRODUCT");
+            })
+            .addCase(updateProduct.fulfilled, (state, { meta, payload }) => {
+                const index = state.products.findIndex(
+                    (item) => item.id == payload.id
                 );
-                if (task) task.status = "ERROR";
+                state.products.splice(index, 1, payload);
+
+                changeThreadStatus(state, meta.requestId, "FULLFILED");
+            })
+            .addCase(updateProduct.rejected, (state, { meta }) => {
+                changeThreadStatus(state, meta.requestId, "ERROR");
             })
             // deleteProductVersion
             .addCase(deleteProductVersion.pending, (state, { meta }) => {
-                state.thread.push({
-                    id: meta.requestId,
-                    action: "DELETE_PRODUCT_VERSION",
-                    status: "LOADING",
-                });
+                addThread(state, meta.requestId, "DELETE_PRODUCT_VERSION");
             })
             .addCase(
                 deleteProductVersion.fulfilled,
@@ -375,17 +343,11 @@ const productSlice = createSlice({
                     );
                     state.productVersion.splice(index, 1);
 
-                    const task = state.thread.find(
-                        (item) => item.id == meta.requestId
-                    );
-                    if (task) task.status = "FULLFILED";
+                    changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
             )
             .addCase(deleteProductVersion.rejected, (state, { meta }) => {
-                const task = state.thread.find(
-                    (item) => item.id == meta.requestId
-                );
-                if (task) task.status = "ERROR";
+                changeThreadStatus(state, meta.requestId, "ERROR");
             }),
 });
 
@@ -405,6 +367,8 @@ export {
     getProducts,
     getProductsVersion,
     loadCategorieStat,
+    getOneProductVersion,
+    updateProduct,
 };
 
 // sync

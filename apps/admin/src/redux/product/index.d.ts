@@ -6,6 +6,13 @@ export interface CreateVersionPayload {
     price: number;
 }
 
+export interface UpdateProductPayload {
+    productId: string;
+    title?: string;
+    description?: string;
+    category?: string;
+}
+
 export interface AddVersionQuantityPayload {
     product: string;
     quantity: number;

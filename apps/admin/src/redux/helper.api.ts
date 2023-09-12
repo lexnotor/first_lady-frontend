@@ -43,6 +43,8 @@ const productUrl = {
     findCategory: `${baseUrl}/product/category`,
     loadCategorieStat: `${baseUrl}/product/category/count`,
     getStats: `${baseUrl}/product/stats`,
+    updateProduct: (productId: string) =>
+        `${baseUrl}/product/update/${productId}`,
     deleteProductVersion: (versionId: string) =>
         `${baseUrl}/product/version/${versionId}`,
 };
