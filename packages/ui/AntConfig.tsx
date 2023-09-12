@@ -19,6 +19,20 @@ const AntConfig = ({ children }: { children: React.ReactNode }) => {
                         titleColor: "#e8e8e8",
                         colorText: "#e8e8e8",
                     },
+                    Drawer: {
+                        colorBgElevated: "#131321",
+                        colorBgContainer: "#131321",
+                        colorTextBase: "#e8e8e8",
+                        colorTextHeading: "#e8e8e8",
+                        colorIcon: "#e8e8e8",
+                        colorIconHover: "#dbe438",
+                        colorText: "#e8e8e8",
+                    },
+                    Popover: {
+                        padding: 0,
+                        colorBgElevated: "#222238",
+                        colorText: "#e8e8e8",
+                    },
                 },
             }}
         >

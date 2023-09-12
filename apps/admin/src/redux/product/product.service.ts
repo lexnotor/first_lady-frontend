@@ -10,8 +10,16 @@ import {
 } from "..";
 import { productUrl } from "../helper.api";
 import { RootState } from "../store";
-import { getOneProduct as getOneProductRe } from "./product.slice";
-import { AddVersionQuantityPayload, CreateVersionPayload } from ".";
+import {
+    getOneProduct as getOneProductRe,
+    getOneProductVersion as getOneProductVRe,
+} from "./product.slice";
+import {
+    AddVersionQuantityPayload,
+    CreateVersionPayload,
+    UpdateProductPayload,
+    UpdateVersionPayload,
+} from ".";
 
 const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
     payload = {},
@@ -146,6 +154,7 @@ const getProductsVersion: AsyncThunkPayloadCreator<
         );
     }
 };
+
 const getProducts: AsyncThunkPayloadCreator<ProductInfo[], any> = async (
     _,
     thunkAPI
@@ -181,6 +190,27 @@ const getOneProduct: AsyncThunkPayloadCreator<
     } catch (error) {
         return thunkAPI.rejectWithValue(
             error?.message ?? "FAIL_TO_LOAD_PRODUCT"
+        );
+    }
+};
+const getOneProductVersion: AsyncThunkPayloadCreator<
+    ProductVersionInfo,
+    { productVId: string; refresh?: boolean }
+> = async (payload, thunkAPI) => {
+    const { productVId, refresh } = payload;
+    const {
+        product: { productVersion },
+    } = thunkAPI.getState() as RootState;
+    const oldProduct = productVersion.find((item) => item.id == productVId);
+    if (oldProduct && !refresh) return oldProduct;
+
+    try {
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
+            await axios.get(productUrl.getOneProductVersion(productVId));
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_LOAD_PRODUCT_VERSION"
         );
     }
 };
@@ -249,6 +279,70 @@ const getProductStats: AsyncThunkPayloadCreator<ProductStats> = async (
     }
 };
 
+const updateProduct: AsyncThunkPayloadCreator<
+    ProductInfo,
+    UpdateProductPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    const { productId, ...rest } = payload;
+
+    try {
+        const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.put(
+            productUrl.updateProduct(productId),
+            rest,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const vers = res.data.data.product_v;
+        vers.forEach((ver) =>
+            thunkAPI.dispatch(
+                getOneProductVRe({ productVId: ver.id, refresh: true })
+            )
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAILED_TO_UPDATE_PRODUCT"
+        );
+    }
+};
+
+const updateProductVersion: AsyncThunkPayloadCreator<
+    ProductVersionInfo,
+    UpdateVersionPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    const { productVId, ...rest } = payload;
+
+    try {
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
+            await axios.put(productUrl.updateProductVersion(productVId), rest, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+        const new_vers = res.data.data;
+
+        if (new_vers)
+            thunkAPI.dispatch(
+                getOneProductRe({
+                    productId: new_vers.product.id,
+                    refresh: true,
+                })
+            );
+
+        return new_vers;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAILED_TO_UPDATE_PRODUCT_VERSION"
+        );
+    }
+};
+
 export const productService = {
     createProduct,
     createCategory,
@@ -261,4 +355,7 @@ export const productService = {
     createProductVersion,
     deleteProductVersion,
     addVersionQuantity,
+    updateProduct,
+    updateProductVersion,
+    getOneProductVersion,
 };

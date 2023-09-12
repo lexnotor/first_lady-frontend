@@ -9,11 +9,13 @@ import { ColumnsType } from "antd/es/table";
 import axios, { AxiosResponse } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CustomTable } from "ui";
+import { AntConfig, CustomTable } from "ui";
+import { useEditProductContext } from "./context/EditProductContext";
 
 const ColumnConfig: (
-    dispatch: ReturnType<typeof useAppDispatch>
-) => ColumnsType<ProductVersionInfo> = (dispatch) => {
+    dispatch: ReturnType<typeof useAppDispatch>,
+    context: ReturnType<typeof useEditProductContext>
+) => ColumnsType<ProductVersionInfo> = (dispatch, context) => {
     const config: ColumnsType<ProductVersionInfo> = [
         {
             title: "Produit",
@@ -48,7 +50,21 @@ const ColumnConfig: (
                     content={
                         <ul>
                             <li
-                                className="cursor-pointer"
+                                className="cursor-pointer py-2 hover:text-secondary-800"
+                                onClick={() =>
+                                    context.setEditing(record.product)
+                                }
+                            >
+                                Modifier produit
+                            </li>
+                            <li
+                                className="cursor-pointer py-2 hover:text-secondary-800"
+                                onClick={() => context.setEditingVer(record)}
+                            >
+                                Modifier Variant
+                            </li>
+                            <li
+                                className="cursor-pointer py-2 hover:text-secondary-800"
                                 onClick={() =>
                                     dispatch(deleteProductVersion(record.id))
                                 }
@@ -71,6 +87,7 @@ const ColumnConfig: (
 const ListeProduct = () => {
     const { productVersion } = useProductVersion();
     const dispatch = useAppDispatch();
+    const context = useEditProductContext();
 
     const [data, setData] = useState<any[]>([]);
 
@@ -106,19 +123,21 @@ const ListeProduct = () => {
                 className="[&_.ant-table]:!bg-transparent rounded-xl p-2"
                 ref={ref}
             >
-                <CustomTable
-                    columns={ColumnConfig(dispatch)}
-                    pagination={false}
-                    dataSource={isSearch ? data : productVersion}
-                    locale={{
-                        emptyText: (
-                            <div className="text-center font-bold py-20">
-                                Pas de produit
-                            </div>
-                        ),
-                    }}
-                    rowKey={(record) => record.id}
-                />
+                <AntConfig>
+                    <CustomTable
+                        columns={ColumnConfig(dispatch, context)}
+                        pagination={false}
+                        dataSource={isSearch ? data : productVersion}
+                        locale={{
+                            emptyText: (
+                                <div className="text-center font-bold py-20">
+                                    Pas de produit
+                                </div>
+                            ),
+                        }}
+                        rowKey={(record) => record.id}
+                    />
+                </AntConfig>
             </div>
         </div>
     );
