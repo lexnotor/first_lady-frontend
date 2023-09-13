@@ -1,8 +1,14 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useProduct from "@/hooks/useProduct";
-import { createProductVersion } from "@/redux/product/product.slice";
-import React, { useRef } from "react";
+import { ProductVersionInfo } from "@/redux";
+import {
+    createProductVersion,
+    updateProductVersion,
+} from "@/redux/product/product.slice";
+import Image from "next/image";
+import React, { useRef, useState } from "react";
+import { BsImage } from "react-icons/bs";
 import { Button } from "ui";
 
 const NewVersionForm = () => {
@@ -14,6 +20,8 @@ const NewVersionForm = () => {
     const quantityRef = useRef<HTMLInputElement>(null);
     const priceRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
+    const imageRef = useRef<HTMLInputElement>(null);
+    const [image, setImage] = useState<File>(null);
 
     const submit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
@@ -28,13 +36,24 @@ const NewVersionForm = () => {
         if (!payload.product || !payload.title)
             return alert("Veuillez completer tous les champs requis");
 
-        await dispatch(createProductVersion(payload));
+        await dispatch(createProductVersion(payload)).then((res) => {
+            if (image && (res.payload as ProductVersionInfo).id) {
+                dispatch(
+                    updateProductVersion({
+                        productVId: (res.payload as ProductVersionInfo).id,
+                        file: image,
+                    })
+                );
+            }
+        });
 
         productRef.current.value = "";
         titleRef.current.value = "";
         quantityRef.current.value = "0";
         priceRef.current.value = "0";
         descriptionRef.current.value = "";
+        imageRef.current.value = null;
+        setImage(null);
 
         alert("Variante Ajouté");
     };
@@ -105,6 +124,43 @@ const NewVersionForm = () => {
                             placeholder="Designation"
                             ref={descriptionRef}
                         />
+                    </div>
+                </div>
+                <div className="input-group">
+                    <label htmlFor="description" className="input-label">
+                        Image
+                    </label>
+                    <div className="input-content">
+                        <label>
+                            {image ? (
+                                <Image
+                                    width={500}
+                                    alt="Photo"
+                                    height={500}
+                                    src={URL.createObjectURL(image)}
+                                    className="w-28 h-28 object-cover"
+                                />
+                            ) : (
+                                <div className="text-primary-500 flex flex-col gap-2 justify-center items-center w-32 h-40 rounded-lg bg-primary-700 cursor-pointer">
+                                    <span className="text-8xl">
+                                        <BsImage />
+                                    </span>
+                                    <span className="text-[85%]">
+                                        Select Photo
+                                    </span>
+                                </div>
+                            )}
+                            <input
+                                type="file"
+                                name=""
+                                id=""
+                                hidden
+                                ref={imageRef}
+                                onChange={(e) =>
+                                    setImage(e.target.files.item(0))
+                                }
+                            />
+                        </label>
                     </div>
                 </div>
             </section>

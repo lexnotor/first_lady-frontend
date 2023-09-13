@@ -46,9 +46,11 @@ const productUrl = {
     updateProduct: (productId: string) =>
         `${baseUrl}/product/update/${productId}`,
     updateProductVersion: (productVId: string) =>
-        `${baseUrl}/product/version/${productVId}`,
+        `${baseUrl}/product/version/update/${productVId}`,
     deleteProductVersion: (versionId: string) =>
         `${baseUrl}/product/version/${versionId}`,
+    addPhotoToVersion: (productVId: string) =>
+        `${baseUrl}/product/version/photo?productVId=${productVId}`,
 };
 
 const orderUrl = {

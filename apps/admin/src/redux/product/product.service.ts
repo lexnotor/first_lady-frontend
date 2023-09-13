@@ -73,7 +73,7 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
 };
 
 const createProductVersion: AsyncThunkPayloadCreator<
-    ProductInfo,
+    ProductVersionInfo,
     CreateVersionPayload
 > = async (payload, thunkAPI) => {
     const {
@@ -81,10 +81,18 @@ const createProductVersion: AsyncThunkPayloadCreator<
     } = thunkAPI.getState() as RootState;
     const { title, product, description, quantity, price } = payload;
     try {
-        const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.post(
-            productUrl.createProductVersion,
-            { title, product, description, quantity, price },
-            { headers: { Authorization: `Bearer ${token}` } }
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
+            await axios.post(
+                productUrl.createProductVersion,
+                { title, product, description, quantity, price },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+        thunkAPI.dispatch(
+            getOneProductRe({
+                productId: res.data.data.product.id,
+                refresh: true,
+            })
         );
 
         return res.data.data;
@@ -320,10 +328,21 @@ const updateProductVersion: AsyncThunkPayloadCreator<
     const { productVId, ...rest } = payload;
 
     try {
-        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
-            await axios.put(productUrl.updateProductVersion(productVId), rest, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+        const res: AxiosResponse<ApiResponse<ProductVersionInfo>> = rest.file
+            ? await axios.putForm(
+                  productUrl.addPhotoToVersion(productVId),
+                  {
+                      file: rest.file,
+                  },
+                  { headers: { Authorization: `Bearer ${token}` } }
+              )
+            : await axios.put(
+                  productUrl.updateProductVersion(productVId),
+                  rest,
+                  {
+                      headers: { Authorization: `Bearer ${token}` },
+                  }
+              );
 
         const new_vers = res.data.data;
 
