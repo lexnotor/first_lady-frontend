@@ -58,6 +58,7 @@ const orderUrl = {
     finishOrder: `${baseUrl}/cancel`,
     getStats: `${baseUrl}/order/stats`,
     getSummary: `${baseUrl}/order/summary`,
+    getOne: (orderId: string) => `${baseUrl}/order/one/${orderId}`,
 };
 
 const invoiceUrl = {

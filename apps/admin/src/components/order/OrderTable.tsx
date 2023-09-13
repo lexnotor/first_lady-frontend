@@ -1,10 +1,11 @@
 "use client";
 
+import { generatePdf } from "@/functions/generateFacturePdf";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useOrder from "@/hooks/useOrder";
 import { ApiResponse, OrderInfo } from "@/redux";
 import { orderUrl } from "@/redux/helper.api";
-import { changeOrderState, setInvoiceId } from "@/redux/order/order.slice";
+import { changeOrderState } from "@/redux/order/order.slice";
 import { Popover, Tag } from "antd";
 import axios, { AxiosResponse } from "axios";
 import { useSearchParams } from "next/navigation";
@@ -136,9 +137,7 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                                 <></>
                                             )}
                                             <div
-                                                onClick={() =>
-                                                    dispatch(setInvoiceId(id))
-                                                }
+                                                onClick={() => generatePdf(id)}
                                                 className="block cursor-pointer hover:text-white hover:bg-neutral-600"
                                             >
                                                 <li>Facture</li>

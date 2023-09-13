@@ -2,9 +2,9 @@ import { OrderState } from "@/components/order";
 import { ApiResponse, OrderInfo } from "@/redux";
 import { orderUrl } from "@/redux/helper.api";
 import axios, { AxiosResponse } from "axios";
-import "../assert/courierprime-normal";
-import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import "../assert/courierprime-normal";
 
 export const generatePdf = (query: URLSearchParams, status?: OrderState) => {
     status && query.set("state", status);
