@@ -1,19 +1,18 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useProduct from "@/hooks/useProduct";
+import { ProductInfo } from "@/redux";
 import {
     createProduct,
     createProductVersion,
 } from "@/redux/product/product.slice";
+import { Modal } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { BsImage } from "react-icons/bs";
 import { Button } from "ui";
 import NewProductContextProvider, {
     useNewProductContext,
 } from "./context/NewProductContext";
-import { Modal } from "antd";
-import { ProductInfo } from "@/redux";
 
 const ProductSection = () => {
     const { category } = useProduct();
@@ -74,22 +73,6 @@ const ProductSection = () => {
                         placeholder="Desciption du produit"
                         ref={descriptionRef}
                     />
-                </div>
-            </div>
-            <div className="input-group">
-                <label htmlFor="description" className="input-label">
-                    Image
-                </label>
-                <div className="input-content">
-                    <label>
-                        <div className="text-primary-500 flex flex-col gap-2 justify-center items-center w-32 h-40 rounded-lg bg-primary-700 cursor-pointer">
-                            <span className="text-8xl">
-                                <BsImage />
-                            </span>
-                            <span className="text-[85%]">Select picture</span>
-                        </div>
-                        <input type="file" name="" id="" hidden />
-                    </label>
                 </div>
             </div>
         </section>

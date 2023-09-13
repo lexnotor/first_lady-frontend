@@ -18,6 +18,7 @@ export interface UpdateVersionPayload {
     title?: string;
     description?: string;
     price?: number;
+    file?: File;
 }
 
 export interface AddVersionQuantityPayload {

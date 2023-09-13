@@ -168,14 +168,7 @@ const productSlice = createSlice({
             .addCase(
                 createProductVersion.fulfilled,
                 (state, { meta, payload }) => {
-                    payload.product_v.forEach((vers) => {
-                        if (
-                            !state.productVersion.find(
-                                (item) => item.id == vers.id
-                            )
-                        )
-                            state.productVersion.unshift(vers);
-                    });
+                    state.productVersion.unshift(payload);
 
                     changeThreadStatus(state, meta.requestId, "FULLFILED");
                 }
