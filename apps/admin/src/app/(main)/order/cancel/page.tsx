@@ -11,7 +11,7 @@ enum OrderState {
 const Page = () => {
     return (
         <div className="px-5">
-            <FilterBar />
+            <FilterBar status={OrderState.ERROR} />
             <StoreProvider>
                 <OrderTable status={OrderState.ERROR} />
             </StoreProvider>

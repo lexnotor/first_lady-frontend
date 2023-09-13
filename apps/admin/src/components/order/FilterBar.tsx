@@ -3,8 +3,9 @@
 import { generatePdf } from "@/functions/generateOrderPdf";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import { OrderState } from ".";
 
-const FilterBar = () => {
+const FilterBar = ({ status }: { status?: OrderState }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -71,7 +72,8 @@ const FilterBar = () => {
                 <span
                     onClick={() =>
                         generatePdf(
-                            new URLSearchParams(searchParams.toString())
+                            new URLSearchParams(searchParams.toString()),
+                            status
                         )
                     }
                     className="px-4 py-1 font-bold underline cursor-pointer hover:text-secondary-800 duration-500"

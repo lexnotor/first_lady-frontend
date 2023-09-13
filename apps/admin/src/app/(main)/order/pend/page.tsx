@@ -12,7 +12,7 @@ enum OrderState {
 const Page = () => {
     return (
         <div className="px-5">
-            <FilterBar />
+            <FilterBar status={OrderState.PENDING} />
             <StoreProvider>
                 <OrderTable status={OrderState.PENDING} />
             </StoreProvider>
