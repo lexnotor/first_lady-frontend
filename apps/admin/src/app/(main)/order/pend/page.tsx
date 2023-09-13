@@ -1,3 +1,4 @@
+import FilterBar from "@/components/order/FilterBar";
 import OrderTable from "@/components/order/OrderTable";
 import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
@@ -11,6 +12,7 @@ enum OrderState {
 const Page = () => {
     return (
         <div className="px-5">
+            <FilterBar status={OrderState.PENDING} />
             <StoreProvider>
                 <OrderTable status={OrderState.PENDING} />
             </StoreProvider>

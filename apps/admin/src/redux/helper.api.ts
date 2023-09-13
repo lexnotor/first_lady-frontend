@@ -57,6 +57,7 @@ const orderUrl = {
     cancelOrder: `${baseUrl}/done`,
     finishOrder: `${baseUrl}/cancel`,
     getStats: `${baseUrl}/order/stats`,
+    getSummary: `${baseUrl}/order/summary`,
 };
 
 const invoiceUrl = {
