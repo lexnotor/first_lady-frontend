@@ -2,9 +2,13 @@
 
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useOrder from "@/hooks/useOrder";
+import { ApiResponse, OrderInfo } from "@/redux";
+import { orderUrl } from "@/redux/helper.api";
 import { changeOrderState, setInvoiceId } from "@/redux/order/order.slice";
 import { Popover, Tag } from "antd";
-import { useEffect, useMemo } from "react";
+import axios, { AxiosResponse } from "axios";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { CustomTable } from "ui";
 import { OrderState } from ".";
 import LoadFacture from "../modals/LoadFacture";
@@ -12,9 +16,33 @@ import LoadFacture from "../modals/LoadFacture";
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
     const { orders } = useOrder();
+    const [data, setData] = useState<OrderInfo[]>([]);
+
+    const searchParam = useSearchParams();
+
+    const isSearch = useMemo(() => {
+        return !!searchParam.get("end") || !!searchParam.get("begin");
+    }, [searchParam]);
+
+    useEffect(() => {
+        if (!isSearch) return () => null;
+
+        axios
+            .get(orderUrl.findOrders + "?" + searchParam.toString())
+            .then(
+                (res: AxiosResponse<ApiResponse<OrderInfo[]>>) => res.data.data
+            )
+            .then((res) => setData(res))
+            .catch(() => setData([]));
+    }, [isSearch, searchParam]);
     const source = useMemo(() => {
-        return status ? orders.filter((item) => item.state == status) : orders;
-    }, [orders, status]);
+        if (isSearch)
+            return status ? data.filter((item) => item.state == status) : data;
+        else
+            return status
+                ? orders.filter((item) => item.state == status)
+                : orders;
+    }, [orders, status, data, isSearch]);
 
     useEffect(() => {
         return () => null;
