@@ -7,6 +7,7 @@ interface NewProductContextType {
     brandRef?: React.MutableRefObject<HTMLInputElement>;
     categoryRef?: React.MutableRefObject<HTMLSelectElement>;
     versions?: VersionData[];
+    setVersion?: React.Dispatch<React.SetStateAction<VersionData[]>>;
     addVersion?: () => void;
     deleteVersion?: (id: string) => void;
     editing?: string;
@@ -19,6 +20,7 @@ interface VersionData {
     description: string;
     quantity: number;
     price: number;
+    image: File;
 }
 
 const newProductContext = createContext<NewProductContextType>({});
@@ -39,6 +41,7 @@ const NewProductContextProvider = ({ children }) => {
             description: "",
             quantity: 0,
             price: 0,
+            image: null,
         };
         setVersion((old) => [...old, nouveau]);
         setEditing(nouveau.id);
@@ -60,6 +63,7 @@ const NewProductContextProvider = ({ children }) => {
                 deleteVersion,
                 editing,
                 setEditing,
+                setVersion,
             }}
         >
             {children}

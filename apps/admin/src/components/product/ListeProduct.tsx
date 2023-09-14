@@ -11,12 +11,34 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AntConfig, CustomTable } from "ui";
 import { useEditProductContext } from "./context/EditProductContext";
+import Image from "next/image";
+import { BsImage } from "react-icons/bs";
 
 const ColumnConfig: (
     dispatch: ReturnType<typeof useAppDispatch>,
     context: ReturnType<typeof useEditProductContext>
 ) => ColumnsType<ProductVersionInfo> = (dispatch, context) => {
     const config: ColumnsType<ProductVersionInfo> = [
+        {
+            title: "",
+            dataIndex: "photo",
+            render: (_, record) =>
+                record?.photo?.photo?.link ? (
+                    <Image
+                        alt="photo"
+                        width={400}
+                        height={400}
+                        src={record?.photo?.photo?.link}
+                        className="w-8 h-8 rounded-lg shadow-lg object-cover"
+                    />
+                ) : (
+                    <span className="text-2xl">
+                        <BsImage />
+                    </span>
+                ),
+            width: "3rem",
+            align: "center",
+        },
         {
             title: "Produit",
             dataIndex: "title",

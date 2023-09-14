@@ -38,7 +38,7 @@ const NewVersionForm = () => {
 
         await dispatch(createProductVersion(payload)).then((res) => {
             if (image && (res.payload as ProductVersionInfo).id) {
-                dispatch(
+                return dispatch(
                     updateProductVersion({
                         productVId: (res.payload as ProductVersionInfo).id,
                         file: image,
@@ -54,8 +54,6 @@ const NewVersionForm = () => {
         descriptionRef.current.value = "";
         imageRef.current.value = null;
         setImage(null);
-
-        alert("Variante Ajouté");
     };
 
     return (
