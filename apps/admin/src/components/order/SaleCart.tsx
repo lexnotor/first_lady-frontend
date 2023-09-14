@@ -10,6 +10,7 @@ import {
     setItemQty,
 } from "@/redux/order/order.slice";
 import Image from "next/image";
+import { BsImage } from "react-icons/bs";
 
 const SaleCart = () => {
     const { local_cart } = useLocatCart();
@@ -53,15 +54,21 @@ const SaleCart = () => {
                 ) : (
                     local_cart.map((item) => (
                         <div className="flex gap-4" key={item.product_v_id}>
-                            <Image
-                                alt="pagne"
-                                src={
-                                    "https://cdn.pixabay.com/photo/2023/08/05/18/12/dahlia-8171538_960_720.jpg"
-                                }
-                                width={200}
-                                height={200}
-                                className="aspect-square w-6 rounded self-start"
-                            />
+                            {item.product_v?.photo?.photo?.link ? (
+                                <Image
+                                    width={200}
+                                    alt="Photo"
+                                    height={200}
+                                    src={item.product_v?.photo?.photo?.link}
+                                    className="object-cover aspect-square rounded-lg w-8 h-8 self-center shadow-lg"
+                                />
+                            ) : (
+                                <div className="text-primary-500 flex flex-col gap-2 justify-center items-center rounded-lg  cursor-pointer">
+                                    <span className="text-3xl">
+                                        <BsImage />
+                                    </span>
+                                </div>
+                            )}
                             <p className="flex flex-col">
                                 <span className="font-bold">
                                     {item.product.title}

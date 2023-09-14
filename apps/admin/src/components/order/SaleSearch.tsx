@@ -5,6 +5,7 @@ import { productUrl } from "@/redux/helper.api";
 import { addLocalItem } from "@/redux/order/order.slice";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
+import { BsImage } from "react-icons/bs";
 
 const SaleSearch = () => {
     const dispatch = useAppDispatch();
@@ -45,21 +46,30 @@ const SaleSearch = () => {
             </form>
 
             {/* search result */}
-            <div className="w-full h-[calc(100%-2rem)] overflow-y-auto grid grid-cols-4 gap-3 [&>div]:border-none [&>div]:border-primary-200 [&>div]:rounded-none [&>div]:h-56">
+            <div className="w-full h-[calc(100%-2rem)] overflow-y-auto grid grid-cols-4 gap-4 pt-2 px-2 pb-4">
                 {result.map((item) =>
                     item.product_v.map((ver) => (
-                        <div key={ver.id} className="flex flex-col justify-end">
-                            <Image
-                                alt="pagne"
-                                src={
-                                    "https://cdn.pixabay.com/photo/2023/08/05/18/12/dahlia-8171538_960_720.jpg"
-                                }
-                                width={200}
-                                height={200}
-                                className="aspect-square"
-                            />
-                            <p>{item.title}</p>
-                            <p>{ver.title}</p>
+                        <div
+                            key={ver.id}
+                            className="flex flex-col justify-end shadow-md shadow-primary-900 p-1 rounded-lg"
+                        >
+                            {ver?.photo?.photo?.link ? (
+                                <Image
+                                    width={500}
+                                    alt="Photo"
+                                    height={500}
+                                    src={ver?.photo?.photo?.link}
+                                    className="object-cover aspect-square rounded-lg shadow-lg"
+                                />
+                            ) : (
+                                <div className="text-primary-500 flex flex-col gap-2 justify-center items-center rounded-lg  cursor-pointer">
+                                    <span className="text-8xl">
+                                        <BsImage />
+                                    </span>
+                                </div>
+                            )}
+                            <p className="text-[85%] pt-2">{item.title}</p>
+                            <p className="text-[85%]">{ver.title}</p>
                             <p className="flex justify-between items-center">
                                 <span>{ver.price} $</span>
                                 <span>
