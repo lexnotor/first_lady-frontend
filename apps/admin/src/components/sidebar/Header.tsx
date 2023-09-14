@@ -6,13 +6,20 @@ import { BiShoppingBag } from "react-icons/bi";
 import { BsCart4, BsShop } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
 import LinkWrapper from "./LinkWrapper";
+import Image from "next/image";
+import logo from "@/assert/logo.png";
 
 const Header = () => {
     return (
         <header className="p-4 flex flex-col gap-5 w-full min-h-full bg-[#262830] text-white">
             <div className="flex justify-between">
-                <span>Logo</span>
-                <span></span>
+                <Image
+                    alt="Logo"
+                    width={500}
+                    height={500}
+                    src={logo}
+                    className="w-44 mx-auto"
+                />
             </div>
             <ul className="flex gap-3 flex-col my-auto">
                 <LinkWrapper

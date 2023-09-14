@@ -1,10 +1,12 @@
 "use client";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { updateProductVersion } from "@/redux/product/product.slice";
 import { Drawer } from "antd";
+import Image from "next/image";
 import React from "react";
+import { BiEdit } from "react-icons/bi";
 import { AntConfig } from "ui";
 import { useEditProductContext } from "./context/EditProductContext";
-import { updateProductVersion } from "@/redux/product/product.slice";
 
 const EditVersion = () => {
     const { editingVer, setEditingVer, priceRef, descriptionRef, titleRef } =
@@ -68,6 +70,26 @@ const EditVersion = () => {
                             className="bg-slate-800 py-2 px-3 rounded-lg resize-none"
                             rows={4}
                         />
+                    </div>
+                    <div className="flex flex-col gap-2 mb-4">
+                        <label htmlFor="photo" className=" flex gap-4">
+                            <span>Photo</span>
+                            <span className="text-2xl hover:text-secondary-800 cursor-pointer">
+                                <BiEdit />
+                            </span>
+                        </label>
+                        <input type="file" id="photo" hidden />
+                        {editingVer?.photo?.photo?.link ? (
+                            <Image
+                                src={editingVer?.photo?.photo?.link}
+                                alt="Photo"
+                                width={500}
+                                height={500}
+                                className="w-full max-h-72 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <></>
+                        )}
                     </div>
                     <div className="flex gap-2 pt-4">
                         <button
