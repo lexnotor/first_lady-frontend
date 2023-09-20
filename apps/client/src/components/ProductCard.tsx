@@ -1,12 +1,13 @@
 import { ProductVersionInfo } from "@/types";
 import Image from "next/image";
+import no_image from "@/assets/no_image.png";
 
 const ProductCard = ({ productV }: { productV: ProductVersionInfo }) => {
     return (
         <div className="max-w-sm min-w-[10rem] rounded-b-lg shadow-lg flex flex-col">
             <div className="w-full bg-neutral-100 rounded-t-lg overflow-hidden">
                 <Image
-                    src={productV?.photo?.photo?.link}
+                    src={productV?.photo?.photo?.link ?? no_image}
                     width={500}
                     height={500}
                     alt={"Photo manquant"}
