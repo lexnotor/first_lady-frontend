@@ -1,7 +1,11 @@
-import React from "react";
+import MyCart from "@/components/MyCart";
 
 const Page = () => {
-    return <div>Page</div>;
+    return (
+        <div className="h-full">
+            <MyCart />
+        </div>
+    );
 };
 
 export default Page;

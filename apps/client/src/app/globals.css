@@ -9,6 +9,6 @@
 
     body {
         font-size: 13px;
-        @apply text-neutral-800
+        @apply text-neutral-700
     }
 }

@@ -1,7 +1,11 @@
-import React from "react";
+import MyAccount from "@/components/MyAccount";
 
 const Page = () => {
-    return <div>Page</div>;
+    return (
+        <div className="min-h-screen">
+            <MyAccount />
+        </div>
+    );
 };
 
 export default Page;

@@ -58,6 +58,7 @@ const orderUrl = {
     saveLocalOrder: `${baseUrl}/order/local`,
     cancelOrder: `${baseUrl}/done`,
     finishOrder: `${baseUrl}/cancel`,
+    getMine: `${baseUrl}/order/mine`,
     getStats: `${baseUrl}/order/stats`,
     getSummary: `${baseUrl}/order/summary`,
     getOne: (orderId: string) => `${baseUrl}/order/one/${orderId}`,
@@ -69,6 +70,7 @@ const invoiceUrl = {
 
 const cartUrl = {
     addItem: `${baseUrl}/cart/item/add`,
+    getMyCart: `${baseUrl}/cart/item/mine`,
 };
 
 export {
