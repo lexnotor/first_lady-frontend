@@ -71,9 +71,14 @@ const getUserStats: AsyncThunkPayloadCreator<UserStats> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<UserStats>> = await axios.get(
-            userUrl.getStats
+            userUrl.getStats,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
     } catch (error) {

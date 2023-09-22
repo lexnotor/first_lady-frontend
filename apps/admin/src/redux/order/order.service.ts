@@ -9,9 +9,14 @@ const getAllOrders: AsyncThunkPayloadCreator<OrderInfo[]> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<OrderInfo[]>> = await axios.get(
-            orderUrl.findOrders
+            orderUrl.findOrders,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
     } catch (error) {
@@ -95,9 +100,14 @@ const loadOrderStat: AsyncThunkPayloadCreator<OrderStats> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<OrderStats>> = await axios.get(
-            orderUrl.getStats
+            orderUrl.getStats,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
 
         return res.data.data;

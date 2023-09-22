@@ -143,9 +143,15 @@ const addVersionQuantity: AsyncThunkPayloadCreator<
 const getProductsVersion: AsyncThunkPayloadCreator<
     ProductVersionInfo[]
 > = async (_, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<ProductVersionInfo[]>> =
-            await axios.get(productUrl.findProductVersion);
+            await axios.get(productUrl.findProductVersion, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
         res.data.data.forEach((productV) =>
             thunkAPI.dispatch(
@@ -167,9 +173,14 @@ const getProducts: AsyncThunkPayloadCreator<ProductInfo[], any> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<ProductInfo[]>> = await axios.get(
-            productUrl.findProduct
+            productUrl.findProduct,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
     } catch (error) {
@@ -190,9 +201,14 @@ const getOneProduct: AsyncThunkPayloadCreator<
     const oldProduct = products.find((item) => item.id == productId);
     if (oldProduct && !refresh) return oldProduct;
 
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<ProductInfo>> = await axios.get(
-            productUrl.getOneProduct(productId)
+            productUrl.getOneProduct(productId),
+            { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
     } catch (error) {
@@ -212,9 +228,15 @@ const getOneProductVersion: AsyncThunkPayloadCreator<
     const oldProduct = productVersion.find((item) => item.id == productVId);
     if (oldProduct && !refresh) return oldProduct;
 
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<ProductVersionInfo>> =
-            await axios.get(productUrl.getOneProductVersion(productVId));
+            await axios.get(productUrl.getOneProductVersion(productVId), {
+                headers: { Authorization: `Bearer ${token}` },
+            });
         return res.data.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(
@@ -228,9 +250,14 @@ const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
     thunkAPI
 ) => {
     const {} = payload;
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<CategoryInfo[]>> = await axios.get(
-            productUrl.findCategory
+            productUrl.findCategory,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
         return res.data.data;
     } catch (error) {
@@ -264,8 +291,14 @@ const loadCategorieStat: AsyncThunkPayloadCreator<CategoryStats[]> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
-        const res = await axios.get(productUrl.loadCategorieStat);
+        const res = await axios.get(productUrl.loadCategorieStat, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
         return res.data.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || "FAIL_TO_GET_STAT");
@@ -276,9 +309,14 @@ const getProductStats: AsyncThunkPayloadCreator<ProductStats> = async (
     _,
     thunkAPI
 ) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
     try {
         const res: AxiosResponse<ApiResponse<ProductStats>> = await axios.get(
-            productUrl.getStats
+            productUrl.getStats,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
 
         return res.data.data;

@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    *:focus {
+        outline: none;
+    }
+
+    body {
+        font-size: 13px;
+        @apply text-neutral-700
+    }
+}
