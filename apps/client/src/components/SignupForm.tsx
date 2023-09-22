@@ -35,7 +35,7 @@ const SignupForm = () => {
                 { auth: { username: payload.username, password: payload.psw } }
             )
             .then(() => message.success("Votre compte a été créer"))
-            .then(() => setTimeout(() => router.push("/account"), 3000))
+            .then(() => setTimeout(() => router.push("/account"), 300))
             .then(() => setIsLoading(false))
             .catch((error) => {
                 setIsLoading(false);

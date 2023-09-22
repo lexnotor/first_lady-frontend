@@ -1,6 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import SearchResult from "@/components/SearchResult";
-import React from "react";
+import DetailProduit from "@/components/detailProduit";
 
 const Page = () => {
     return (
@@ -12,6 +12,7 @@ const Page = () => {
             <div className="px-3">
                 <SearchResult />
             </div>
+            <DetailProduit />
         </div>
     );
 };

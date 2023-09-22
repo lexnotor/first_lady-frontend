@@ -32,7 +32,7 @@ const LoginForm = () => {
             .then((res: AxiosResponse<ApiResponse<string>>) => res.data.data)
             .then((token) => localStorage.setItem("user_token", token))
             .then(() => message.success("Vous êtes connecté"))
-            .then(() => setTimeout(() => router.refresh(), 2000))
+            .then(() => setTimeout(() => router.refresh(), 200))
             .then(() => setIsLoading(false))
             .catch((error) => {
                 setIsLoading(false);
