@@ -1,7 +1,9 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useRef } from "react";
-import { BiFilterAlt } from "react-icons/bi";
+import { BiFilterAlt, BiSearch } from "react-icons/bi";
+import logo from "@/assets/logo_sm.png";
+import Image from "next/image";
 
 const SearchBar = () => {
     const [searchParam, router, pathname] = [
@@ -28,17 +30,24 @@ const SearchBar = () => {
     return (
         <form
             onSubmit={submit}
-            className="flex items-center gap-2 sticky top-0 p-3 bg-white"
+            className="flex items-center gap-2 sticky top-0 p-2 bg-white"
         >
+            <Image
+                src={logo}
+                alt="Première Dame"
+                width={400}
+                height={400}
+                className="mx-a w-[3rem] object-contain"
+            />
             <label className="flex grow border py-1 px-3 border-black rounded-r-full rounded-l-full">
                 <input type="search" className="grow py-1" ref={textRef} />
+                <button className="bg-red-600 self-stretch text-white text-lg font-bold rounded-r-full rounded-l-full px-4">
+                    <BiSearch />
+                </button>
             </label>
-            <span className="text-lg">
+            <span className="text-xl">
                 <BiFilterAlt />
             </span>
-            <button className="bg-black self-stretch text-white font-bold rounded-r-full rounded-l-full px-4">
-                Search
-            </button>
         </form>
     );
 };

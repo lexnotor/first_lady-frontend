@@ -7,6 +7,10 @@
         outline: none;
     }
 
+    * {
+        font-family: "Poppins", "Inter", sans-serif;
+    }
+
     body {
         font-size: 13px;
         @apply text-neutral-700
