@@ -73,14 +73,19 @@ const cartUrl = {
     getMyCart: `${baseUrl}/cart/item/mine`,
 };
 
+const paymentUrl = {
+    requestPayement: `${baseUrl}/payment/request_payement`,
+};
+
 export {
     apiFetch,
     authUrl,
     baseUrl,
     cartUrl,
+    invoiceUrl,
     orderUrl,
+    paymentUrl,
     productUrl,
     shopUrl,
     userUrl,
-    invoiceUrl,
 };

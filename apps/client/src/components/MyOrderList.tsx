@@ -80,10 +80,10 @@ const MyOrderList = () => {
 
     return (
         <div>
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-5">
                 {data?.map((order) => {
                     return (
-                        <li key={order.id}>
+                        <li key={order.id} className="shadow-lg">
                             <OrderCard order={order} />
                         </li>
                     );
