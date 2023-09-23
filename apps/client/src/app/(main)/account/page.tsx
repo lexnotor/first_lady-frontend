@@ -1,4 +1,4 @@
-import MyAccount from "@/components/MyAccount";
+import MyAccount from "@/components/myAccount";
 
 const Page = () => {
     return (

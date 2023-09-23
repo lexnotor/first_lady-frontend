@@ -1,15 +1,26 @@
 "use client";
-import { cartUrl } from "@/redux/helper.api";
+import { cartUrl, paymentUrl } from "@/redux/helper.api";
 import type { ApiResponse, CartProductInfo } from "@/types";
+import { message } from "antd";
 import axios, { AxiosResponse } from "axios";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import { BiCheck, BiCreditCard } from "react-icons/bi";
 import CartItem from "./CartItem";
 
 const MyCart = () => {
     const [token, setToken] = useState<string>(null);
     const [data, setData] = useState<CartProductInfo[]>([]);
     const [signStatus, setSigninStatus] = useState("LOOKING");
+    const [selected, toggleSelected] = useReducer(
+        (state: string[], payload: string) => {
+            const index = state.indexOf(payload);
+            if (index == -1) return [payload, ...state];
+            else return [...state.slice(0, index), ...state.slice(index + 1)];
+        },
+        []
+    );
+
     const getMyCart = useCallback((token: string) => {
         axios
             .get(cartUrl.getMyCart, {
@@ -78,14 +89,53 @@ const MyCart = () => {
                 <p>Aucune produit pour le moment</p>
             </div>
         );
+    const beginPaiement = () => {
+        axios
+            .post(
+                paymentUrl.requestPayement,
+                { card_product_id: selected, shop_id: data[0]?.shop?.id },
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            .then((res: AxiosResponse<string>) => res.data)
+            .then((res) => (window.location.href = res))
+            .catch(() => message.error("Erreur Réseau"));
+    };
 
     return (
         <div>
-            <ul className="flex flex-col gap-4">
+            {selected.length > 0 && (
+                <div className="px-4 py-2 flex justify-between gap-3 items-center">
+                    <span className="text-3xl ">
+                        <BiCreditCard />
+                    </span>
+                    <button
+                        onClick={beginPaiement}
+                        className="py-1 px-4 rounded-lg bg-red-600 text-white"
+                    >
+                        Payer ({selected.length})
+                    </button>
+                </div>
+            )}
+            <ul className="flex flex-col gap-4 p-4">
                 {data?.map((item) => {
                     return (
-                        <li key={item.id}>
-                            <CartItem item={item} />
+                        <li
+                            key={item.id}
+                            className="flex gap-2"
+                            onClick={() => toggleSelected(item?.id)}
+                        >
+                            <div className="w-5 flex">
+                                {selected.includes(item?.id) ? (
+                                    <span className="self-center relative text-2xl text-red-600 w-full aspect-square  border border-red-600 rounded-full">
+                                        <BiCheck className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                                    </span>
+                                ) : (
+                                    <span className="self-center w-full aspect-square  border border-neutral-700 rounded-full" />
+                                )}
+                            </div>
+                            <div className="grow">
+                                <CartItem item={item} />
+                            </div>
                         </li>
                     );
                 })}

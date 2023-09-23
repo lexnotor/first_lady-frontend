@@ -11,8 +11,8 @@ enum OrderState {
 const OrderCard = ({ order }: { order: OrderInfo }) => {
     return (
         <div className="py-3 px-4">
-            <h2 className="flex justify-between">
-                <span>
+            <h2 className="flex justify-between mb-3">
+                <span className="text-neutral-500 italic">
                     {order?.state == OrderState.DONE
                         ? "Terminée"
                         : order?.state == OrderState.ERROR

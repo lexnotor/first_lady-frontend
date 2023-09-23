@@ -1,11 +1,8 @@
-import "../globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import "./globals.css";
 
 export const metadata: Metadata = {
-    title: "First Lady",
+    title: "Première Dame",
     description: "Profitez de meilleurs ventes au feminin",
 };
 
@@ -16,7 +13,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="fr">
-            <body className={inter.className}>{children}</body>
+            <body className="flex flex-col">
+                <main className="grow">{children}</main>
+            </body>
         </html>
     );
 }

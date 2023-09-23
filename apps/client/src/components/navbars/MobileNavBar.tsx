@@ -1,26 +1,26 @@
 import Link from "next/link";
-import React from "react";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineOrderedList } from "react-icons/ai";
+import { BiCart, BiShoppingBag, BiUser } from "react-icons/bi";
 
 const links = [
     {
         path: "/shop",
-        icon: <AiOutlineHome />,
+        icon: <BiShoppingBag />,
         text: "Shop",
     },
     {
         path: "/order",
-        icon: <AiOutlineHome />,
+        icon: <AiOutlineOrderedList />,
         text: "Commandes",
     },
     {
         path: "/cart",
-        icon: <AiOutlineHome />,
+        icon: <BiCart />,
         text: "Panier",
     },
     {
         path: "/account",
-        icon: <AiOutlineHome />,
+        icon: <BiUser />,
         text: "Compte",
     },
 ];
