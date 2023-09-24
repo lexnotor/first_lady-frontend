@@ -13,6 +13,7 @@ const SubmitSection = ({
     getNewUserData: any;
     setData: any;
 }) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [searchParams, router, pathname] = [
         useSearchParams(),
         useRouter(),
@@ -40,11 +41,11 @@ const SubmitSection = ({
             .then((res: AxiosResponse<ApiResponse<UserInfo>>) => res.data.data)
             .then((res) => {
                 setData(res ?? null);
-                message.success("Profile mis à jour");
+                messageApi.success("Profile mis à jour");
                 router.push(pathname);
             })
             .catch(() => {
-                message.error("Veillez saisir des imformations correctes");
+                messageApi.error("Veillez saisir des imformations correctes");
             });
     };
 
@@ -54,6 +55,7 @@ const SubmitSection = ({
                 onSubmit={submitChange}
                 className="px-4 flex gap-4 items-center mt-8"
             >
+                {contextHolder}
                 <Link
                     href="?"
                     className="text-center basis-1/2 py-2 px-4 rounded-lg border"

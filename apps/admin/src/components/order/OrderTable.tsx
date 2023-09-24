@@ -13,11 +13,15 @@ import { useEffect, useMemo, useState } from "react";
 import { CustomTable } from "ui";
 import { OrderState } from ".";
 import LoadFacture from "../modals/LoadFacture";
+import useAuth from "@/hooks/useAuth";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
     const { orders } = useOrder();
     const [data, setData] = useState<OrderInfo[]>([]);
+    const {
+        account: { token },
+    } = useAuth();
 
     const searchParam = useSearchParams();
 
@@ -29,13 +33,15 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
         if (!isSearch) return () => null;
 
         axios
-            .get(orderUrl.findOrders + "?" + searchParam.toString())
+            .get(orderUrl.findOrders + "?" + searchParam.toString(), {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then(
                 (res: AxiosResponse<ApiResponse<OrderInfo[]>>) => res.data.data
             )
             .then((res) => setData(res))
             .catch(() => setData([]));
-    }, [isSearch, searchParam]);
+    }, [isSearch, searchParam, token]);
     const source = useMemo(() => {
         if (isSearch)
             return status ? data.filter((item) => item.state == status) : data;
