@@ -70,13 +70,13 @@ const MyCart = () => {
                 <p>à votre pagnier </p>
                 <Link
                     className="py-2 px-4 rounded-r-full rounded-l-full bg-transparent border-black border text-black mt-8"
-                    href={"/login?redirect=order"}
+                    href={"/account?redirect=order"}
                 >
                     Se connecter
                 </Link>
                 <Link
                     className="py-2 px-4  underline text-[85%] text-neutral-800 mt-0"
-                    href={"/signup?redirect=order"}
+                    href={"/account/register?redirect=order"}
                 >
                     Créer un compte
                 </Link>
