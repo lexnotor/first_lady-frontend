@@ -40,11 +40,12 @@ const SearchBar = () => {
                 className="mx-a w-[3rem] object-contain"
             />
             <label className="flex grow border py-1 px-3 border-black rounded-r-full rounded-l-full">
-                <input 
-																			type="search" className="grow py-1"
-																			ref={textRef} 
-																defaultValue={searchParam.get("text")} 
-															/>
+                <input
+                    type="search"
+                    className="grow py-1"
+                    ref={textRef}
+                    defaultValue={searchParam.get("text")}
+                />
                 <button className="bg-red-600 self-stretch text-white text-lg font-bold rounded-r-full rounded-l-full px-4">
                     <BiSearch />
                 </button>

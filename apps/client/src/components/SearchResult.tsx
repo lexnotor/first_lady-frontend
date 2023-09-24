@@ -22,7 +22,7 @@ const SearchResult = () => {
                 await axios.get(productUrl.findProductVersion + "?" + payload);
             if (res.status == 200) setResult(res.data.data);
         } catch (error) {
-											setResult([]);
+            setResult([]);
             message.info("Aucune correspondance trouvée");
         }
     }, []);
@@ -55,12 +55,11 @@ const SearchResult = () => {
 
     return (
         <div>
-											{result?.length == 0 &&
-															<div 
-																			className="flex justify-center items-center text-neutral-500 h-[80vh]"> 
-																			<span>Aucun produit trouvé</span>
-															</div>
-											}
+            {result?.length == 0 && (
+                <div className="flex justify-center items-center text-neutral-500 h-[80vh]">
+                    <span>Aucun produit trouvé</span>
+                </div>
+            )}
             <ul className="grid grid-cols-2 gap-4">
                 <li className="flex flex-col gap-3">
                     {result
