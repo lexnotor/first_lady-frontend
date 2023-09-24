@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import {message} from "antd";
+import { message } from "antd";
 
 const SearchResult = () => {
     const [searchParam, pathname, router] = [
@@ -23,7 +23,7 @@ const SearchResult = () => {
             if (res.status == 200) setResult(res.data.data);
         } catch (error) {
 											setResult([]);
-            message.info("Aucune correspondance trouvé");
+            message.info("Aucune correspondance trouvée");
         }
     }, []);
 
@@ -57,7 +57,7 @@ const SearchResult = () => {
         <div>
 											{result?.length == 0 &&
 															<div 
-																			className="flex justify-center items-center text-neutral-500"> 
+																			className="flex justify-center items-center text-neutral-500 h-[80vh]"> 
 																			<span>Aucun produit trouvé</span>
 															</div>
 											}
