@@ -81,6 +81,5 @@ export const generateInvoice = async (orderId: string) => {
 
             doc.save(`facture-${data.user.username}-${Date.now()}`);
         })
-        .catch(console.log)
         .catch(() => alert("Impossible de télecharger la facture"));
 };
