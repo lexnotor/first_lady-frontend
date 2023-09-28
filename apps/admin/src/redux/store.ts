@@ -3,6 +3,7 @@ import shopReducer from "./shop/shop.slice";
 import userReducer from "./user/user.slice";
 import productReducer from "./product/product.slice";
 import orderReducer from "./order/order.slice";
+import modalReducer from "./modals/modal.slice";
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         shop: shopReducer,
         product: productReducer,
         order: orderReducer,
+        modalmanager: modalReducer,
     },
 });
 
