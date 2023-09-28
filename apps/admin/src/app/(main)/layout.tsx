@@ -3,6 +3,7 @@ import AuthManager from "@/components/auth/AuthManager";
 import StoreProvider from "@/redux/StoreProvider";
 import type { Metadata } from "next";
 import "../globals.css";
+import ModalManager from "@/components/modals/ModalManager";
 
 export const metadata: Metadata = {
     title: "Dashboard - Admin",
@@ -28,6 +29,7 @@ export default function RootLayout({
 
                 <StoreProvider>
                     <AuthManager />
+                    <ModalManager />
                 </StoreProvider>
             </body>
         </html>

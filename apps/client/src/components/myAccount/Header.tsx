@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import logo from "@/assets/logo_sm.png";
+import logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
 import { UserInfo } from "@/types";
 
@@ -11,13 +11,13 @@ const Header = ({ data }: { data: UserInfo }) => {
         router.refresh();
     };
     return (
-        <h1 className="flex gap-2 items-center p-2 bg-white shadow-lg">
+        <h1 className="flex gap-2 justify-between items-center p-2 bg-white shadow-lg">
             <Image
                 src={logo}
                 alt="Première Dame"
                 width={400}
                 height={400}
-                className="mx-a w-[3rem] object-contain"
+                className="w-fit h-[3rem] object-contain"
             />
             <span className="text-xl font-bold">Mon profil</span>
             {data?.id && (

@@ -2,28 +2,17 @@
 import no_image from "@/assets/no_image.png";
 import { ProductVersionInfo } from "@/types";
 import Image from "next/image";
-import {
-    useState,
-    useImperativeHandle,
-    MutableRefObject,
-    forwardRef,
-} from "react";
+import { MutableRefObject, forwardRef } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 
 const ItemSection = forwardRef(function ItemSection(
-    { productV }: { productV: ProductVersionInfo },
-    ref: MutableRefObject<any>
+    {
+        productV,
+        setQuantity,
+        quantity,
+    }: { productV: ProductVersionInfo; setQuantity: any; quantity: number },
+    ref: MutableRefObject<HTMLInputElement>
 ) {
-    const [quantity, setQuantity] = useState(1);
-
-    useImperativeHandle(ref, () => {
-        return {
-            getQuantity() {
-                return quantity;
-            },
-        };
-    });
-
     return (
         <>
             <header className="flex gap-4">
@@ -53,7 +42,14 @@ const ItemSection = forwardRef(function ItemSection(
                             >
                                 <BiMinus />
                             </span>
-                            <span>{quantity}</span>
+                            {/* <span>{quantity}</span> */}
+                            <input
+                                type="text"
+                                value={quantity}
+                                ref={ref}
+                                className="w-4 text-center"
+                                disabled
+                            />
                             <span
                                 onClick={() => setQuantity((old) => ++old || 1)}
                                 className="active:bg-red-600 active:text-white p-1 border border-red-600 text-red-600 rounded-md self-center aspect-square"

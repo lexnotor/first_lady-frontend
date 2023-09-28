@@ -2,6 +2,7 @@
 
 import { generatePdf } from "@/functions/generateFacturePdf";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import useAuth from "@/hooks/useAuth";
 import useOrder from "@/hooks/useOrder";
 import { ApiResponse, OrderInfo } from "@/redux";
 import { orderUrl } from "@/redux/helper.api";
@@ -13,11 +14,15 @@ import { useEffect, useMemo, useState } from "react";
 import { CustomTable } from "ui";
 import { OrderState } from ".";
 import LoadFacture from "../modals/LoadFacture";
+import { ModalID, openModal } from "@/redux/modals/modal.slice";
 
 const OrderTable = ({ status }: { status?: OrderState }) => {
     const dispatch = useAppDispatch();
     const { orders } = useOrder();
     const [data, setData] = useState<OrderInfo[]>([]);
+    const {
+        account: { token },
+    } = useAuth();
 
     const searchParam = useSearchParams();
 
@@ -29,13 +34,15 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
         if (!isSearch) return () => null;
 
         axios
-            .get(orderUrl.findOrders + "?" + searchParam.toString())
+            .get(orderUrl.findOrders + "?" + searchParam.toString(), {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then(
                 (res: AxiosResponse<ApiResponse<OrderInfo[]>>) => res.data.data
             )
             .then((res) => setData(res))
             .catch(() => setData([]));
-    }, [isSearch, searchParam]);
+    }, [isSearch, searchParam, token]);
     const source = useMemo(() => {
         if (isSearch)
             return status ? data.filter((item) => item.state == status) : data;
@@ -88,7 +95,7 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                         {
                             title: "Action",
                             width: "5rem",
-                            render: (_, { state, id }) => (
+                            render: (_, { state, id, address }: OrderInfo) => (
                                 <Popover
                                     overlayInnerStyle={{
                                         padding: "0",
@@ -142,6 +149,30 @@ const OrderTable = ({ status }: { status?: OrderState }) => {
                                             >
                                                 <li>Facture</li>
                                             </div>
+                                            {!!address && (
+                                                <div
+                                                    // onClick={() => generatePdf(id)}
+                                                    className="block cursor-pointer hover:text-white hover:bg-neutral-600"
+                                                >
+                                                    <li>
+                                                        <span
+                                                            onClick={() =>
+                                                                dispatch(
+                                                                    openModal({
+                                                                        modal_id:
+                                                                            ModalID.SHOW_MAP,
+                                                                        payload:
+                                                                            address,
+                                                                    })
+                                                                )
+                                                            }
+                                                            className="rounded-lg text-white block"
+                                                        >
+                                                            Livraison
+                                                        </span>
+                                                    </li>
+                                                </div>
+                                            )}
                                         </ul>
                                     }
                                 >

@@ -7,6 +7,7 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const nameRef = useRef<HTMLInputElement>(null);
@@ -23,9 +24,9 @@ const SignupForm = () => {
             cpsw: cpswRef.current.value.trim(),
         };
         if (payload.cpsw != payload.cpsw)
-            return message.error("Les mots de passe ne correspondent pas");
+            return messageApi.error("Les mots de passe ne correspondent pas");
         if (!payload.name || !payload.username || !payload.psw)
-            return message.error("Tous les champs sont obligatoires");
+            return messageApi.error("Tous les champs sont obligatoires");
 
         setIsLoading(true);
         axios
@@ -34,12 +35,12 @@ const SignupForm = () => {
                 { names: payload.name },
                 { auth: { username: payload.username, password: payload.psw } }
             )
-            .then(() => message.success("Votre compte a été créer"))
+            .then(() => messageApi.success("Votre compte a été créer"))
             .then(() => setTimeout(() => router.push("/account"), 300))
             .then(() => setIsLoading(false))
             .catch((error) => {
                 setIsLoading(false);
-                message.error(error?.message);
+                messageApi.error(error?.message);
             });
     };
 
@@ -48,6 +49,7 @@ const SignupForm = () => {
             onSubmit={submit}
             className="p-4 flex flex-col justify-center h-full"
         >
+            {contextHolder}
             <h1 className="text-4xl font-bold mb-1 mt-2">Inscription</h1>
             <p className="mb-5 text-neutral-500 italic text-[85%]">
                 Devenez membre de First Lady et profitez des reductions à chaque

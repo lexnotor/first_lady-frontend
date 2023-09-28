@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { FormEventHandler, useRef, useState } from "react";
 
 const LoginForm = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const usernameRef = useRef<HTMLInputElement>(null);
@@ -20,7 +21,7 @@ const LoginForm = () => {
             psw: pswRef.current.value.trim(),
         };
         if (!payload.username || !payload.psw)
-            return message.error("Tous les champs sont obligatoires");
+            return messageApi.error("Tous les champs sont obligatoires");
 
         setIsLoading(true);
         axios
@@ -31,12 +32,12 @@ const LoginForm = () => {
             )
             .then((res: AxiosResponse<ApiResponse<string>>) => res.data.data)
             .then((token) => localStorage.setItem("user_token", token))
-            .then(() => message.success("Vous êtes connecté"))
+            .then(() => messageApi.success("Vous êtes connecté"))
             .then(() => setTimeout(() => router.refresh(), 200))
             .then(() => setIsLoading(false))
             .catch((error) => {
                 setIsLoading(false);
-                message.error(error?.message);
+                messageApi.error(error?.message);
             });
     };
 
@@ -45,6 +46,7 @@ const LoginForm = () => {
             onSubmit={submit}
             className="p-4 flex flex-col justify-center h-full"
         >
+            {contextHolder}
             <h1 className="text-4xl font-bold mb-1 mt-2">Connexion</h1>
             <p className="mb-5 text-neutral-500 italic text-[85%]">
                 Profiter des meilleurs ventes du moment chez First-Lady

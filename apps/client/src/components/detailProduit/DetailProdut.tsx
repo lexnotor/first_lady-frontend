@@ -34,8 +34,8 @@ const DetailProdut = () => {
             .catch(() => setProductV(null));
     };
 
-    const qtyRef = useRef<any>(() => 0);
-
+    const qtyRef = useRef<HTMLInputElement>(null);
+    const [quantity, setQuantity] = useState(1);
     useEffect(() => {
         if (searchParam.get("detail")) {
             getData(searchParam.get("detail"));
@@ -51,6 +51,7 @@ const DetailProdut = () => {
             closable={false}
             onClose={close}
             height={"90vh"}
+            destroyOnClose
         >
             <div className="bg-white h-full overflow-y-scroll rounded-t-xl pt-4 px-4">
                 {productV == null ? (
@@ -63,12 +64,17 @@ const DetailProdut = () => {
                     </div>
                 ) : (
                     <section className="flex flex-col gap h-full">
-                        <ItemSection productV={productV} ref={qtyRef} />
+                        <ItemSection
+                            productV={productV}
+                            ref={qtyRef}
+                            setQuantity={setQuantity}
+                            quantity={quantity}
+                        />
                         <RelatedItem product_v={productV} />
                         <FooterSection
                             close={close}
                             productV={productV}
-                            getQuantity={qtyRef.current?.getQuantity}
+                            quantity={quantity}
                         />
                     </section>
                 )}

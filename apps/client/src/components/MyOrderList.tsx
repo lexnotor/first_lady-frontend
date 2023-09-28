@@ -40,7 +40,7 @@ const MyOrderList = () => {
     }, []);
 
     useEffect(() => {
-        getMyOrders(token);
+        if (token) getMyOrders(token);
     }, [getMyOrders, token]);
 
     if (signStatus == "LOOKING")

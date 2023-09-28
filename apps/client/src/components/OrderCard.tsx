@@ -1,6 +1,8 @@
 import no_image from "@/assets/no_image.png";
+import { generateInvoice } from "@/functions/generateInvoice";
 import { OrderInfo } from "@/types";
 import Image from "next/image";
+import { BiPrinter } from "react-icons/bi";
 
 enum OrderState {
     DONE = "TERMINER",
@@ -59,6 +61,17 @@ const OrderCard = ({ order }: { order: OrderInfo }) => {
                     );
                 })}
             </ul>
+            <footer className="flex justify-end">
+                <button
+                    onClick={() => generateInvoice(order?.id)}
+                    className="flex items-center gap-2 py-2 px-4 bg-red-500 text-white rounded-lg"
+                >
+                    <span className="text-base">
+                        <BiPrinter />
+                    </span>
+                    <span>Facture</span>
+                </button>
+            </footer>
         </div>
     );
 };

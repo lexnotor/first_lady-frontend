@@ -72,6 +72,8 @@ const MyAccount = () => {
 
     if (signStatus == "DISCONNECTED") return <LoginForm />;
 
+    const [messageApi, contextHolder] = message.useMessage();
+
     const submitChange: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
         axios
@@ -89,16 +91,17 @@ const MyAccount = () => {
             .then((res: AxiosResponse<ApiResponse<UserInfo>>) => res.data.data)
             .then((res) => {
                 setData(res ?? null);
-                message.success("Profile mis à jour");
+                messageApi.success("Profile mis à jour");
                 router.push(pathname);
             })
             .catch(() => {
-                message.error("Veillez saisir des imformations correctes");
+                messageApi.error("Veillez saisir des imformations correctes");
             });
     };
 
     return (
         <div>
+            {contextHolder}
             <h1 className="flex gap-2 items-center p-2 bg-white shadow-lg">
                 <Image
                     src={logo}
