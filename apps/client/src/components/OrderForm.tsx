@@ -49,6 +49,8 @@ const OrderForm = ({
 
     const submitOrder: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
+        if (!point && !addRef.current.value.trim())
+            return alert("Veillez preciser une adresse");
         setAddress(`${addRef.current.value} + @[${point}]`);
         setTimeout(beginPaiement, 500);
     };
