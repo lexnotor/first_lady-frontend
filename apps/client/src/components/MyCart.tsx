@@ -3,10 +3,12 @@ import { cartUrl, paymentUrl } from "@/redux/helper.api";
 import type { ApiResponse, CartProductInfo } from "@/types";
 import { message } from "antd";
 import axios, { AxiosResponse } from "axios";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { BiCheck, BiCreditCard } from "react-icons/bi";
 import CartItem from "./CartItem";
+const OrderForm = dynamic(() => import("./OrderForm"), { ssr: false });
 
 const MyCart = () => {
     const [token, setToken] = useState<string>(null);
@@ -20,6 +22,7 @@ const MyCart = () => {
         },
         []
     );
+    const [address, setAddress] = useState<string>(null);
 
     const getMyCart = useCallback((token: string) => {
         axios
@@ -53,7 +56,7 @@ const MyCart = () => {
     }, []);
 
     useEffect(() => {
-        getMyCart(token);
+        token && getMyCart(token);
     }, [getMyCart, token]);
 
     if (signStatus == "LOOKING")
@@ -93,7 +96,11 @@ const MyCart = () => {
         axios
             .post(
                 paymentUrl.requestPayement,
-                { card_product_id: selected, shop_id: data[0]?.shop?.id },
+                {
+                    card_product_id: selected,
+                    shop_id: data[0]?.shop?.id,
+                    address,
+                },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             .then((res: AxiosResponse<string>) => res.data)
@@ -108,12 +115,11 @@ const MyCart = () => {
                     <span className="text-3xl ">
                         <BiCreditCard />
                     </span>
-                    <button
-                        onClick={beginPaiement}
-                        className="py-1 px-4 rounded-lg bg-red-600 text-white"
-                    >
-                        Payer ({selected.length})
-                    </button>
+                    <OrderForm
+                        address={address}
+                        setAddress={setAddress}
+                        beginPaiement={beginPaiement}
+                    />
                 </div>
             )}
             <ul className="flex flex-col gap-4 p-4">
