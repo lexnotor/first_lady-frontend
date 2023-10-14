@@ -244,7 +244,16 @@ const productSlice = createSlice({
                 addThread(state, meta.requestId, "GET_PRODUCTS");
             })
             .addCase(getProducts.fulfilled, (state, { meta, payload }) => {
-                state.products.push(...payload);
+                const toPush = [];
+                payload?.forEach((newProduct) => {
+                    const index = state.products.findIndex(
+                        (old) => old.id == newProduct.id
+                    );
+                    index == -1
+                        ? toPush.push(newProduct)
+                        : state.products.splice(index, 1, newProduct);
+                });
+                state.products.push(...toPush);
 
                 changeThreadStatus(state, meta.requestId, "FULLFILED");
             })
