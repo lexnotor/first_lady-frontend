@@ -2,14 +2,14 @@ import { Table } from "antd";
 
 import React from "react";
 import AntConfig from "./AntConfig";
+import { AnyObject } from "antd/es/_util/type";
 
-type Cust = Parameters<typeof Table>[0];
+type Cust<T extends AnyObject> = Parameters<typeof Table<T>>[0];
 
-export const CustomTable = ({ ...arg }: Cust) => {
+export function CustomTable<T extends AnyObject>({ ...arg }: Cust<T>) {
     return (
         <AntConfig>
             <Table
-                {...arg}
                 className="bg-transparent"
                 size="small"
                 locale={{
@@ -19,12 +19,13 @@ export const CustomTable = ({ ...arg }: Cust) => {
                         </div>
                     ),
                 }}
+                {...arg}
                 components={{
                     header: {
                         cell: ({ children, ...rest }: { children: any }) => (
                             <td
                                 {...rest}
-                                className="p-2 hover:!bg-transparent !font-medium !text-white text-sm !bg-[#262830]/30"
+                                className="p-2 hover:!bg-transparent !font-medium !text-white text-sx !bg-[#262830]/30"
                             >
                                 {children}
                             </td>
@@ -42,7 +43,7 @@ export const CustomTable = ({ ...arg }: Cust) => {
                         cell: ({ children, ...rest }: { children: any }) => (
                             <td
                                 {...rest}
-                                className="p-0 !font-normal !text-white text-sm !border-none"
+                                className="p-0 !font-normal !text-white text-xs !border-none"
                             >
                                 {children}
                             </td>
@@ -52,4 +53,4 @@ export const CustomTable = ({ ...arg }: Cust) => {
             />
         </AntConfig>
     );
-};
+}

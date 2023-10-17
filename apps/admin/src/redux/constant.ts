@@ -1,0 +1,8 @@
+export enum RoleType {
+    OWNER = "OWNER",
+    UPDATE_USER = "UPDATE_USER",
+    UPDATE_PRODUCT = "UPDATE_PRODUCT",
+    UPDATE_ORDER = "UPDATE_ORDER",
+    SELLER = "SELLER",
+    STAFF = "STAFF",
+}

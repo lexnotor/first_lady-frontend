@@ -1,10 +1,10 @@
 "use client";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
+import { ApiResponse, RoleInfo, UserInfo, UserStats } from "..";
 import { authUrl, userUrl } from "../helper.api";
-import { loginUser as loginUserAction } from "./user.slice";
 import { RootState } from "../store";
-import { ApiResponse, UserStats } from "..";
+import { loginUser as loginUserAction } from "./user.slice";
 
 const signupUser: AsyncThunkPayloadCreator<any, any> = async (
     payload: {
@@ -88,4 +88,59 @@ const getUserStats: AsyncThunkPayloadCreator<UserStats> = async (
     }
 };
 
-export const userServices = { signupUser, loginUser, getMyInfo, getUserStats };
+const findUser: AsyncThunkPayloadCreator<UserInfo[], string> = async (
+    queryStr,
+    thunkAPI
+) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
+    const query = new URLSearchParams(queryStr);
+    query.get("page") ?? query.set("page", "1");
+
+    try {
+        const users: AxiosResponse<ApiResponse<UserInfo[]>> = await axios.get(
+            userUrl.findUser(query.toString()),
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        return thunkAPI.fulfillWithValue(users.data.data);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_FETCH_USERS"
+        );
+    }
+};
+
+const getAllRoles: AsyncThunkPayloadCreator<RoleInfo[]> = async (
+    _,
+    thunkAPI
+) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
+    try {
+        const res: AxiosResponse<ApiResponse<RoleInfo[]>> = await axios.get(
+            userUrl.findRoles,
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_FETCH_ROLES"
+        );
+    }
+};
+
+export const userServices = {
+    signupUser,
+    loginUser,
+    getMyInfo,
+    getUserStats,
+    findUser,
+    getAllRoles,
+};

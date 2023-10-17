@@ -1,27 +1,36 @@
 "use client";
 import useAuth from "@/hooks/useAuth";
-import { Modal } from "antd";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Button } from "ui";
+import { authUrl } from "@/redux/helper.api";
+import axios from "axios";
+import { useEffect, useRef } from "react";
 
 const AuthManager = () => {
-    const { isLogin } = useAuth();
+    const { loginStatus } = useAuth();
 
-    const [isOpen, setIsOpen] = useState(false);
+    const isUserAuth = async (token: string) => {
+        await axios(authUrl.islogin, {
+            headers: { Authorization: `Bearer ${token}` },
+        }).catch(() => {
+            localStorage.removeItem("session_token");
+            window.location.reload();
+        });
+    };
+    const timer = useRef<ReturnType<typeof setInterval>>(null);
 
-    useEffect(() => setIsOpen(!isLogin), [isLogin]);
+    useEffect(() => {
+        if (loginStatus == "CONNECTED" && !timer) {
+            timer.current = setInterval(
+                () => isUserAuth(localStorage.getItem("session_token")),
+                5 * 3_600 * 1_000
+            );
+        }
+        return () => {
+            clearInterval(timer.current);
+            timer.current == null;
+        };
+    }, [loginStatus]);
 
-    return (
-        <Modal closable={false} footer={null} open={isOpen} destroyOnClose>
-            <div className="flex flex-col gap-4 items-center justify-center">
-                <h4 className="font-bold">Espace reservé</h4>
-                <Button size="small">
-                    <Link href={"/login"}>Connectez-vous</Link>
-                </Button>
-            </div>
-        </Modal>
-    );
+    return <></>;
 };
 
 export default AuthManager;
