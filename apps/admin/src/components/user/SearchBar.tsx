@@ -36,7 +36,7 @@ const SearchBar = () => {
                         className="py-1 px-2 bg-transparent w-80"
                         placeholder="Nom"
                         ref={textRef}
-                        defaultValue={searchParams.get("text")}
+                        defaultValue={searchParams.get("names")}
                     />
                 </label>
                 <button className="px-3 rounded-r-full bg-secondary-900 text-primary-700 text-2xl">

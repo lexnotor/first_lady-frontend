@@ -10,7 +10,7 @@ const page = () => {
             <StoreProvider>
                 <SearchBar />
                 <EditUserContextProvider>
-                    <UserListe />
+                    <UserListe type="CLIENT" />
                     <EditUser />
                 </EditUserContextProvider>
             </StoreProvider>

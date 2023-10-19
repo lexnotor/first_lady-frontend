@@ -7,7 +7,8 @@ import { Popover } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { AntConfig, CustomTable } from "ui";
 import { useUserEditingContext } from "./contexts/EditUserContext";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ColumnConfig: (
     dispatch: ReturnType<typeof useAppDispatch>,
@@ -23,7 +24,7 @@ const ColumnConfig: (
         { title: "Créer le", dataIndex: "created_at" },
     ];
     if (
-        !myrole.find(
+        myrole.find(
             (item) => item.title == "OWNER" || item.title == "UPDATE_USER"
         )
     )
@@ -60,19 +61,40 @@ const ColumnConfig: (
     return config;
 };
 
-const UserListe = ({ payload }: { payload?: UserInfo[] }) => {
+const UserListe = ({
+    payload,
+    type = "CLIENT",
+}: {
+    payload?: UserInfo[];
+    type: "CLIENT" | "STAFF";
+}) => {
+    const [router, searchParams, pathname] = [
+        useRouter(),
+        useSearchParams(),
+        usePathname(),
+    ];
     const dispatch = useAppDispatch();
     const { result } = useAppSelector((state) => state.user.search);
     const context = useUserEditingContext();
     const { myRoles } = useRoles();
 
     const source = useMemo(() => {
-        // ON N4AFFICHE PAS LES UTILISATEURS AVEC LE ROLE OWNER
-        return (payload ?? result).filter(
-            (item) =>
-                !item.shops[0].roles.find(({ role }) => role.title == "OWNER")
-        );
+        // ON N'AFFICHE PAS LES UTILISATEURS AVEC LE ROLE OWNER
+        const isOwner = (targer: UserInfo) => {
+            return (
+                Array.isArray(targer?.shops) &&
+                targer.shops[0]?.roles &&
+                targer.shops[0].roles.find(({ role }) => role.title == "OWNER")
+            );
+        };
+        return (payload ?? result).filter((item) => !isOwner(item));
     }, [payload, result]);
+
+    useEffect(() => {
+        const query = new URLSearchParams(searchParams.toString());
+        query.set("type", type);
+        router.push(pathname + "?" + query.toString());
+    }, [pathname, router, type, searchParams]);
 
     return (
         <div className="[&_.ant-table]:!bg-transparent rounded-xl p-2">

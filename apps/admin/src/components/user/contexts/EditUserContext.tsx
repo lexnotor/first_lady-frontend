@@ -1,6 +1,5 @@
 "use client";
-import { UserInfo } from "@/redux";
-import { RoleType } from "@/redux/constant";
+import { RoleInfo, UserInfo } from "@/redux";
 import {
     ReactNode,
     SetStateAction,
@@ -18,7 +17,7 @@ type EditUserContextType = {
     usernameRef?: React.MutableRefObject<HTMLInputElement>;
     addressRef?: React.MutableRefObject<HTMLTextAreaElement>;
     emailRef?: React.MutableRefObject<HTMLInputElement>;
-    roleRef?: React.MutableRefObject<RoleType[]>;
+    roleRef?: React.MutableRefObject<RoleInfo[]>;
 };
 
 const EditUserContext = createContext<EditUserContextType>({});
@@ -31,7 +30,7 @@ const EditUserContextProvider = ({ children }: { children?: ReactNode }) => {
         usernameRef = useRef<HTMLInputElement>(null),
         addressRef = useRef<HTMLTextAreaElement>(null),
         emailRef = useRef<HTMLInputElement>(null),
-        roleRef = useRef<RoleType[]>(null);
+        roleRef = useRef<RoleInfo[]>(null);
 
     return (
         <EditUserContext.Provider

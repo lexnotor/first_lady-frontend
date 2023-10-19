@@ -1,7 +1,19 @@
 "use client";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { ApiResponse, RoleInfo, UserInfo, UserStats } from "..";
+import {
+    CreateUserPayload,
+    assignRolePaylod,
+    dismissRolePaylod,
+    updateUserPayload,
+} from ".";
+import {
+    ApiResponse,
+    RoleInfo,
+    UserInfo,
+    UserShopRoleInfo,
+    UserStats,
+} from "..";
 import { authUrl, userUrl } from "../helper.api";
 import { RootState } from "../store";
 import { loginUser as loginUserAction } from "./user.slice";
@@ -136,6 +148,92 @@ const getAllRoles: AsyncThunkPayloadCreator<RoleInfo[]> = async (
     }
 };
 
+const createUser: AsyncThunkPayloadCreator<
+    UserInfo,
+    CreateUserPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
+    try {
+        const res: AxiosResponse<ApiResponse<UserInfo>> = await axios.post(
+            userUrl.createUser,
+            payload,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error?.message ?? "FAIL_TO_CREATE");
+    }
+};
+
+const updateUser: AsyncThunkPayloadCreator<
+    UserInfo,
+    updateUserPayload
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+
+    try {
+        const res: AxiosResponse<ApiResponse<UserInfo>> = await axios.put(
+            payload?.userId ? userUrl.updateUser : userUrl.updateMe,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_UPDATE_USER"
+        );
+    }
+};
+
+const assignRole: AsyncThunkPayloadCreator<
+    UserShopRoleInfo[],
+    assignRolePaylod
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    try {
+        const res: AxiosResponse<ApiResponse<UserShopRoleInfo[]>> =
+            await axios.put(userUrl.assignRole, payload, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_ASSIGN_ROLE"
+        );
+    }
+};
+const dismissRole: AsyncThunkPayloadCreator<
+    UserShopRoleInfo[],
+    dismissRolePaylod
+> = async (payload, thunkAPI) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    try {
+        const res: AxiosResponse<ApiResponse<UserShopRoleInfo[]>> =
+            await axios.delete(userUrl.assignRole, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_ASSIGN_ROLE"
+        );
+    }
+};
+
 export const userServices = {
     signupUser,
     loginUser,
@@ -143,4 +241,8 @@ export const userServices = {
     getUserStats,
     findUser,
     getAllRoles,
+    updateUser,
+    assignRole,
+    dismissRole,
+    createUser,
 };

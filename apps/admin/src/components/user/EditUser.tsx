@@ -1,8 +1,12 @@
 "use client";
-import { Drawer } from "antd";
-import React from "react";
+import { Drawer, message } from "antd";
+import React, { useEffect, useRef } from "react";
 import { AntConfig } from "ui";
 import { useUserEditingContext } from "./contexts/EditUserContext";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { assignRole, updateUser } from "@/redux/user/user.slice";
+import useRoles from "@/hooks/useRoles";
+import { RoleInfo } from "@/redux";
 
 const EditUser = () => {
     const {
@@ -13,14 +17,73 @@ const EditUser = () => {
         namesRef,
         secretRef,
         usernameRef,
+        roleRef,
     } = useUserEditingContext();
+    const dispatch = useAppDispatch();
+    const [toast, contextHold] = message.useMessage();
+
+    const changed = useRef<Record<string, boolean>>({});
 
     const submit: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
+        const names = namesRef.current.value,
+            address = addressRef.current.value,
+            secret = secretRef.current.value,
+            email = addressRef.current.value,
+            roles = roleRef.current;
+
+        const payload: Parameters<typeof updateUser>[number] = {
+            names: changed.current.names ? names : undefined,
+            address: changed.current.address ? address : undefined,
+            secret: changed.current.secret ? secret : undefined,
+            email: changed.current.email ? email : undefined,
+            userId: editing.id,
+        };
+
+        dispatch(updateUser(payload))
+            .then(({ payload }: any) => {
+                if (!payload.id) throw new Error("Données entrées son invalid");
+                toast.success("Profile mis à jour");
+                if (changed.current.roles)
+                    return dispatch(
+                        assignRole({
+                            roles: roles.map((item) => item.id),
+                            user_id: editing.id,
+                        })
+                    );
+            })
+            .then((action: any) => {
+                if (changed.current.roles && !action.payload.id)
+                    throw new Error("ROLES_ERROR");
+                if (changed.current.roles) toast.success("Roles mis à jour");
+                setEditing(null);
+            })
+            .catch(({ message }) => toast.error(message));
     };
+
+    const { allRoles } = useRoles();
+
+    const hasRole = (role: RoleInfo) => {
+        return (
+            Array.isArray(editing?.shops) &&
+            editing.shops[0]?.roles &&
+            !!editing.shops[0].roles.find((item) => item.role.id == role.id)
+        );
+    };
+    const toggleRole = (role: RoleInfo) => {
+        const index = roleRef.current.findIndex((item) => item.id == role.id);
+        index == -1
+            ? roleRef.current.push(role)
+            : roleRef.current.splice(index, 1);
+    };
+
+    useEffect(() => {
+        roleRef.current = (editing?.shops[0] && editing.shops[0].roles) || [];
+    }, [editing?.shops, roleRef]);
 
     return (
         <AntConfig>
+            {contextHold}
             <Drawer
                 open={!!editing}
                 title="Modifier Utilisateur"
@@ -50,6 +113,7 @@ const EditUser = () => {
                             type="text"
                             className="bg-slate-800 py-2 px-3 rounded-lg"
                             defaultValue={editing?.names}
+                            onChange={() => (changed.current.names = true)}
                             ref={namesRef}
                         />
                     </div>
@@ -61,6 +125,7 @@ const EditUser = () => {
                             type="text"
                             className="bg-slate-800 py-2 px-3 rounded-lg"
                             defaultValue={editing?.username}
+                            onChange={() => (changed.current.username = true)}
                             ref={usernameRef}
                         />
                     </div>
@@ -72,6 +137,7 @@ const EditUser = () => {
                             type="text"
                             className="bg-slate-800 py-2 px-3 rounded-lg"
                             ref={secretRef}
+                            onChange={() => (changed.current.secret = true)}
                         />
                     </div>
                     <div className="flex flex-col gap-2 mb-4">
@@ -83,6 +149,7 @@ const EditUser = () => {
                             className="bg-slate-800 py-2 px-3 rounded-lg"
                             defaultValue={editing?.email}
                             ref={emailRef}
+                            onChange={() => (changed.current.email = true)}
                         />
                     </div>
                     <div className="flex flex-col gap-2 mb-4">
@@ -94,18 +161,28 @@ const EditUser = () => {
                             rows={4}
                             defaultValue={editing?.address}
                             ref={addressRef}
+                            onChange={() => (changed.current.address = true)}
                         />
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="flex gap-2">
-                            <input type="checkbox" />
-                            <span>OWNER</span>
-                        </label>
-                        <label className="flex gap-2">
-                            <input type="checkbox" />
-                            <span>OWNER</span>
-                        </label>
-                    </div>
+                    {editing?.shops[0] && (
+                        <div className="flex flex-col gap-2">
+                            {allRoles.map((item) => (
+                                <label className="flex gap-2" key={item.id}>
+                                    <input
+                                        type="checkbox"
+                                        name={item.id}
+                                        id={item.id}
+                                        defaultChecked={hasRole(item)}
+                                        onChange={() => {
+                                            changed.current.roles;
+                                            toggleRole(item);
+                                        }}
+                                    />
+                                    <span>{item.title}</span>
+                                </label>
+                            ))}
+                        </div>
+                    )}
                     <div className="flex gap-2 pt-4">
                         <button
                             onClick={() => setEditing(null)}
