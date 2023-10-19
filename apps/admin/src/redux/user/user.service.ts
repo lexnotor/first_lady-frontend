@@ -195,6 +195,28 @@ const updateUser: AsyncThunkPayloadCreator<
     }
 };
 
+const deleteUser: AsyncThunkPayloadCreator<string, string> = async (
+    userId,
+    thunkAPI
+) => {
+    const {
+        user: { token },
+    } = thunkAPI.getState() as RootState;
+    try {
+        const res: AxiosResponse<ApiResponse<string>> = await axios.delete(
+            userUrl.deleteUser(userId),
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
+        return res.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(
+            error?.message ?? "FAIL_TO_DELETE_USER"
+        );
+    }
+};
+
 const assignRole: AsyncThunkPayloadCreator<
     UserShopRoleInfo[],
     assignRolePaylod
@@ -244,5 +266,6 @@ export const userServices = {
     updateUser,
     assignRole,
     dismissRole,
+    deleteUser,
     createUser,
 };

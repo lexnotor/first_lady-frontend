@@ -17,6 +17,7 @@ interface UserState {
             | "LOAD_USER_STATS"
             | "GET_ALL_ROLES"
             | "ASSIGN_ROLE"
+            | "DELETE_USER"
             | "CREATE_USER"
             | "UPDATE_USER"
             | "SEARCH_USER";
@@ -63,6 +64,7 @@ const createUser = createAsyncThunk("user/createUser", userServices.createUser);
 const getMe = createAsyncThunk("user/getMyInfo", userServices.getMyInfo);
 
 const findUser = createAsyncThunk("user/findUser", userServices.findUser);
+const deleteUser = createAsyncThunk("user/deleteUser", userServices.deleteUser);
 
 const getAllRoles = createAsyncThunk(
     "user/getAllRoles",
@@ -327,6 +329,30 @@ const userSlice = createSlice({
                     (task) => task.id == meta.requestId
                 );
                 if (tasks) tasks.status = "ERROR";
+            })
+            // deleteUser
+            .addCase(deleteUser.pending, (state, { meta }) => {
+                state.thread.push({
+                    action: "DELETE_USER",
+                    id: meta.requestId,
+                    status: "LOADING",
+                });
+            })
+            .addCase(deleteUser.fulfilled, (state, { payload, meta }) => {
+                const index = state.search.result.findIndex(
+                    (item) => item.id == payload
+                );
+                if (index != -1) state.search.result.splice(index, 1);
+                const tasks = state.thread.find(
+                    (task) => task.id == meta.requestId
+                );
+                if (tasks) tasks.status = "FULLFILED";
+            })
+            .addCase(deleteUser.rejected, (state, { meta }) => {
+                const tasks = state.thread.find(
+                    (task) => task.id == meta.requestId
+                );
+                if (tasks) tasks.status = "ERROR";
             }),
 });
 
@@ -345,6 +371,7 @@ export {
     dismissRole,
     assignRole,
     createUser,
+    deleteUser,
 };
 // reducer
 export default userSlice.reducer;

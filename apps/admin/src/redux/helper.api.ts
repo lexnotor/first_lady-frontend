@@ -30,6 +30,7 @@ const userUrl = {
     assignRole: `${baseUrl}/user/role`,
     dismissRole: `${baseUrl}/user/role`,
     createUser: `${baseUrl}/user/new`,
+    deleteUser: (id: string) => `${baseUrl}/user/delete/${id}`,
 };
 
 const shopUrl = {
