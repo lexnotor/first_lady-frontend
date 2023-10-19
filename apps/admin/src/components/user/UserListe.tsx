@@ -111,6 +111,7 @@ const UserListe = ({
                             </div>
                         ),
                     }}
+                    rowKey={(record) => record.id}
                 />
             </AntConfig>
         </div>

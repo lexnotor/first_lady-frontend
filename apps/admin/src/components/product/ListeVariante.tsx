@@ -63,6 +63,12 @@ const ColumnConfig: (
             render: (_, record) => <div>{record.quantity}</div>,
         },
         {
+            title: "Ajouté le",
+            render: (_, record) => (
+                <div>{new Date(record.created_at).toLocaleDateString()}</div>
+            ),
+        },
+        {
             title: "",
             width: "5rem",
             render: (_, record) => (
@@ -150,6 +156,7 @@ const ListeVariante = () => {
                         columns={ColumnConfig(dispatch, context)}
                         pagination={false}
                         dataSource={isSearch ? data : productVersion}
+                        scroll={{ x: "max-content" }}
                         locale={{
                             emptyText: (
                                 <div className="text-center font-bold py-20">

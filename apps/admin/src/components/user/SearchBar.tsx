@@ -1,4 +1,5 @@
 "use client";
+import generatePdf from "@/functions/generateUserPdf";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { findUser } from "@/redux/user/user.slice";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -43,6 +44,15 @@ const SearchBar = () => {
                     <BiSearch />
                 </button>
             </form>
+            {/* Print */}
+            <button
+                className="px-4 py-1 font-bold underline cursor-pointer hover:text-secondary-800 duration-500"
+                onClick={() =>
+                    generatePdf(new URLSearchParams(searchParams.toString()))
+                }
+            >
+                Tout imprimer
+            </button>
         </div>
     );
 };

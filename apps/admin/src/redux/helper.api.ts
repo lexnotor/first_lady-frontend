@@ -42,7 +42,7 @@ const productUrl = {
     createCategory: `${baseUrl}/product/category/new`,
     createProductVersion: `${baseUrl}/product/version/new`,
     addQuantityProductVersion: (keyId: string) =>
-        `${baseUrl}/product/version/${keyId}`,
+        `${baseUrl}/product/version/update/${keyId}`,
     findProduct: `${baseUrl}/product`,
     findProductVersion: `${baseUrl}/product/version`,
     getOneProduct: (productId: string) => `${baseUrl}/product?id=${productId}`,

@@ -29,6 +29,12 @@ const ColumnConfig = (): ColumnsType<ProductInfo> => {
             dataIndex: "product_v",
             render: (_, record) => <>{record?.product_v?.length ?? 0} </>,
         },
+        {
+            title: "Ajouté le",
+            render: (_, record) => (
+                <>{new Date(record.created_at).toLocaleDateString()} </>
+            ),
+        },
     ];
     return config;
 };
