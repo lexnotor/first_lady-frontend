@@ -9,6 +9,7 @@ import { AntConfig, CustomTable } from "ui";
 import { useUserEditingContext } from "./contexts/EditUserContext";
 import { useEffect, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { deleteUser } from "@/redux/user/user.slice";
 
 const ColumnConfig: (
     dispatch: ReturnType<typeof useAppDispatch>,
@@ -45,7 +46,7 @@ const ColumnConfig: (
                             </li>
                             <li
                                 className="cursor-pointer py-2 hover:text-secondary-800"
-                                onClick={() => null}
+                                onClick={() => dispatch(deleteUser(record.id))}
                             >
                                 Supprimer
                             </li>
@@ -110,6 +111,7 @@ const UserListe = ({
                             </div>
                         ),
                     }}
+                    rowKey={(record) => record.id}
                 />
             </AntConfig>
         </div>

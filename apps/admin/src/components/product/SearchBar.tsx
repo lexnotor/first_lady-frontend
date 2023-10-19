@@ -14,6 +14,8 @@ const SearchBar = () => {
     const maxQtyRef = useRef<HTMLInputElement>(null);
     const minPriceRef = useRef<HTMLInputElement>(null);
     const maxPriceRef = useRef<HTMLInputElement>(null);
+    const productRef = useRef<HTMLSelectElement>(null);
+    const categoryRef = useRef<HTMLSelectElement>(null);
 
     const [isOpen, toggleOpen] = useToggle(false);
     const { products, category } = useProduct();
@@ -35,12 +37,18 @@ const SearchBar = () => {
         const minQty = minQtyRef.current.value.trim(),
             maxQty = maxQtyRef.current.value.trim(),
             minPrice = minPriceRef.current.value.trim(),
-            maxPrice = maxPriceRef.current.value.trim();
+            maxPrice = maxPriceRef.current.value.trim(),
+            product = productRef.current.value.trim(),
+            category = categoryRef.current.value.trim();
 
         minQty ? query.set("minQty", minQty) : query.delete("minQty");
         maxQty ? query.set("maxQty", maxQty) : query.delete("maxQty");
         minPrice ? query.set("minPrice", minPrice) : query.delete("minPrice");
         maxPrice ? query.set("maxPrice", maxPrice) : query.delete("maxPrice");
+        product ? query.set("productId", product) : query.delete("productId");
+        category
+            ? query.set("categoryId", category)
+            : query.delete("categoryId");
 
         router.push(`?${query.toString()}`);
 
@@ -98,8 +106,11 @@ const SearchBar = () => {
                         <div className="flex flex-col gap-4">
                             <div className="flex gap-6 items-center">
                                 <label className="">Produit :</label>
-                                <select className="py-2 px-4 bg-primary-600 rounded-r-full rounded-l-full">
-                                    <option value={null}>Aucun</option>
+                                <select
+                                    ref={productRef}
+                                    className="py-2 px-4 bg-primary-600 rounded-r-full rounded-l-full"
+                                >
+                                    <option value={""}>Aucun</option>
                                     {products.map((item) => (
                                         <option key={item.id} value={item.id}>
                                             {item.title}
@@ -109,8 +120,11 @@ const SearchBar = () => {
                             </div>
                             <div className="flex gap-6 items-center">
                                 <label className="">Categorie :</label>
-                                <select className="py-2 px-4 bg-primary-600 rounded-r-full rounded-l-full">
-                                    <option value={null}>Aucun</option>
+                                <select
+                                    ref={categoryRef}
+                                    className="py-2 px-4 bg-primary-600 rounded-r-full rounded-l-full"
+                                >
+                                    <option value={""}>Aucun</option>
                                     {category.map((item) => (
                                         <option key={item.id} value={item.id}>
                                             {item.title}

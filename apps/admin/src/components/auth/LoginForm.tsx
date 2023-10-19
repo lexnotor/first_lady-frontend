@@ -7,7 +7,7 @@ import { loginUser } from "@/redux/user/user.slice";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useRef } from "react";
 import Checkbox from "ui/Checkbox";
-
+// TODO logo
 const LoginForm = () => {
     const dispatch = useAppDispatch();
 
@@ -61,7 +61,7 @@ const LoginForm = () => {
             <div className="flex gap-4">
                 <input
                     type="text"
-                    placeholder="Votre email"
+                    placeholder="Votre nom d'utilisateur"
                     className="py-2 px-4 w-full border border-neutral-400 rounded-lg focus:outline-none"
                     ref={emailRef}
                 />

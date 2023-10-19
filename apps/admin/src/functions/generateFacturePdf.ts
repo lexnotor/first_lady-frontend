@@ -7,7 +7,13 @@ import "../assert/courierprime-normal";
 
 export const generatePdf = async (orderId: string) => {
     await axios
-        .get(orderUrl.getOne(orderId))
+        .get(orderUrl.getOne(orderId), {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem(
+                    "session_token"
+                )}`,
+            },
+        })
         .then((res: AxiosResponse<ApiResponse<OrderInfo>>) => res.data.data)
         .then((data) => {
             const doc = new jsPDF({ putOnlyUsedFonts: true });

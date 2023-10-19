@@ -29,7 +29,7 @@ const EditUser = () => {
         const names = namesRef.current.value,
             address = addressRef.current.value,
             secret = secretRef.current.value,
-            email = addressRef.current.value,
+            email = emailRef.current.value,
             roles = roleRef.current;
 
         const payload: Parameters<typeof updateUser>[number] = {
@@ -145,7 +145,7 @@ const EditUser = () => {
                             Email
                         </label>
                         <input
-                            type="text"
+                            type="email"
                             className="bg-slate-800 py-2 px-3 rounded-lg"
                             defaultValue={editing?.email}
                             ref={emailRef}
