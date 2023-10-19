@@ -60,7 +60,7 @@ const SearchResult = () => {
                     <span>Aucun produit trouvé</span>
                 </div>
             )}
-            <ul className="grid grid-cols-2 gap-4">
+            <ul className="grid md:hidden grid-cols-2 gap-4">
                 <li className="flex flex-col gap-3">
                     {result
                         .slice(0, Math.ceil(result.length / 2))
@@ -77,6 +77,18 @@ const SearchResult = () => {
                         </Link>
                     ))}
                 </li>
+            </ul>
+            <ul className="hidden md:grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+                {result.map((item) => (
+                    <li key={item.id}>
+                        <Link
+                            href={generateLink(item.id)}
+                            className="h-full w-full"
+                        >
+                            <ProductCard productV={item} />
+                        </Link>
+                    </li>
+                ))}
             </ul>
             <div className="flex justify-center gap-4 mt-5">
                 <button
