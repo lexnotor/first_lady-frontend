@@ -1,3 +1,4 @@
+"use client";
 import { authUrl } from "@/redux/helper.api";
 import axios from "axios";
 import React, { useEffect } from "react";
