@@ -4,7 +4,6 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import useAuth from "@/hooks/useAuth";
 import useShop from "@/hooks/useShop";
 import { loginUser } from "@/redux/user/user.slice";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useRef } from "react";
 import Checkbox from "ui/Checkbox";
@@ -102,9 +101,9 @@ const LoginForm = () => {
                         <span>Se connecter</span>
                     )}
                 </button>
-                <Link href={"/signup"} className="block text-center underline">
+                {/* <Link href={"/signup"} className="block text-center underline">
                     Je n'ai pas encore de compte
-                </Link>
+                </Link> */}
             </div>
         </form>
     );

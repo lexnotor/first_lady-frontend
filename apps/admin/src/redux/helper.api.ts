@@ -16,12 +16,20 @@ const apiFetch = async (type: string, route: string) => {
 const authUrl = {
     login: `${baseUrl}/login`,
     signup: `${baseUrl}/signup`,
+    islogin: `${baseUrl}/islogin`,
 };
 
 const userUrl = {
     getMe: `${baseUrl}/user/me`,
     getUser: `${baseUrl}/user`,
     getStats: `${baseUrl}/user/stats`,
+    findUser: (query: string) => `${baseUrl}/user/find?${query}`,
+    findRoles: `${baseUrl}/user/role/find`,
+    updateUser: `${baseUrl}/user/update`,
+    updateMe: `${baseUrl}/user/me`,
+    assignRole: `${baseUrl}/user/role`,
+    dismissRole: `${baseUrl}/user/role`,
+    createUser: `${baseUrl}/user/new`,
 };
 
 const shopUrl = {

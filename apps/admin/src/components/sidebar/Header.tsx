@@ -1,13 +1,12 @@
-import React from "react";
-import UserButton from "../auth/UserButton";
-import StoreProvider from "@/redux/StoreProvider";
-import { TfiDashboard } from "react-icons/tfi";
-import { BiShoppingBag } from "react-icons/bi";
-import { BsCart4, BsShop } from "react-icons/bs";
-import { FiUsers } from "react-icons/fi";
-import LinkWrapper from "./LinkWrapper";
-import Image from "next/image";
 import logo from "@/assert/logo.png";
+import StoreProvider from "@/redux/StoreProvider";
+import Image from "next/image";
+import { BiShoppingBag } from "react-icons/bi";
+import { BsCart4 } from "react-icons/bs";
+import { FiUsers } from "react-icons/fi";
+import { TfiDashboard } from "react-icons/tfi";
+import UserButton from "../auth/UserButton";
+import LinkWrapper from "./LinkWrapper";
 
 const Header = () => {
     return (
@@ -38,7 +37,7 @@ const Header = () => {
                     text="Ustilisateurs"
                     to="/user"
                 />
-                <LinkWrapper icon={<BsShop />} text="Boutiques" to="/shop" />
+                {/* <LinkWrapper icon={<BsShop />} text="Boutiques" to="/shop" /> */}
             </ul>
             <div className="mt-auto">
                 <StoreProvider>

@@ -67,7 +67,7 @@ const UserButton = () => {
         </div>
     ) : (
         <div>
-            <Link href={"/signup"}>Signup</Link>/
+            {/* <Link href={"/signup"}>Signup</Link>/ */}
             <Link href={"/login"}>Login</Link>
         </div>
     );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AuthManager from "@/components/AuthManager";
 
 export const metadata: Metadata = {
     title: "Première Dame",
@@ -15,6 +16,7 @@ export default function RootLayout({
         <html lang="fr">
             <body className="flex flex-col">
                 <main className="grow">{children}</main>
+                <AuthManager />
             </body>
         </html>
     );

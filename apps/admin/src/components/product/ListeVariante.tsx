@@ -106,7 +106,7 @@ const ColumnConfig: (
     return config;
 };
 
-const ListeProduct = () => {
+const ListeVariante = () => {
     const { productVersion } = useProductVersion();
     const dispatch = useAppDispatch();
     const context = useEditProductContext();
@@ -165,4 +165,4 @@ const ListeProduct = () => {
     );
 };
 
-export default ListeProduct;
+export default ListeVariante;

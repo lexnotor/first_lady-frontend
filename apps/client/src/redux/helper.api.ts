@@ -16,6 +16,7 @@ const apiFetch = async (type: string, route: string) => {
 const authUrl = {
     login: `${baseUrl}/login`,
     signup: `${baseUrl}/signup`,
+    islogin: `${baseUrl}/islogin`,
 };
 
 const userUrl = {

@@ -1,6 +1,6 @@
 import EditProduct from "@/components/product/EditProduct";
 import EditVersion from "@/components/product/EditVersion";
-import ListeProduct from "@/components/product/ListeProduct";
+import ListeVariante from "@/components/product/ListeVariante";
 import SearchBar from "@/components/product/SearchBar";
 import EditProductContextProvider from "@/components/product/context/EditProductContext";
 import StoreProvider from "@/redux/StoreProvider";
@@ -11,7 +11,7 @@ const Page = () => {
             <StoreProvider>
                 <SearchBar />
                 <EditProductContextProvider>
-                    <ListeProduct />
+                    <ListeVariante />
                     <EditProduct />
                     <EditVersion />
                 </EditProductContextProvider>
