@@ -57,7 +57,7 @@ const Header = () => {
                             text={item.text}
                         />
                     ) : (
-                        <div></div>
+                        <div key={item.path}></div>
                     )
                 )}
                 {/* <LinkWrapper
