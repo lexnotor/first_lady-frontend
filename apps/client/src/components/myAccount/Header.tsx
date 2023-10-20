@@ -1,14 +1,11 @@
-import Image from "next/image";
-import React from "react";
 import logo from "@/assets/logo.png";
-import { useRouter } from "next/navigation";
 import { UserInfo } from "@/types";
+import Image from "next/image";
 
 const Header = ({ data }: { data: UserInfo }) => {
-    const router = useRouter();
     const deconnect = () => {
         localStorage.removeItem("user_token");
-        router.refresh();
+        window.location.reload();
     };
     return (
         <h1 className="flex gap-2 justify-between items-center p-2 bg-white shadow-lg">
