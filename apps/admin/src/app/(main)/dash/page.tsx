@@ -1,4 +1,5 @@
 import fashion from "@/assert/vector.jpg";
+import AdminUserList from "@/components/dash/AdminUserList";
 import GraphiqueCard from "@/components/dash/GraphiqueCard";
 import PendingOrderList from "@/components/dash/PendingOrderList";
 import {
@@ -30,10 +31,12 @@ const Page = () => {
             </div>
             <div className="grid grid-cols-2 p-4 gap-4">
                 <StoreProvider>
-                    <GraphiqueCard text="Vente Annuelle" />
+                    <div className="col-[1_/_span_2]">
+                        <GraphiqueCard text="Vente Annuelle" />
+                    </div>
                     <PendingOrderList />
-                    <PendingOrderList />
-                    <GraphiqueCard text="Commandes" />
+                    <AdminUserList />
+                    {/* <GraphiqueCard text="Commandes" /> */}
                 </StoreProvider>
             </div>
         </div>

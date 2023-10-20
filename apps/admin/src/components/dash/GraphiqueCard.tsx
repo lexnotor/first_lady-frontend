@@ -20,7 +20,9 @@ const GraphiqueCard = ({ text }: { text?: string }) => {
             `${orderUrl.getStats}?year=${y}`
         );
 
-        setData(res.data.data);
+        setData(
+            res.data.data.map((item: any) => ({ ...item, nbr: +item.nbr }))
+        );
     };
     const config: LineConfig = {
         data,
@@ -36,6 +38,8 @@ const GraphiqueCard = ({ text }: { text?: string }) => {
         xAxis: {
             grid: { line: { style: { lineWidth: 0, lineHeight: 0 } } },
             line: { style: { lineWidth: 0, stroke: "#f0ff25" } },
+            tickInterval: 30,
+            min: 0,
         },
         yAxis: {
             grid: {
@@ -44,7 +48,20 @@ const GraphiqueCard = ({ text }: { text?: string }) => {
                 },
             },
             line: { style: { lineWidth: 0, stroke: "#f0ff25" } },
-            min: 20,
+            min: 0,
+        },
+        tooltip: {
+            customContent: (title, data) => {
+                if (!data[0]) return <></>;
+
+                const info = data[0]?.data;
+                return (
+                    <div className="py-2 flex flex-col gap-1">
+                        <span>{new Date(info.date).toDateString()}</span>
+                        <span>{info.nbr} vente.s</span>
+                    </div>
+                );
+            },
         },
     };
 
