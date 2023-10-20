@@ -1,8 +1,9 @@
 "use client";
 import { cartUrl } from "@/redux/helper.api";
 import { ProductVersionInfo } from "@/types";
-import { message } from "antd";
+import { Popover, message } from "antd";
 import axios from "axios";
+import Link from "next/link";
 import React from "react";
 
 const FooterSection = ({
@@ -45,11 +46,30 @@ const FooterSection = ({
                     onClick={close}
                     className="border border-neutral-700 py-2 px-4 rounded-lg"
                 >
-                    Quitter
+                    Fermer
                 </button>
-                <button className="border border-red-500 bg-red-500 text-white py-2 px-4 rounded-lg">
-                    Ajouter au pagnier
-                </button>
+                {localStorage?.getItem("user_token") ? (
+                    <button className="border border-red-500 bg-red-500 text-white py-2 px-4 rounded-lg">
+                        Ajouter au pagnier
+                    </button>
+                ) : (
+                    <Popover
+                        trigger={["hover"]}
+                        content={
+                            <>
+                                Connectez-vous pour ajouter <br /> ce produit à
+                                votre pagnier
+                            </>
+                        }
+                    >
+                        <Link
+                            href={"/account"}
+                            className="border border-red-500 bg-red-500 text-white hover:text-white py-2 px-4 rounded-lg"
+                        >
+                            Se connecter
+                        </Link>
+                    </Popover>
+                )}
             </form>
         </>
     );
