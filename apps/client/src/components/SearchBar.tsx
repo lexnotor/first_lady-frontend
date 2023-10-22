@@ -3,7 +3,7 @@ import logo from "@/assets/logo_sm.png";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useRef } from "react";
-import { BiFilterAlt, BiSearch } from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 
 const SearchBar = () => {
     const [searchParam, router, pathname] = [
@@ -50,9 +50,6 @@ const SearchBar = () => {
                     <BiSearch />
                 </button>
             </label>
-            <span className="text-xl">
-                <BiFilterAlt />
-            </span>
         </form>
     );
 };

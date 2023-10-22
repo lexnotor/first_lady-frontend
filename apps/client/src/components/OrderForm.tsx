@@ -3,6 +3,7 @@ import { Modal } from "antd";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import { BiCreditCard } from "react-icons/bi";
 
 const OrderForm = ({
     address,
@@ -71,9 +72,12 @@ const OrderForm = ({
         <div>
             <button
                 onClick={() => setIsOpen(true)}
-                className="py-1 px-4 rounded-lg bg-red-600 text-white"
+                className="py-1 px-4 rounded-lg bg-red-600 text-white flex gap-2 justify-center items-center"
             >
-                Payer
+                <span className="text-[150%]">
+                    <BiCreditCard />
+                </span>
+                <span>Payer</span>
             </button>
             <Modal
                 onCancel={close}

@@ -72,6 +72,9 @@ const invoiceUrl = {
 const cartUrl = {
     addItem: `${baseUrl}/cart/item/add`,
     getMyCart: `${baseUrl}/cart/item/mine`,
+    emptyCart: `${baseUrl}/cart/item/delete?all=true`,
+    removeItem: (itemId: string) =>
+        `${baseUrl}/cart/item/delete?itemId=${itemId}`,
 };
 
 const paymentUrl = {
