@@ -30,7 +30,7 @@ const EditUserContextProvider = ({ children }: { children?: ReactNode }) => {
         usernameRef = useRef<HTMLInputElement>(null),
         addressRef = useRef<HTMLTextAreaElement>(null),
         emailRef = useRef<HTMLInputElement>(null),
-        roleRef = useRef<RoleInfo[]>(null);
+        roleRef = useRef<RoleInfo[]>([]);
 
     return (
         <EditUserContext.Provider

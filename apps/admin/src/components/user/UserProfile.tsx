@@ -64,7 +64,7 @@ const UserProfile = () => {
                     </h2>
                 </div>
             </section>
-            <section className="my-4 flex gap-4">
+            <section className="my-4 grid grid-cols-2 gap-4">
                 <article className="flex flex-col gap-4 border p-4 rounded-xl border-primary-700">
                     <h1 className="font-bold">Roles et Permissions</h1>
                     <ul>
@@ -96,7 +96,8 @@ const UserProfile = () => {
                         })}
                     </ul>
                 </article>
-                <article className="flex grow max-w-sm flex-col gap-4 border p-4 rounded-xl border-primary-700">
+
+                <article className="flex grow flex-col gap-4 border p-4 rounded-xl border-primary-700">
                     <h1 className="font-bold">Changer mot de passe</h1>
                     <form
                         onSubmit={submitSecret}
@@ -148,8 +149,56 @@ const UserProfile = () => {
                         </div>
                     </form>
                 </article>
-                <article className="flex grow max-w-sm flex-col gap-4 border p-4 rounded-xl border-primary-700">
+
+                <article className="col-[1_/_span_2] flex grow flex-col gap-4 border p-4 rounded-xl border-primary-700">
                     <h1 className="font-bold">Profile</h1>
+                    <form className="grid grid-cols-2 gap-5">
+                        <div className="flex flex-col gap-3">
+                            <label htmlFor="">Noms</label>
+                            <input
+                                type="text"
+                                required
+                                className="bg-slate-800 py-3 px-3 rounded-lg"
+                                placeholder="Votre nom"
+                                defaultValue={account?.data?.names}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <label htmlFor="">Nom d'utilisateur</label>
+                            <input
+                                type="text"
+                                disabled
+                                className="bg-slate-800 py-3 px-3 rounded-lg"
+                                placeholder="Votre nom d'utilisateur"
+                                defaultValue={account?.data?.username}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <label htmlFor="">Email</label>
+                            <input
+                                type="email"
+                                required
+                                className="bg-slate-800 py-3 px-3 rounded-lg"
+                                placeholder="Entrer votre email"
+                                defaultValue={account?.data?.email}
+                            />
+                        </div>
+                        <div className="col-[1_/_span_2] flex flex-col gap-3">
+                            <label htmlFor="">Adresse</label>
+
+                            <textarea
+                                className="bg-slate-800 py-3 px-3 rounded-lg resize-none"
+                                rows={7}
+                                placeholder="Entrez votre adresse"
+                                defaultValue={account?.data?.address}
+                            ></textarea>
+                        </div>
+                        <div className="col-[1_/_span_2] flex justify-end">
+                            <button className="px-6 py-1 border border-secondary-800 text-secondary-800 hover:bg-secondary-800 hover:text-primary-800 rounded-lg duration-500">
+                                Mettre à jour
+                            </button>
+                        </div>
+                    </form>
                 </article>
             </section>
         </div>
