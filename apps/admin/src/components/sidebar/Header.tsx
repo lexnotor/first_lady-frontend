@@ -24,7 +24,7 @@ const links = [
         icon: <BsCart4 />,
         text: "Commandes",
         path: "/order",
-        role: [RoleType.UPDATE_ORDER, RoleType.OWNER, RoleType.SELLER],
+        role: [RoleType.UPDATE_ORDER, RoleType.OWNER],
     },
     {
         icon: <FiUsers />,
