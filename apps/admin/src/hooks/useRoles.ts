@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { useAppDispatch } from "./useAppDispatch";
 import { useAppSelector } from "./useAppSelector";

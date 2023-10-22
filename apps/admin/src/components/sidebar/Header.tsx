@@ -1,3 +1,4 @@
+"use client";
 import logo from "@/assert/logo.png";
 import StoreProvider from "@/redux/StoreProvider";
 import Image from "next/image";
@@ -8,6 +9,8 @@ import { TfiDashboard } from "react-icons/tfi";
 import UserButton from "../auth/UserButton";
 import LinkWrapper from "./LinkWrapper";
 import { RoleType } from "@/redux/constant";
+import useRoles from "@/hooks/useRoles";
+import { Popover } from "antd";
 
 const links = [
     { icon: <TfiDashboard />, text: "Dashboard", path: "/dash", role: [] },
@@ -32,8 +35,13 @@ const links = [
 ];
 
 const Header = () => {
-    const hasRole = () => {
-        return true;
+    const { myRoles } = useRoles();
+
+    const hasRole = (...roles: RoleType[]) => {
+        const istrue = roles.some(
+            (role) => !!myRoles.find((item) => item.title == role)
+        );
+        return istrue || roles.length == 0;
     };
 
     return (
@@ -48,8 +56,8 @@ const Header = () => {
                 />
             </div>
             <ul className="flex gap-3 flex-col my-auto">
-                {links.map((item) =>
-                    hasRole() ? (
+                {links.map((item) => {
+                    return hasRole(...item.role) ? (
                         <LinkWrapper
                             icon={item.icon}
                             key={item.path}
@@ -57,9 +65,16 @@ const Header = () => {
                             text={item.text}
                         />
                     ) : (
-                        <div key={item.path}></div>
-                    )
-                )}
+                        <Popover
+                            key={item.path}
+                            content={() => <>Vous n'êtes pas autoriser</>}
+                        >
+                            <div className="`pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-[#0b0b18] rounded-xl flex gap-4 items-center">
+                                {item.text}
+                            </div>
+                        </Popover>
+                    );
+                })}
                 {/* <LinkWrapper
                     icon={<TfiDashboard />}
                     text="Dashboard"

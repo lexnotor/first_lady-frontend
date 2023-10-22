@@ -6,8 +6,9 @@ import axios, { AxiosResponse } from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { BiCheck, BiCreditCard } from "react-icons/bi";
+import { BiCheck } from "react-icons/bi";
 import CartItem from "./CartItem";
+import RemoveCartItem from "./RemoveCartItem";
 const OrderForm = dynamic(() => import("./OrderForm"), { ssr: false });
 
 const MyCart = () => {
@@ -16,6 +17,10 @@ const MyCart = () => {
     const [signStatus, setSigninStatus] = useState("LOOKING");
     const [selected, toggleSelected] = useReducer(
         (state: string[], payload: string) => {
+            if (payload == "ALL") {
+                setData([]);
+                return [];
+            }
             const index = state.indexOf(payload);
             if (index == -1) return [payload, ...state];
             else return [...state.slice(0, index), ...state.slice(index + 1)];
@@ -110,16 +115,25 @@ const MyCart = () => {
 
     return (
         <div>
-            {selected.length > 0 && (
-                <div className="px-4 py-2 flex justify-between gap-3 items-center">
-                    <span className="text-3xl ">
+            {selected.length + data.length > 0 && (
+                <div className="px-4 py-2 flex justify-end gap-3 items-center">
+                    {data.length ? (
+                        <RemoveCartItem
+                            toggleSelected={toggleSelected}
+                            selected={selected}
+                            getMyCart={getMyCart}
+                        />
+                    ) : null}
+                    {/* <span className="text-3xl ">
                         <BiCreditCard />
-                    </span>
-                    <OrderForm
-                        address={address}
-                        setAddress={setAddress}
-                        beginPaiement={beginPaiement}
-                    />
+                    </span> */}
+                    {selected.length ? (
+                        <OrderForm
+                            address={address}
+                            setAddress={setAddress}
+                            beginPaiement={beginPaiement}
+                        />
+                    ) : null}
                 </div>
             )}
             <ul className="flex flex-col gap-4 p-4">
