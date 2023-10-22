@@ -1,4 +1,4 @@
-import UserProfile from "@/components/user/UserProfile";
+import UserProfile from "@/components/user/UserProfile/UserProfile";
 import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
 
