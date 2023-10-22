@@ -65,8 +65,8 @@ const productUrl = {
 const orderUrl = {
     findOrders: `${baseUrl}/order`,
     saveLocalOrder: `${baseUrl}/order/local`,
-    cancelOrder: `${baseUrl}/order/done`,
-    finishOrder: `${baseUrl}/order/cancel`,
+    cancelOrder: `${baseUrl}/order/cancel`,
+    finishOrder: `${baseUrl}/order/done`,
     getStats: `${baseUrl}/order/stats`,
     getSummary: `${baseUrl}/order/summary`,
     getOne: (orderId: string) => `${baseUrl}/order/one/${orderId}`,

@@ -296,7 +296,12 @@ const userSlice = createSlice({
                     );
                     user.shops[0].roles = payload;
                 } else {
-                    state.data.shops[0].roles = payload;
+                    const user = state.search.result.find(
+                        (item) => item.id == meta.arg.user_id
+                    );
+                    if (user) {
+                        user.shops[0].roles = payload;
+                    }
                 }
                 const tasks = state.thread.find(
                     (task) => task.id == meta.requestId

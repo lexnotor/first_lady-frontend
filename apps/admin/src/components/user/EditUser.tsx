@@ -53,7 +53,7 @@ const EditUser = () => {
                     );
             })
             .then((action: any) => {
-                if (changed.current.roles && !action.payload.id)
+                if (changed.current.roles && !Array.isArray(action.payload))
                     throw new Error("ROLES_ERROR");
                 if (changed.current.roles) toast.success("Roles mis à jour");
                 setEditing(null);
@@ -73,12 +73,19 @@ const EditUser = () => {
     const toggleRole = (role: RoleInfo) => {
         const index = roleRef.current.findIndex((item) => item.id == role.id);
         index == -1
-            ? roleRef.current.push(role)
-            : roleRef.current.splice(index, 1);
+            ? (roleRef.current = [...roleRef.current, role])
+            : (roleRef.current = [
+                  ...roleRef.current.slice(0, index),
+                  ...roleRef.current.slice(index + 1),
+              ]);
     };
 
     useEffect(() => {
-        roleRef.current = (editing?.shops[0] && editing.shops[0].roles) || [];
+        roleRef.current =
+            (editing?.shops[0] &&
+                editing.shops[0].roles &&
+                editing.shops[0].roles.map((item) => item.role)) ||
+            [];
     }, [editing?.shops, roleRef]);
 
     return (
@@ -174,7 +181,7 @@ const EditUser = () => {
                                         id={item.id}
                                         defaultChecked={hasRole(item)}
                                         onChange={() => {
-                                            changed.current.roles;
+                                            changed.current.roles = true;
                                             toggleRole(item);
                                         }}
                                     />
