@@ -6,7 +6,7 @@ import { SpinLoader } from "ui";
 const Page = () => {
     const [router] = [useRouter()];
 
-    useEffect(() => router.replace("/user/me"), [router]);
+    useEffect(() => router.replace("/user/client"), [router]);
     return (
         <div>
             <SpinLoader />

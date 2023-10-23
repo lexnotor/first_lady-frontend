@@ -28,7 +28,7 @@ const links = [
     },
     {
         icon: <FiUsers />,
-        text: "Ustilisateurs",
+        text: "Utilisateurs",
         path: "/user",
         role: [RoleType.OWNER, RoleType.UPDATE_USER],
     },
@@ -69,29 +69,13 @@ const Header = () => {
                             key={item.path}
                             content={() => <>Vous n'êtes pas autoriser</>}
                         >
-                            <div className="`pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-[#0b0b18] rounded-xl flex gap-4 items-center">
-                                {item.text}
+                            <div className="pl-6 py-3 transition-colors duration-500 cursor-pointer hover:bg-[#0b0b18] rounded-xl flex gap-4 items-center">
+                                <span className="text-xl">{item.icon}</span>
+                                <span>{item.text}</span>
                             </div>
                         </Popover>
                     );
                 })}
-                {/* <LinkWrapper
-                    icon={<TfiDashboard />}
-                    text="Dashboard"
-                    to="/dash"
-                />
-                <LinkWrapper icon={<BsCart4 />} text="Commandes" to="/order" />
-                <LinkWrapper
-                    icon={<BiShoppingBag />}
-                    text="Produits"
-                    to="/product"
-                />
-                <LinkWrapper
-                    icon={<FiUsers />}
-                    text="Ustilisateurs"
-                    to="/user"
-                /> */}
-                {/* <LinkWrapper icon={<BsShop />} text="Boutiques" to="/shop" /> */}
             </ul>
             <div className="mt-auto">
                 <StoreProvider>
