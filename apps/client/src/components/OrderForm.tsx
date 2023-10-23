@@ -2,17 +2,13 @@
 import { Modal } from "antd";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiCreditCard } from "react-icons/bi";
 
 const OrderForm = ({
-    address,
     beginPaiement,
-    setAddress,
 }: {
-    setAddress: React.Dispatch<SetStateAction<string>>;
-    address: string;
-    beginPaiement: () => any;
+    beginPaiement: (address: string) => any;
 }) => {
     const mapRef = useRef(null);
     const [isopen, setIsOpen] = useState(false);
@@ -63,10 +59,18 @@ const OrderForm = ({
         e.preventDefault();
         if (delivery && !point && !addRef.current.value.trim())
             return alert("Veillez preciser une adresse");
-        delivery
-            ? setAddress(`${addRef.current.value} + @[${point}]`)
-            : setAddress(undefined);
-        setTimeout(beginPaiement, 500);
+        // delivery
+        //     ? setAddress(`${addRef.current.value} + @[${point}]`)
+        //     : setAddress(undefined);
+        setTimeout(
+            () =>
+                beginPaiement(
+                    delivery
+                        ? `${addRef.current.value} + @[${point}]`
+                        : undefined
+                ),
+            500
+        );
     };
     return (
         <div>
@@ -117,7 +121,7 @@ const OrderForm = ({
                             <input
                                 type="text"
                                 className="border rounded-lg px-3 py-2"
-                                defaultValue={address}
+                                placeholder="Réference ..."
                                 ref={addRef}
                             />
                         </div>

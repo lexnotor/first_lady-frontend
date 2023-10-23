@@ -21,6 +21,7 @@ const OrderMap = ({ address }: { address: string; id: ModalID }) => {
     const [map, setMap] = useState<L.Map>(null);
 
     useEffect(() => {
+        if (!point) return;
         if (!isopen) return;
         if (!!map) return;
         const carte = L.map(mapRef.current).setView([0, 0], 5);
@@ -32,7 +33,7 @@ const OrderMap = ({ address }: { address: string; id: ModalID }) => {
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(carte);
         setMap(carte);
-    }, [isopen, map]);
+    }, [isopen, map, point]);
 
     useEffect(() => {
         if (!map || !point) return;
@@ -46,6 +47,11 @@ const OrderMap = ({ address }: { address: string; id: ModalID }) => {
     const close = () => {
         dispatch(closeModal());
     };
+
+    const extractAddress = (str) => {
+        const reg = str.replace(/\+ @\[([0-9\-.]+,[0-9\-.]+)\]$/i, "").trim();
+        return reg ? reg : "Aucune";
+    };
     return (
         <>
             <Modal
@@ -54,12 +60,19 @@ const OrderMap = ({ address }: { address: string; id: ModalID }) => {
                 footer={false}
                 title={"Livraison"}
             >
-                <h3 className="text-[115%] font-bold">{address}</h3>
-                <div
-                    id="map"
-                    className="w-full h-[50vh] bg-slate-400 relative"
-                    ref={mapRef}
-                />
+                <h3 className="mb-4">
+                    <span className="">Reference: </span>
+                    <span className="text-[115%] font-bold">
+                        {extractAddress(address)}
+                    </span>
+                </h3>
+                {point && (
+                    <div
+                        id="map"
+                        className="w-full h-[50vh] bg-slate-400 relative"
+                        ref={mapRef}
+                    />
+                )}
             </Modal>
         </>
     );
