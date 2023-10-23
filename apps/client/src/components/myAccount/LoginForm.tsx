@@ -1,11 +1,13 @@
 "use client";
+import logo from "@/assets/logo.png";
 import { authUrl } from "@/redux/helper.api";
 import { ApiResponse } from "@/types";
 import { message } from "antd";
 import axios, { AxiosResponse } from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { FormEventHandler, useRef, useState } from "react";
+import { FormEventHandler, useRef, useState } from "react";
 
 const LoginForm = () => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -47,6 +49,15 @@ const LoginForm = () => {
             className="p-4 flex flex-col justify-center h-full"
         >
             {contextHolder}
+            <h1 className="flex gap-2 justify-between items-center p-2 bg-white">
+                <Image
+                    src={logo}
+                    alt="Première Dame"
+                    width={400}
+                    height={400}
+                    className="w-fit h-[3rem] object-contain"
+                />
+            </h1>
             <h1 className="text-4xl font-bold mb-1 mt-2">Connexion</h1>
             <p className="mb-5 text-neutral-500 italic text-[85%]">
                 Profiter des meilleurs ventes du moment chez First-Lady

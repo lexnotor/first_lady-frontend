@@ -1,10 +1,12 @@
 "use client";
+import logo from "@/assets/logo.png";
 import { authUrl } from "@/redux/helper.api";
-import axios from "axios";
-import Link from "next/link";
-import React, { FormEventHandler, useRef, useState } from "react";
 import { message } from "antd";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FormEventHandler, useRef, useState } from "react";
 
 const SignupForm = () => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -50,6 +52,15 @@ const SignupForm = () => {
             className="p-4 flex flex-col justify-center h-full"
         >
             {contextHolder}
+            <h1 className="flex gap-2 justify-between items-center p-2 bg-white">
+                <Image
+                    src={logo}
+                    alt="Première Dame"
+                    width={400}
+                    height={400}
+                    className="w-fit h-[3rem] object-contain"
+                />
+            </h1>
             <h1 className="text-4xl font-bold mb-1 mt-2">Inscription</h1>
             <p className="mb-5 text-neutral-500 italic text-[85%]">
                 Devenez membre de First Lady et profitez des reductions à chaque
