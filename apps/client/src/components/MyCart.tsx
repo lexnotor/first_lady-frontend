@@ -27,7 +27,6 @@ const MyCart = () => {
         },
         []
     );
-    const [address, setAddress] = useState<string>(null);
 
     const getMyCart = useCallback((token: string) => {
         axios
@@ -97,7 +96,7 @@ const MyCart = () => {
                 <p>Aucune produit pour le moment</p>
             </div>
         );
-    const beginPaiement = () => {
+    const beginPaiement = (address?: string) => {
         axios
             .post(
                 paymentUrl.requestPayement,
@@ -128,11 +127,7 @@ const MyCart = () => {
                         <BiCreditCard />
                     </span> */}
                     {selected.length ? (
-                        <OrderForm
-                            address={address}
-                            setAddress={setAddress}
-                            beginPaiement={beginPaiement}
-                        />
+                        <OrderForm beginPaiement={beginPaiement} />
                     ) : null}
                 </div>
             )}
