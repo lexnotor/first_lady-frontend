@@ -1,6 +1,6 @@
 "use client";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import {
     CreateUserPayload,
     assignRolePaylod,
@@ -42,7 +42,11 @@ const signupUser: AsyncThunkPayloadCreator<any, any> = async (
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || "SIGNUP_FAILED");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "SIGNUP_FAILED",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -94,9 +98,11 @@ const getUserStats: AsyncThunkPayloadCreator<UserStats> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_LOAD_USER_STAT"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_LOAD_USER_STAT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -119,9 +125,11 @@ const findUser: AsyncThunkPayloadCreator<UserInfo[], string> = async (
 
         return thunkAPI.fulfillWithValue(users.data.data);
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_FETCH_USERS"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_FETCH_USERS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -142,9 +150,11 @@ const getAllRoles: AsyncThunkPayloadCreator<RoleInfo[]> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_FETCH_ROLES"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_FETCH_ROLES",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -165,7 +175,11 @@ const createUser: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error?.message ?? "FAIL_TO_CREATE");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_CREATE",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -189,9 +203,11 @@ const updateUser: AsyncThunkPayloadCreator<
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_UPDATE_USER"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_UPDATE_USER",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -211,9 +227,11 @@ const deleteUser: AsyncThunkPayloadCreator<string, string> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_DELETE_USER"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_DELETE_USER",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -231,9 +249,11 @@ const assignRole: AsyncThunkPayloadCreator<
             });
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_ASSIGN_ROLE"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_ASSIGN_ROLE",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 const dismissRole: AsyncThunkPayloadCreator<
@@ -250,9 +270,11 @@ const dismissRole: AsyncThunkPayloadCreator<
             });
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_ASSIGN_ROLE"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_ASSIGN_ROLE",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 

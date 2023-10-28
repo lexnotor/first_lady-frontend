@@ -1,5 +1,5 @@
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { ApiResponse, ShopInfo } from "..";
 import { shopUrl } from "../helper.api";
 import { RootState } from "../store";
@@ -20,7 +20,11 @@ const getShopList: AsyncThunkPayloadCreator<ShopInfo[], void> = async (
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || "FAIL_TO_LOAD_SHOP");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_LOAD_SHOP",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
