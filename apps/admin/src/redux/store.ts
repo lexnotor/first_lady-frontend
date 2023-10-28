@@ -4,6 +4,7 @@ import userReducer from "./user/user.slice";
 import productReducer from "./product/product.slice";
 import orderReducer from "./order/order.slice";
 import modalReducer from "./modals/modal.slice";
+import checkAuth from "./checkAuth";
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         order: orderReducer,
         modalmanager: modalReducer,
     },
+    middleware: (getDefault) => getDefault().concat([checkAuth]),
 });
 
 // store

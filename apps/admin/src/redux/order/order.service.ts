@@ -1,6 +1,6 @@
 import { OrderState } from "@/components/order";
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import type { ApiResponse, CartProductInfo, OrderInfo, OrderStats } from "..";
 import { cartUrl, orderUrl } from "../helper.api";
 import { RootState } from "../store";
@@ -20,9 +20,11 @@ const getAllOrders: AsyncThunkPayloadCreator<OrderInfo[]> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_FETCH_ORDERS"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_FETCH_ORDERS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -46,9 +48,11 @@ const changeOrderState: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_CHANGE_STATE"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_CHANGE_STATE",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -77,7 +81,11 @@ const saveLocalOrder: AsyncThunkPayloadCreator<
             )
         );
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_ADD_ITEMS");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_ADD_ITEMS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 
     // save ass order
@@ -92,7 +100,11 @@ const saveLocalOrder: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_ADD_ITEMS");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_ADD_ITEMS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -112,7 +124,11 @@ const loadOrderStat: AsyncThunkPayloadCreator<OrderStats> = async (
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_LOAD_STATS");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_LOAD_STATS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 

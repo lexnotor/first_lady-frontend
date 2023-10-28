@@ -1,5 +1,5 @@
 import { AsyncThunkPayloadCreator } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import {
     ApiResponse,
     CategoryInfo,
@@ -42,9 +42,11 @@ const createProduct: AsyncThunkPayloadCreator<ProductInfo, any> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_CREATE_PRODUCT"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_CREATE_PRODUCT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -66,9 +68,11 @@ const createCategory: AsyncThunkPayloadCreator<CategoryInfo, any> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message || "FAIL_TO_CREATE_CATEGORY"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_CREATE_CATEGORY",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -97,9 +101,12 @@ const createProductVersion: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_CREATE_PRODUCT_VERSION"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error:
+                err?.response.data?.message ?? "FAIL_TO_CREATE_PRODUCT_VERSION",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -134,9 +141,11 @@ const addVersionQuantity: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_ADD_QUANTITY"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_ADD_QUANTITY",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -163,9 +172,12 @@ const getProductsVersion: AsyncThunkPayloadCreator<
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_FETCH_PRODUCT_VERSION"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error:
+                err?.response.data?.message ?? "FAIL_TO_FETCH_PRODUCT_VERSION",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -184,9 +196,11 @@ const getProducts: AsyncThunkPayloadCreator<ProductInfo[], any> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message ?? "FAIL_TO_FETCH_PRODUCT"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_FETCH_PRODUCT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -212,9 +226,11 @@ const getOneProduct: AsyncThunkPayloadCreator<
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_LOAD_PRODUCT"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_LOAD_PRODUCT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 const getOneProductVersion: AsyncThunkPayloadCreator<
@@ -239,9 +255,12 @@ const getOneProductVersion: AsyncThunkPayloadCreator<
             });
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAIL_TO_LOAD_PRODUCT_VERSION"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error:
+                err?.response.data?.message ?? "FAIL_TO_LOAD_PRODUCT_VERSION",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -261,9 +280,11 @@ const getCategories: AsyncThunkPayloadCreator<CategoryInfo[], any> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message || "FAIL_TO_FETCH_CATEGORIES"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_FETCH_CATEGORIES",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -281,9 +302,12 @@ const deleteProductVersion: AsyncThunkPayloadCreator<string, string> = async (
         );
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error.message || "FAIL_TO_DELETE_PRODUCT_VERSION"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error:
+                err?.response.data?.message ?? "FAIL_TO_DELETE_PRODUCT_VERSION",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -301,7 +325,11 @@ const loadCategorieStat: AsyncThunkPayloadCreator<CategoryStats[]> = async (
         });
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || "FAIL_TO_GET_STAT");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_GET_STAT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -321,7 +349,11 @@ const getProductStats: AsyncThunkPayloadCreator<ProductStats> = async (
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message ?? "FAIL_TO_LOAD_STATS");
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAIL_TO_LOAD_STATS",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -350,9 +382,11 @@ const updateProduct: AsyncThunkPayloadCreator<
 
         return res.data.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAILED_TO_UPDATE_PRODUCT"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error: err?.response.data?.message ?? "FAILED_TO_UPDATE_PRODUCT",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
@@ -394,9 +428,13 @@ const updateProductVersion: AsyncThunkPayloadCreator<
 
         return new_vers;
     } catch (error) {
-        return thunkAPI.rejectWithValue(
-            error?.message ?? "FAILED_TO_UPDATE_PRODUCT_VERSION"
-        );
+        const err = error as AxiosError<{ message: string }>;
+        return thunkAPI.rejectWithValue({
+            error:
+                err?.response.data?.message ??
+                "FAILED_TO_UPDATE_PRODUCT_VERSION",
+            code_error: err?.response?.status ?? 0,
+        });
     }
 };
 
